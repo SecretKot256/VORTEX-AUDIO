@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VORTEX AUDIO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #000;
+            overflow-x: hidden;
+            color: #fff;
+            scroll-behavior: smooth;
+        }
+
+        /* ========== ОБЩИЕ СТИЛИ ========== */
+        .page {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ========== СТРАНИЦА 1 ========== */
+        .page-1 {
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Верхняя часть (3/4) */
+        .top-section {
+            position: relative;
+            height: 75%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding-left: 60px;
+        }
+
+        /* Заблюренный фон (только для премиум) */
+        .bg-blurred {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: calc(100% + 40px);
+            height: calc(100% + 40px);
+            background-image: url('cover.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(25px) brightness(0.5);
+            z-index: 0;
+        }
+
+        /* Контент премиум */
+        .track-info {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .cover-clean {
+            width: 200px;
+            height: 200px;
+            border-radius: 16px;
+            background-image: url('cover.jpg');
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            flex-shrink: 0;
+        }
+
+        .track-text {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .track-name {
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.5);
+        }
+
+        .verified-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .verified-icon-img {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .verified-text {
+            font-size: 16px;
+            color: #aaa;
+            letter-spacing: 1px;
+        }
+
+        /* Контент для ГОСТЕЙ (скрыт по умолчанию) */
+        .guest-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .guest-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        .guest-subtitle {
+            font-size: 18px;
+            color: #999;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .guest-logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 24px;
+        }
+
+        .guest-description {
+            font-size: 16px;
+            color: #777;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        /* Нижняя часть */
+        .bottom-section {
+            height: 25%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.95);
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .check-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 50px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 40px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(255,255,255,0.2);
+        }
+
+        .check-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(255,255,255,0.4);
+            background: #f0f0f0;
+        }
+
+        .arrow-down {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .check-btn:hover .arrow-down {
+            transform: translateY(5px);
+        }
+
+        /* Скрытие/показ */
+        .hidden {
+            display: none !important;
+        }
+
+        /* ========== СТРАНИЦА 2 (проверка) ========== */
+        .page-2 {
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .input-group {
+            position: relative;
+            width: 400px;
+        }
+
+        .input-label {
+            font-size: 13px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 20px;
+            background: #141414;
+            border: 1px solid #2a2a2a;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #555;
+        }
+
+        .help-icon {
+            position: absolute;
+            right: 16px;
+            top: 38px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .help-icon:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 35px;
+            right: -10px;
+            background: #222;
+            color: #ddd;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            white-space: nowrap;
+            pointer-events: none;
+            border: 1px solid #333;
+        }
+
+        .info-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            z-index: 100;
+            text-align: center;
+            font-size: 18px;
+            color: #ccc;
+            min-width: 320px;
+        }
+
+        .info-popup.show {
+            display: block;
+        }
+
+        .submit-btn {
+            margin-top: 16px;
+            padding: 16px 50px;
+            background: #6C5CE7;
+            color: #fff;
+            border: none;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            box-shadow: 0 0 25px rgba(108, 92, 231, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: #7C6CF7;
+            box-shadow: 0 0 45px rgba(108, 92, 231, 0.5);
+            transform: scale(1.03);
+        }
+
+        .register-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            z-index: 200;
+            width: 380px;
+            text-align: center;
+        }
+
+        .register-popup.show {
+            display: block;
+        }
+
+        .register-popup h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: #fff;
+        }
+
+        .register-popup .input-field {
+            margin-bottom: 14px;
+        }
+
+        /* ========== СТРАНИЦА 3 (Что такое Vortex) ========== */
+        .page-3 {
+            background: #080808;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 80px;
+        }
+
+        .what-is-title {
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.8s ease;
+        }
+
+        .what-is-title.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .what-is-desc {
+            font-size: 18px;
+            color: #aaa;
+            max-width: 700px;
+            line-height: 1.7;
+            margin-bottom: 48px;
+        }
+
+        .advantages-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .advantage-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .advantage-item {
+            font-size: 17px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .advantage-item strong {
+            color: #fff;
+        }
+
+        /* ========== СТРАНИЦА 4 (Субтитры) ========== */
+        .page-4 {
+            background: #060606;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 60px 80px;
+            gap: 40px;
+        }
+
+        .subtitles-text-block {
+            max-width: 500px;
+        }
+
+        .subtitles-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .subtitles-desc {
+            font-size: 17px;
+            color: #aaa;
+            line-height: 1.7;
+        }
+
+        .subtitles-gif {
+            width: 450px;
+            height: 450px;
+            border-radius: 20px;
+            object-fit: cover;
+            border: 2px solid #222;
+        }
+
+        /* ========== НАВИГАЦИЯ ========== */
+        .nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 50;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #fff;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Точки навигации -->
+    <div class="nav-dots" id="navDots">
+        <div class="nav-dot active" data-page="0"></div>
+        <div class="nav-dot" data-page="1"></div>
+        <div class="nav-dot" data-page="2"></div>
+        <div class="nav-dot" data-page="3"></div>
+    </div>
+
+    <!-- ==================== СТРАНИЦА 1 ==================== -->
+    <div class="page page-1" id="page1">
+        <!-- Премиум-контент (скрыт для гостей) -->
+        <div class="top-section" id="premiumContent">
+            <div class="bg-blurred"></div>
+            <div class="track-info">
+                <div class="cover-clean"></div>
+                <div class="track-text">
+                    <div class="track-name">MXZI - Montagem Tomada</div>
+                    <div class="verified-block">
+                        <img class="verified-icon-img" src="check-icon.png" alt="✓">
+                        <div class="verified-text">Проверено VORTEX AUDIO</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Гостевой контент (показан для гостей) -->
+        <div class="top-section hidden" id="guestContent">
+            <div class="guest-content">
+                <div class="guest-title">Узнай текст песни за секунды</div>
+                <div class="guest-subtitle">Узнай, о чём поётся в песне. Проверь, безопасна ли она</div>
+                <img class="guest-logo" src="vortex-logo.png" alt="Vortex Logo">
+                <div class="guest-description">
+                    Vortex Audio — это сервис, который помогает узнать, о чём поётся в песне, и проверяет, безопасен ли текст для детей.
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопка внизу -->
+        <div class="bottom-section">
+            <button class="check-btn" onclick="goToPage(1)">
+                Проверить
+                <span class="arrow-down">↓</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== СТРАНИЦА 2 ==================== -->
+    <div class="page page-2" id="page2">
+        <div class="input-group">
+            <div class="input-label">Название трека</div>
+            <input class="input-field" type="text" placeholder="Введите название...">
+        </div>
+        <div class="input-group">
+            <div class="input-label">Автор(ы) трека</div>
+            <input class="input-field" type="text" placeholder="Введите автора...">
+            <img 
+                class="help-icon" 
+                src="question-icon.png" 
+                alt="?"
+                data-tooltip="Найдите автора(ов) по обложке трека"
+                onclick="showInfoPopup()"
+            >
+        </div>
+        <button class="submit-btn" onclick="showRegister()">Проверить</button>
+    </div>
+
+    <!-- ==================== СТРАНИЦА 3 ==================== -->
+    <div class="page page-3" id="page3">
+        <div class="what-is-title" id="whatIsTitle">Что это такое?</div>
+        <div class="what-is-desc">
+            Vortex Audio — это умный помощник для родителей и всех, кто хочет понимать музыку. Ты вводишь название песни — сервис показывает текст, перевод и помечает, есть ли в нём нецензурные или опасные слова.
+        </div>
+        <div class="advantages-title">Плюсы Vortex Audio:</div>
+        <ul class="advantage-list">
+            <li class="advantage-item"><strong>● Гибкость</strong> — Vortex Audio работает на любом устройстве: будь то смартфон, ПК, и другие, где есть браузер и интернет.</li>
+            <li class="advantage-item"><strong>● Скорость</strong> — Vortex Audio предлагает проверку песни за считанные секунды.</li>
+            <li class="advantage-item"><strong>● Точность</strong> — В Vortex Audio загружены сотни библиотек со списками плохих и нецензурных выражений и слов — ни одна плохая песня не пройдёт как «чистая» через наш Vortex-фильтр.</li>
+            <li class="advantage-item"><strong>● Качество</strong> — ИИ от Vortex Audio подробно вам опишет, какой бит в песне, есть ли в ней плохие и нецензурные слова, а также даст общую оценку песни.</li>
+        </ul>
+    </div>
+
+    <!-- ==================== СТРАНИЦА 4 ==================== -->
+    <div class="page page-4" id="page4">
+        <div class="subtitles-text-block">
+            <div class="subtitles-title">После проверки песни вы сами можете проверить, о чём поётся в ней</div>
+            <div class="subtitles-desc">
+                На сайте Vortex Audio также есть функция показа субтитров: После проверки песни вы сами можете удостовериться в правильности анализа — ИИ подчеркнёт слова и фразы на понятном вам языке.
+            </div>
+        </div>
+        <img class="subtitles-gif" src="demo.gif" alt="Демонстрация субтитров">
+    </div>
+
+    <!-- Окошко при клике на знак вопроса -->
+    <div class="info-popup" id="infoPopup" onclick="hideInfoPopup()">
+        🔍 Найдите автора(ов) по обложке трека
+        <br><small style="color:#777;">(кликните чтобы закрыть)</small>
+    </div>
+
+    <!-- Окно регистрации -->
+    <div class="register-popup" id="registerPopup">
+        <h2>📋 Регистрация</h2>
+        <input class="input-field" type="text" placeholder="Ваше имя">
+        <input class="input-field" type="email" placeholder="Email">
+        <input class="input-field" type="password" placeholder="Пароль">
+        <br>
+        <button class="submit-btn" onclick="hideRegister()">Зарегистрироваться</button>
+    </div>
+
+    <script>
+        // === ПРОВЕРКА ПРЕМИУМ-СТАТУСА ===
+        function checkPremium() {
+            // Пока смотрим localStorage. Потом можно заменить на проверку с сервера.
+            const isPremium = localStorage.getItem('vortex_premium') === 'true';
+            
+            if (isPremium) {
+                document.getElementById('premiumContent').classList.remove('hidden');
+                document.getElementById('guestContent').classList.add('hidden');
+            } else {
+                document.getElementById('premiumContent').classList.add('hidden');
+                document.getElementById('guestContent').classList.remove('hidden');
+            }
+        }
+
+        // Для теста: сделай пользователя премиум-пользователем
+        // Вызови в консоли: setPremium()
+        function setPremium() {
+            localStorage.setItem('vortex_premium', 'true');
+            checkPremium();
+        }
+
+        function removePremium() {
+            localStorage.removeItem('vortex_premium');
+            checkPremium();
+        }
+
+        // === ПРОКРУТКА МЕЖДУ СТРАНИЦАМИ ===
+        let currentPage = 0;
+        const totalPages = 4;
+
+        function goToPage(index) {
+            const pages = document.querySelectorAll('.page');
+            currentPage = index;
+            
+            pages.forEach((page, i) => {
+                page.style.transform = `translateY(-${index * 100}vh)`;
+                page.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+
+            updateNavDots();
+
+            // Анимация заголовка на странице 3
+            if (index === 2) {
+                setTimeout(() => {
+                    document.getElementById('whatIsTitle').classList.add('visible');
+                }, 500);
+            }
+        }
+
+        function updateNavDots() {
+            document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentPage);
+            });
+        }
+
+        // Колёсико мыши
+        window.addEventListener('wheel', (e) => {
+            if (e.deltaY > 0 && currentPage < totalPages - 1) {
+                goToPage(currentPage + 1);
+            } else if (e.deltaY < 0 && currentPage > 0) {
+                goToPage(currentPage - 1);
+            }
+        });
+
+        // Навигационные точки
+        document.querySelectorAll('.nav-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                goToPage(parseInt(dot.dataset.page));
+            });
+        });
+
+        // === ВСПЛЫВАЮЩИЕ ОКНА ===
+        function showInfoPopup() {
+            document.getElementById('infoPopup').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('infoPopup').classList.remove('show');
+            }, 2500);
+        }
+
+        function hideInfoPopup() {
+            document.getElementById('infoPopup').classList.remove('show');
+        }
+
+        function showRegister() {
+            document.getElementById('registerPopup').classList.add('show');
+        }
+
+        function hideRegister() {
+            document.getElementById('registerPopup').classList.remove('show');
+        }
+
+        // === ЗАПУСК ===
+        checkPremium();
+    </script>
+
+</body>
+</html>
