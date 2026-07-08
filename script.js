@@ -8,7 +8,7 @@ let userData = {
     notesBalance: 42,
     songsTranslated: 17,
     lang: 'ru',
-    subscription: null // 'bronze', 'gold', 'diamond'
+    subscription: null
 };
 
 const savedAvatar = localStorage.getItem('vortex_avatar');
@@ -48,18 +48,21 @@ function removePremium() {
 
 // ========== НАВИГАЦИЯ ==========
 let currentPage = 0;
-let totalPages = 4; // 4 контентные страницы + футер = 5 позиций
+let totalPages = 4;
 
 function updateTotalPages() {
     if (userData.isLoggedIn) {
         totalPages = 3; // страницы 1, 2, футер (индексы 0, 1, 2)
         document.getElementById('page3').style.display = 'none';
         document.getElementById('page4').style.display = 'none';
-        document.getElementById('checkTrackBtn').onclick = tryCheckTrack;
+        updateCheckButton(); // обновляем кнопку после логина
     } else {
         totalPages = 5; // все страницы + футер
         document.getElementById('page3').style.display = 'flex';
         document.getElementById('page4').style.display = 'flex';
+        // Без регистрации — просто кнопка «Проверить»
+        document.getElementById('checkTrackBtn').innerHTML = 'Проверить';
+        document.getElementById('checkTrackBtn').classList.remove('disabled');
         document.getElementById('checkTrackBtn').onclick = showRegister;
     }
 }
@@ -77,12 +80,12 @@ function goToPage(index) {
         document.getElementById('page4').style.transform = `translateY(calc(300vh - ${index * 100}vh))`;
         document.getElementById('footer').style.transform = `translateY(calc(400vh - ${index * 100}vh))`;
     } else {
+        // Футер на позиции 2 (третий экран) и занимает 1/3
         document.getElementById('footer').style.transform = `translateY(calc(200vh - ${index * 100}vh))`;
     }
 
     if (userData.isLoggedIn) {
         document.getElementById('topIcons').style.display = 'flex';
-        updateCheckButton();
     }
 
     if (index === 2 && !userData.isLoggedIn) {
@@ -119,14 +122,12 @@ function doRegister() {
         document.getElementById('headerNickname').textContent = login;
         document.getElementById('headerAvatar').src = userData.avatar;
         updateTotalPages();
-        updateCheckButton();
         goToPage(1); // сразу на страницу проверки
     } else {
         alert('Неверный логин. Попробуйте Secret');
     }
 }
 
-// Закрытие регистрации по клику вне
 document.getElementById('registerOverlay').addEventListener('click', function(e) {
     if (e.target === this) hideRegister();
 });
@@ -157,14 +158,12 @@ function openProfile() {
     document.getElementById('notesBalance').textContent = userData.notesBalance;
     document.getElementById('songsTranslated').textContent = userData.songsTranslated;
 
-    // Обводка подписки
     const ring = document.getElementById('avatarRing');
     ring.classList.remove('bronze', 'gold', 'diamond');
     if (userData.subscription) {
         ring.classList.add(userData.subscription);
     }
 
-    // Профиль-кнопка в шапке тоже с обводкой
     const profileBtn = document.getElementById('profileButton');
     profileBtn.style.borderColor = '#333';
     if (userData.subscription === 'bronze') profileBtn.style.borderColor = '#cd7f32';
@@ -250,7 +249,11 @@ function connectPhone() {
 // ========== КНОПКА ПРОВЕРКИ ==========
 function updateCheckButton() {
     const btn = document.getElementById('checkTrackBtn');
-    if (userData.notesBalance < 1) {
+    if (!userData.isLoggedIn) {
+        btn.innerHTML = 'Проверить';
+        btn.classList.remove('disabled');
+        btn.onclick = showRegister;
+    } else if (userData.notesBalance < 1) {
         btn.classList.add('disabled');
         btn.innerHTML = 'Недостаточно нот';
         btn.onclick = showErrorNotes;
@@ -286,13 +289,72 @@ document.getElementById('errorNotesOverlay').addEventListener('click', function(
     if (e.target === this) this.classList.remove('show');
 });
 
-// ========== СЧЁТЧИК ПРОВЕРОК ==========
+// ========== СЧЁТЧИК ПРОВЕРОК (анимированный) ==========
 let totalChecked = 25000;
+let displayedTotal = 25000;
+let counterInterval = null;
+
+function formatNumber(num) {
+    return num.toLocaleString('ru-RU');
+}
+
+function renderCounter() {
+    const container = document.getElementById('totalChecked');
+    const numStr = formatNumber(displayedTotal);
+    let html = '';
+    
+    for (let i = 0; i < numStr.length; i++) {
+        const char = numStr[i];
+        if (char === ' ' || char === ',') {
+            html += '<span class="counter-separator"> </span>';
+        } else {
+            html += `<span class="counter-digit-wrapper"><span class="counter-digit">${char}</span></span>`;
+        }
+    }
+    
+    container.innerHTML = html;
+}
+
+function animateCounter() {
+    if (displayedTotal < totalChecked) {
+        // Плавно догоняем
+        const diff = totalChecked - displayedTotal;
+        const increment = Math.max(1, Math.floor(diff / 20));
+        displayedTotal = Math.min(displayedTotal + increment, totalChecked);
+        renderCounter();
+        
+        // Анимация прокрутки цифр
+        const wrappers = document.querySelectorAll('.counter-digit-wrapper');
+        wrappers.forEach(w => {
+            const digit = w.querySelector('.counter-digit');
+            digit.style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+                digit.style.transition = 'none';
+                digit.style.transform = 'translateY(100%)';
+                setTimeout(() => {
+                    digit.style.transition = 'transform 0.4s cubic-bezier(0.2, 0, 0.4, 1)';
+                    digit.style.transform = 'translateY(0)';
+                }, 30);
+            }, 200);
+        });
+    }
+}
 
 function incrementTotalChecked() {
-    totalChecked++;
-    document.getElementById('totalChecked').textContent = totalChecked.toLocaleString();
+    totalChecked += Math.floor(Math.random() * 3) + 1;
     updateProgressBar();
+}
+
+// Запуск автоинкремента раз в 1.5 секунды
+function startCounterAuto() {
+    if (counterInterval) clearInterval(counterInterval);
+    counterInterval = setInterval(() => {
+        if (userData.isLoggedIn) {
+            totalChecked += Math.floor(Math.random() * 5) + 1;
+        }
+        animateCounter();
+        updateProgressBar();
+    }, 1500);
 }
 
 function updateProgressBar() {
@@ -300,15 +362,8 @@ function updateProgressBar() {
     document.getElementById('progressFill').style.width = progress + '%';
 }
 
-// Автоинкремент каждую секунду (имитация)
-setInterval(() => {
-    if (userData.isLoggedIn) {
-        totalChecked += Math.floor(Math.random() * 3) + 1;
-        document.getElementById('totalChecked').textContent = totalChecked.toLocaleString();
-        updateProgressBar();
-    }
-}, 1000);
-
+renderCounter();
+startCounterAuto();
 updateProgressBar();
 
 // ========== МАГАЗИН НОТ ==========
