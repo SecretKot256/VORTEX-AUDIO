@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VORTEX AUDIO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Скрытый input для загрузки аватара -->
+    <input type="file" id="avatarFileInput" accept="image/*" onchange="handleAvatarUpload(event)">
+
+    <!-- Иконки всегда сверху -->
+    <div class="top-icons" id="topIcons" style="display: none;">
+        <div class="lang-btn" onclick="toggleLangPopup()">
+            <img class="lang-flag" id="currentFlag" src="flag-ru.png" alt="RU">
+        </div>
+        <div class="lang-popup" id="langPopup">
+            <button class="lang-option" onclick="setLang('ru')">
+                <img class="lang-option-flag" src="flag-ru.png" alt="RU">
+                Русский
+            </button>
+            <button class="lang-option" onclick="setLang('en')">
+                <img class="lang-option-flag" src="flag-uk.png" alt="UK">
+                English
+            </button>
+        </div>
+
+        <div class="profile-btn" onclick="openProfile()" id="profileButton">
+            <img class="profile-avatar" id="headerAvatar" src="default-avatar.png" alt="Avatar">
+            <span class="profile-nickname" id="headerNickname">User</span>
+        </div>
+    </div>
+
+    <!-- ==================== СТРАНИЦА 1 (гость/премиум) ==================== -->
+    <div class="page" id="page1">
+        <div class="top-section" id="premiumContent">
+            <div class="bg-blurred"></div>
+            <div class="track-info">
+                <div class="cover-clean"></div>
+                <div class="track-text">
+                    <div class="track-name">MXZI - Montagem Tomada</div>
+                    <div class="verified-block">
+                        <img class="verified-icon-img" src="check-icon.png" alt="✓">
+                        <div class="verified-text">Проверено VORTEX AUDIO</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="top-section hidden" id="guestContent">
+            <div class="guest-content">
+                <div class="guest-title">Узнай текст песни за секунды</div>
+                <div class="guest-subtitle">Узнай, о чём поётся в песне. Проверь, безопасна ли она</div>
+                <img class="guest-logo" src="vortex-logo.png" alt="Vortex Logo">
+                <div class="guest-description">
+                    Vortex Audio — это сервис, который помогает узнать, о чём поётся в песне, и проверяет, безопасен ли текст для детей.
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <button class="check-btn" onclick="goToPage(1)">
+                Проверить
+                <span class="arrow-down">↓</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== СТРАНИЦА 2 (проверка) ==================== -->
+    <div class="page" id="page2">
+        <div class="check-counter">
+            Всего проверено песен: <span class="counter-number" id="totalChecked">25 000</span>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">1 000 000 песен — промокод на скидку 25%</div>
+        </div>
+
+        <div class="input-group">
+            <div class="input-label">Название трека</div>
+            <input class="input-field" type="text" placeholder="Введите название...">
+        </div>
+        <div class="input-group">
+            <div class="input-label">Автор(ы) трека</div>
+            <input class="input-field" type="text" placeholder="Введите автора...">
+            <img 
+                class="help-icon" 
+                src="question-icon.png" 
+                alt="?"
+                data-tooltip="Найдите автора(ов) по обложке трека"
+                onclick="showInfoPopup()"
+            >
+        </div>
+             <!-- Кнопка на странице 2 -->
+            <button class="submit-btn" id="checkTrackBtn">Проверить</button>
+            <img class="note-icon-btn" src="note-icon.png" alt="♪"> 1
+        </button>
+    </div>
+
+    <!-- ==================== СТРАНИЦА 3 (плюсы) ==================== -->
+    <div class="page" id="page3">
+        <div class="what-is-title" id="whatIsTitle">Что это такое?</div>
+        <div class="what-is-desc">
+            Vortex Audio — это умный помощник для родителей и всех, кто хочет понимать музыку. Ты вводишь название песни — сервис показывает текст, перевод и помечает, есть ли в нём нецензурные или опасные слова.
+        </div>
+        <div class="advantages-title">Плюсы Vortex Audio:</div>
+        <ul class="advantage-list">
+            <li class="advantage-item"><strong>● Гибкость</strong> — Vortex Audio работает на любом устройстве: будь то смартфон, ПК, и другие, где есть браузер и интернет.</li>
+            <li class="advantage-item"><strong>● Скорость</strong> — Vortex Audio предлагает проверку песни за считанные секунды.</li>
+            <li class="advantage-item"><strong>● Точность</strong> — В Vortex Audio загружены сотни библиотек со списками плохих и нецензурных выражений и слов — ни одна плохая песня не пройдёт как «чистая» через наш Vortex-фильтр.</li>
+            <li class="advantage-item"><strong>● Качество</strong> — ИИ от Vortex Audio подробно вам опишет, какой бит в песне, есть ли в ней плохие и нецензурные слова, а также даст общую оценку песни.</li>
+        </ul>
+    </div>
+
+    <!-- ==================== СТРАНИЦА 4 (субтитры) ==================== -->
+    <div class="page" id="page4">
+        <div class="subtitles-text-block">
+            <div class="subtitles-title">После проверки песни вы сами можете проверить, о чём поётся в ней</div>
+            <div class="subtitles-desc">
+                На сайте Vortex Audio также есть функция показа субтитров: После проверки песни вы сами можете удостовериться в правильности анализа — ИИ подчеркнёт слова и фразы на понятном вам языке.
+            </div>
+        </div>
+        <img class="subtitles-gif" src="demo.gif" alt="Демонстрация субтитров">
+    </div>
+
+    <!-- ==================== ФУТЕР ==================== -->
+    <div class="page" id="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <div class="footer-brand">Vortex Audio</div>
+                <div class="footer-socials">
+                    <a href="#" class="social-icon">
+                        <img src="max-icon.png" alt="MAX">
+                    </a>
+                </div>
+                <div class="footer-copyright">© 2026 Vortex Audio</div>
+            </div>
+            <div class="footer-column">
+                <a class="footer-link" onclick="openPrivacyPopup()">Политика конфиденциальности</a>
+            </div>
+            <div class="footer-column">
+                <a class="footer-link" onclick="openNewsPage()">Новости</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ПОПАП ПРОФИЛЯ ==================== -->
+    <div class="profile-overlay" id="profileOverlay">
+        <div class="profile-popup">
+            <button class="profile-close" onclick="closeProfile()">✕</button>
+            <div class="profile-popup-header">
+                <div class="avatar-wrapper">
+                    <div class="avatar-ring" id="avatarRing">
+                        <img class="profile-big-avatar" id="profileAvatar" src="default-avatar.png" alt="Avatar">
+                    </div>
+                    <button class="avatar-edit-btn" onclick="toggleAvatarMenu()">✎</button>
+                    <div class="avatar-edit-menu" id="avatarEditMenu">
+                        <button class="avatar-menu-btn" onclick="uploadAvatar()">📷 Загрузить фото</button>
+                        <button class="avatar-menu-btn delete" onclick="deleteAvatar()">🗑 Удалить фото</button>
+                    </div>
+                </div>
+                <div class="profile-popup-info">
+                    <div class="profile-nickname-big" id="profileNickname">User</div>
+                    <div class="profile-email" id="profileEmail">user@example.com</div>
+                    <div class="profile-phone">
+                        <span>📱</span>
+                        <span id="phoneText">Номер не подключён</span>
+                    </div>
+                    <button class="connect-phone-btn" id="connectPhoneBtn" onclick="connectPhone()">
+                        Подключить номер
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-label">Баланс нот</div>
+                    <div class="stat-value" id="notesBalance">42</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Переведено песен</div>
+                    <div class="stat-value" id="songsTranslated">17</div>
+                </div>
+            </div>
+
+            <button class="buy-notes-btn" onclick="openShop()">💰 Купить ноты</button>
+        </div>
+    </div>
+
+    <!-- ==================== ПОПАП ПОЛИТИКИ ==================== -->
+    <div class="popup-overlay" id="privacyOverlay">
+        <div class="popup-content privacy-popup">
+            <button class="profile-close" onclick="closePrivacyPopup()">✕</button>
+            <h2>📄 Политика конфиденциальности Vortex Audio</h2>
+            <div class="privacy-text">
+                <h3>1. Общие положения</h3>
+                <p>Настоящая политика конфиденциальности описывает, как Vortex Audio собирает, использует и защищает информацию, которую вы предоставляете при использовании сайта.</p>
+
+                <h3>2. Какие данные мы собираем</h3>
+                <p>Название трека и исполнитель (для поиска текста).</p>
+                <p>Дата и время запроса — для улучшения работы сервиса.</p>
+                <p>IP-адрес (в обезличенном виде) — для подсчёта статистики.</p>
+
+                <h3>3. Как мы используем данные</h3>
+                <p>Для предоставления результата проверки.</p>
+                <p>Для улучшения точности фильтрации.</p>
+                <p>Для анализа популярных запросов.</p>
+
+                <h3>4. Передача данных третьим лицам</h3>
+                <p>Мы не передаём ваши данные третьим лицам, за исключением случаев, предусмотренных законом.</p>
+
+                <h3>5. Хранение данных</h3>
+                <p>Мы храним данные только в течение времени, необходимого для выполнения запроса. История проверок не сохраняется, если вы не зарегистрированы.</p>
+
+                <h3>6. Права пользователей</h3>
+                <p>Вы можете запросить удаление всех данных, связанных с вашим аккаунтом.</p>
+
+                <h3>7. Изменения в политике</h3>
+                <p>Мы можем обновлять эту политику. Обо всех изменениях мы будем уведомлять на главной странице.</p>
+            </div>
+            <button class="submit-btn" onclick="closePrivacyPopup()">Принять</button>
+        </div>
+    </div>
+
+    <!-- ==================== СТРАНИЦА НОВОСТЕЙ ==================== -->
+    <div class="page news-page" id="newsPage">
+        <button class="back-btn-news" onclick="closeNewsPage()">← Назад</button>
+        <h1 class="news-title">Новости Vortex Audio</h1>
+        <div class="news-placeholder">Скоро здесь появятся новости...</div>
+    </div>
+
+    <!-- ==================== РЕГИСТРАЦИЯ ==================== -->
+    <div class="popup-overlay" id="registerOverlay">
+        <div class="popup-content register-popup-content">
+            <h2>📋 Регистрация</h2>
+            <input class="input-field" type="text" id="regLogin" placeholder="Логин">
+            <input class="input-field" type="email" placeholder="Email">
+            <input class="input-field" type="password" placeholder="Пароль">
+            <br>
+            <button class="submit-btn" onclick="doRegister()">Зарегистрироваться</button>
+        </div>
+    </div>
+
+    <!-- ==================== МАГАЗИН НОТ / ПОДПИСКИ ==================== -->
+    <div class="shop-popup-overlay" id="shopOverlay">
+        <div class="shop-popup">
+            <!-- Переключатель: Ноты / Подписки -->
+            <div class="shop-tabs">
+                <button class="shop-tab active" id="tabNotes" onclick="switchShopTab('notes')">Ноты</button>
+                <button class="shop-tab" id="tabSubs" onclick="switchShopTab('subs')">Подписки <span class="tab-arrow">→</span></button>
+            </div>
+
+            <!-- Контент: Ноты -->
+            <div class="shop-tab-content" id="notesContent">
+                <div class="shop-balance">Ваш баланс: <span id="shopBalance">42 ноты</span></div>
+
+                <div class="notes-sections">
+                    <div class="notes-row">
+                        <div class="note-pack" onclick="selectPack(this, 10, 79)">
+                            <div class="note-pack-amount">10 нот</div>
+                            <div class="note-pack-price">79 ₽</div>
+                        </div>
+                        <div class="note-pack" onclick="selectPack(this, 50, 399)">
+                            <div class="note-pack-amount">50 нот</div>
+                            <div class="note-pack-price">399 ₽</div>
+                        </div>
+                        <div class="note-pack" onclick="selectPack(this, 100, 799)">
+                            <div class="note-pack-amount">100 нот</div>
+                            <div class="note-pack-price">799 ₽</div>
+                        </div>
+                    </div>
+                    <div class="notes-row">
+                        <div class="note-pack" onclick="selectPack(this, 250, 2299)">
+                            <div class="note-pack-amount">250 нот</div>
+                            <div class="note-pack-price">2 299 ₽</div>
+                        </div>
+                        <div class="note-pack" onclick="selectPack(this, 500, 3599)">
+                            <div class="note-pack-amount">500 нот</div>
+                            <div class="note-pack-price">3 599 ₽</div>
+                        </div>
+                        <div class="note-pack" onclick="selectPack(this, 1000, 7999)">
+                            <div class="note-pack-amount">1000 нот</div>
+                            <div class="note-pack-price">7 999 ₽</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="custom-section">
+                    <div class="custom-fields">
+                        <div class="custom-field">
+                            <div class="custom-field-label">Количество нот</div>
+                            <input type="number" class="custom-field-input" id="customNotesInput" value="100" min="1" max="10000" oninput="onCustomNotesInput()">
+                        </div>
+                        <div class="custom-field">
+                            <div class="custom-field-label">Сумма</div>
+                            <input type="number" class="custom-field-input" id="customPriceInput" value="1000" min="10" step="10" oninput="onCustomPriceInput()">
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" class="slider" id="notesSlider" min="1" max="1000" value="100" step="1" oninput="onSliderInput()">
+                    </div>
+                    <div class="price-per-note">1 нота — 10 ₽</div>
+                </div>
+
+                <button class="buy-btn" onclick="buyNotes()">Купить</button>
+            </div>
+
+            <!-- Контент: Подписки -->
+            <div class="shop-tab-content hidden" id="subsContent">
+                <div class="subs-sections">
+                    <div class="subs-row">
+                        <div class="sub-pack bronze" onclick="selectSub(this, 'bronze')">
+                            <div class="sub-pack-title">Бронзовый минимум</div>
+                            <div class="sub-pack-price">Скоро</div>
+                        </div>
+                        <div class="sub-pack gold" onclick="selectSub(this, 'gold')">
+                            <div class="sub-pack-title">
+                                <span class="gold-text">Золотая</span> <span class="white-text">середина</span>
+                            </div>
+                            <div class="sub-pack-price">Скоро</div>
+                        </div>
+                        <div class="sub-pack diamond" onclick="selectSub(this, 'diamond')">
+                            <div class="sub-pack-title">Бриллиантовый максимум</div>
+                            <div class="sub-pack-price">Скоро</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Заглушка оплаты -->
+    <div class="popup-overlay" id="paymentSuccessOverlay">
+        <div class="popup-content payment-success-content">
+            ✅ Оплата завершена!
+        </div>
+    </div>
+
+    <!-- Попап ошибки нот -->
+    <div class="popup-overlay" id="errorNotesOverlay">
+        <div class="popup-content error-popup-content">
+            ❌ Ошибка: Недостаточно нот.
+            <span class="buy-link" onclick="openShopFromError()">Купить?</span>
+        </div>
+    </div>
+
+    <!-- Окошко при клике на знак вопроса -->
+    <div class="info-popup" id="infoPopup" onclick="hideInfoPopup()">
+        🔍 Найдите автора(ов) по обложке трека
+        <br><small style="color:#777;">(кликните чтобы закрыть)</small>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
