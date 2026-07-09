@@ -112,7 +112,7 @@ function doRegister() {
     }
 }
 
-document.getElementById('registerOverlay').addEventListener('click', function(e) {
+document.getElementById('registerOverlay').addEventListener('click', function (e) {
     if (e.target === this) document.getElementById('registerOverlay').classList.remove('show');
 });
 
@@ -168,7 +168,7 @@ function closeProfile() {
     document.getElementById('avatarEditMenu').classList.remove('show');
 }
 
-document.getElementById('profileOverlay').addEventListener('click', function(e) {
+document.getElementById('profileOverlay').addEventListener('click', function (e) {
     if (e.target === this) closeProfile();
 });
 
@@ -186,7 +186,7 @@ function handleAvatarUpload(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             userData.avatar = e.target.result;
             document.getElementById('profileAvatar').src = userData.avatar;
             document.getElementById('headerAvatar').src = userData.avatar;
@@ -205,7 +205,7 @@ function deleteAvatar() {
     saveUserData();
 }
 
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     if (!e.target.closest('.avatar-edit-btn') && !e.target.closest('.avatar-edit-menu')) {
         document.getElementById('avatarEditMenu').classList.remove('show');
     }
@@ -265,7 +265,7 @@ function openShopFromError() {
     openShop();
 }
 
-document.getElementById('errorNotesOverlay').addEventListener('click', function(e) {
+document.getElementById('errorNotesOverlay').addEventListener('click', function (e) {
     if (e.target === this) this.classList.remove('show');
 });
 
@@ -450,11 +450,11 @@ function buyNotes() {
     }, 1000);
 }
 
-document.getElementById('shopOverlay').addEventListener('click', function(e) {
+document.getElementById('shopOverlay').addEventListener('click', function (e) {
     if (e.target === this) this.classList.remove('show');
 });
 
-document.getElementById('paymentSuccessOverlay').addEventListener('click', function(e) {
+document.getElementById('paymentSuccessOverlay').addEventListener('click', function (e) {
     if (e.target === this) this.classList.remove('show');
 });
 
@@ -467,7 +467,7 @@ function closePrivacyPopup() {
     document.getElementById('privacyOverlay').classList.remove('show');
 }
 
-document.getElementById('privacyOverlay').addEventListener('click', function(e) {
+document.getElementById('privacyOverlay').addEventListener('click', function (e) {
     if (e.target === this) closePrivacyPopup();
 });
 
@@ -491,6 +491,19 @@ function showInfoPopup() {
 function hideInfoPopup() {
     document.getElementById('infoPopup').classList.remove('show');
 }
+
+// ========== ДЕМО ПЛЕЕРА ==========
+function openPlayerDemo() {
+    document.getElementById('playerDemoOverlay').classList.add('show');
+}
+
+function closePlayerDemo() {
+    document.getElementById('playerDemoOverlay').classList.remove('show');
+}
+
+document.getElementById('playerDemoOverlay').addEventListener('click', function (e) {
+    if (e.target === this) closePlayerDemo();
+});
 
 // ========== ЗАПУСК ==========
 checkPremium();

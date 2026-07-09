@@ -4,7 +4,8 @@
     box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
     width: 100%;
     height: 100%;
     font-family: 'Segoe UI', Arial, sans-serif;
@@ -200,7 +201,7 @@ body, html {
     font-size: 34px;
     font-weight: 800;
     letter-spacing: 1px;
-    text-shadow: 0 2px 15px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
 }
 
 .verified-block {
@@ -268,7 +269,7 @@ body, html {
     justify-content: center;
     align-items: center;
     background: rgba(10, 10, 10, 0.4);
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .check-btn {
@@ -469,8 +470,13 @@ body, html {
 }
 
 @keyframes noteBounce {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-5px); }
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-5px);
+    }
 }
 
 /* ========== СТРАНИЦА 3 ========== */
@@ -649,7 +655,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
     z-index: 200;
     justify-content: center;
     align-items: center;
@@ -699,7 +705,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.75);
+    background: rgba(0, 0, 0, 0.75);
     z-index: 200;
     justify-content: center;
     align-items: center;
@@ -737,9 +743,18 @@ body, html {
     transition: border-color 0.3s ease;
 }
 
-.avatar-ring.bronze { border-color: #cd7f32; }
-.avatar-ring.gold { border-color: #ffd700; }
-.avatar-ring.diamond { border-color: #b9f2ff; box-shadow: 0 0 15px rgba(185, 242, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3); }
+.avatar-ring.bronze {
+    border-color: #cd7f32;
+}
+
+.avatar-ring.gold {
+    border-color: #ffd700;
+}
+
+.avatar-ring.diamond {
+    border-color: #b9f2ff;
+    box-shadow: 0 0 15px rgba(185, 242, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
+}
 
 .profile-big-avatar {
     width: 80px;
@@ -996,7 +1011,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
     z-index: 400;
     justify-content: center;
     align-items: center;
@@ -1328,4 +1343,523 @@ body, html {
 /* ========== СКРЫТЫЙ INPUT ========== */
 #avatarFileInput {
     display: none;
+}
+
+/* ========== АДАПТИВ ДЛЯ ТЕЛЕФОНОВ ========== */
+@media (max-width: 768px) {
+    .top-icons {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+    }
+
+    .lang-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .lang-flag {
+        width: 22px;
+        height: 22px;
+    }
+
+    .profile-btn {
+        padding: 6px 12px;
+        gap: 6px;
+    }
+
+    .profile-avatar {
+        width: 26px;
+        height: 26px;
+    }
+
+    .profile-nickname {
+        font-size: 12px;
+    }
+
+    /* Страница 1 */
+    .guest-title {
+        font-size: 24px;
+    }
+
+    .guest-subtitle {
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    .guest-logo {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 24px;
+    }
+
+    .guest-description {
+        font-size: 13px;
+        max-width: 300px;
+    }
+
+    .track-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cover-clean {
+        width: 140px;
+        height: 140px;
+    }
+
+    .track-name {
+        font-size: 22px;
+    }
+
+    .verified-text {
+        font-size: 13px;
+    }
+
+    .check-btn {
+        padding: 14px 32px;
+        font-size: 16px;
+    }
+
+    /* Страница 2 */
+    .check-counter {
+        font-size: 14px;
+    }
+
+    .progress-bar-container {
+        width: 280px;
+    }
+
+    .input-group {
+        width: 280px;
+    }
+
+    .input-field {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .help-icon {
+        width: 20px;
+        height: 20px;
+        right: 12px;
+        top: 34px;
+    }
+
+    /* Страница 3 */
+    #page3 {
+        padding: 30px 20px;
+    }
+
+    .what-is-title {
+        font-size: 24px;
+    }
+
+    .what-is-desc {
+        font-size: 14px;
+    }
+
+    .advantages-title {
+        font-size: 20px;
+    }
+
+    .advantage-item {
+        font-size: 14px;
+    }
+
+    /* Страница 4 */
+    #page4 {
+        flex-direction: column;
+        padding: 30px 20px;
+        gap: 20px;
+    }
+
+    .subtitles-title {
+        font-size: 22px;
+    }
+
+    .subtitles-desc {
+        font-size: 14px;
+    }
+
+    .subtitles-gif {
+        width: 280px;
+        height: 280px;
+        margin: 0;
+    }
+
+    /* Футер */
+    #footer {
+        height: auto;
+        min-height: 33.33vh;
+        padding: 20px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .footer-brand {
+        font-size: 18px;
+    }
+
+    .footer-link {
+        font-size: 13px;
+    }
+
+    /* Профиль */
+    .profile-popup {
+        width: 320px;
+        padding: 20px;
+    }
+
+    .profile-big-avatar {
+        width: 60px;
+        height: 60px;
+    }
+
+    .profile-nickname-big {
+        font-size: 16px;
+    }
+
+    .stat-card {
+        padding: 12px 14px;
+    }
+
+    .stat-value {
+        font-size: 20px;
+    }
+
+    /* Регистрация */
+    .register-popup-content {
+        width: 300px;
+        padding: 24px;
+    }
+
+    /* Магазин */
+    .shop-popup {
+        width: 340px;
+        padding: 20px;
+    }
+
+    .notes-row {
+        flex-wrap: wrap;
+    }
+
+    .note-pack {
+        min-width: 90px;
+        padding: 12px;
+    }
+
+    .note-pack-amount {
+        font-size: 16px;
+    }
+
+    .note-pack-price {
+        font-size: 13px;
+    }
+
+    .subs-row {
+        flex-direction: column;
+    }
+
+    .sub-pack {
+        min-height: auto;
+        padding: 14px;
+    }
+
+    .sub-pack-title {
+        font-size: 14px !important;
+    }
+
+    /* Политика */
+    .privacy-popup {
+        width: 320px;
+    }
+
+    /* Попап плеера */
+    .player-demo-popup {
+        width: 300px;
+        padding: 20px;
+    }
+
+    .player-demo-gif {
+        width: 260px;
+        height: 180px;
+    }
+}
+
+/* Исправление: нота не висит, кнопка ровно по центру */
+.submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 160px;
+}
+
+.submit-btn .note-icon-btn {
+    flex-shrink: 0;
+    margin: 0;
+    vertical-align: middle;
+}
+
+/* ========== ОБНОВЛЁННЫЕ ПОДПИСКИ ========== */
+.subs-row {
+    display: flex;
+    gap: 12px;
+}
+
+.sub-pack {
+    flex: 1;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 280px;
+    position: relative;
+}
+
+.sub-pack:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+
+/* Бронза */
+.sub-pack.bronze {
+    border-color: #cd7f3240;
+    background: linear-gradient(180deg, #1a1410 0%, #1a1a1a 100%);
+}
+
+.sub-pack.bronze:hover {
+    border-color: #cd7f32;
+    box-shadow: 0 8px 30px rgba(205, 127, 50, 0.15);
+}
+
+.sub-pack.bronze .sub-pack-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.sub-pack.bronze .sub-pack-title .bronze-text {
+    color: #cd7f32;
+}
+
+.sub-pack.bronze .sub-pack-title .white-text {
+    color: #fff;
+}
+
+/* Золото */
+.sub-pack.gold {
+    border-color: #ffd70040;
+    background: linear-gradient(180deg, #1a1a0a 0%, #1a1a1a 100%);
+}
+
+.sub-pack.gold:hover {
+    border-color: #ffd700;
+    box-shadow: 0 8px 30px rgba(255, 215, 0, 0.15);
+}
+
+.sub-pack.gold .sub-pack-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.sub-pack.gold .sub-pack-title .gold-text {
+    color: #ffd700;
+}
+
+.sub-pack.gold .sub-pack-title .white-text {
+    color: #fff;
+}
+
+/* Бриллиант */
+.sub-pack.diamond {
+    border-color: #b9f2ff40;
+    background: linear-gradient(180deg, #0a1a1a 0%, #1a1a1a 100%);
+}
+
+.sub-pack.diamond:hover {
+    border-color: #b9f2ff;
+    box-shadow: 0 8px 30px rgba(185, 242, 255, 0.2);
+}
+
+.sub-pack.diamond .sub-pack-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    background: linear-gradient(90deg, #b9f2ff, #e0f7ff, #b9f2ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 10px rgba(185, 242, 255, 0.3);
+}
+
+/* Список фич подписки */
+.sub-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.sub-feature {
+    font-size: 13px;
+    color: #bbb;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+}
+
+.sub-feature-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.sub-feature-aura {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.sub-feature-aura.bronze-aura {
+    border: 2px solid #cd7f32;
+    box-shadow: 0 0 6px rgba(205, 127, 50, 0.5);
+}
+
+.sub-feature-aura.gold-aura {
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.sub-feature-aura.diamond-aura {
+    border: 2px solid #b9f2ff;
+    box-shadow: 0 0 10px rgba(185, 242, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.sub-feature-question {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #333;
+    border: 1px solid #555;
+    color: #999;
+    font-size: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 4px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.sub-feature-question:hover {
+    background: #444;
+    color: #fff;
+}
+
+/* Цена */
+.sub-pack-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #2a2a2a;
+}
+
+.sub-pack-price small {
+    font-size: 13px;
+    color: #888;
+    font-weight: 400;
+}
+
+/* Бейдж "Популярный" */
+.sub-badge {
+    position: absolute;
+    top: -12px;
+    right: 16px;
+    background: #6C5CE7;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 12px;
+    letter-spacing: 1px;
+}
+
+/* Попап с плеером */
+.player-demo-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 500;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-demo-overlay.show {
+    display: flex;
+}
+
+.player-demo-popup {
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+}
+
+.player-demo-gif {
+    width: 480px;
+    height: 300px;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-bottom: 16px;
+}
+
+.player-demo-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.player-demo-desc {
+    font-size: 14px;
+    color: #999;
+}
+
+.player-demo-close {
+    margin-top: 16px;
+    padding: 10px 28px;
+    background: #6C5CE7;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.player-demo-close:hover {
+    background: #7C6CF7;
 }

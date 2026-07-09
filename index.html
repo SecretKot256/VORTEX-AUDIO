@@ -310,28 +310,93 @@
             </div>
 
             <!-- Контент: Подписки -->
-            <div class="shop-tab-content hidden" id="subsContent">
-                <div class="subs-sections">
-                    <div class="subs-row">
-                        <div class="sub-pack bronze" onclick="selectSub(this, 'bronze')">
-                            <div class="sub-pack-title">Бронзовый минимум</div>
-                            <div class="sub-pack-price">Скоро</div>
-                        </div>
-                        <div class="sub-pack gold" onclick="selectSub(this, 'gold')">
-                            <div class="sub-pack-title">
-                                <span class="gold-text">Золотая</span> <span class="white-text">середина</span>
-                            </div>
-                            <div class="sub-pack-price">Скоро</div>
-                        </div>
-                        <div class="sub-pack diamond" onclick="selectSub(this, 'diamond')">
-                            <div class="sub-pack-title">Бриллиантовый максимум</div>
-                            <div class="sub-pack-price">Скоро</div>
-                        </div>
-                    </div>
+<div class="shop-tab-content hidden" id="subsContent">
+    <div class="subs-sections">
+        <div class="subs-row">
+            <!-- Бронза -->
+            <div class="sub-pack bronze" onclick="selectSub(this, 'bronze')">
+                <div class="sub-pack-title">
+                    <span class="bronze-text">Бронзовый</span> <span class="white-text">минимум</span>
                 </div>
+                <ul class="sub-features">
+                    <li class="sub-feature">
+                        <img class="sub-feature-icon" src="note-icon.png" alt="♪">
+                        25 нот каждый месяц
+                    </li>
+                    <li class="sub-feature">
+                        <div class="sub-feature-aura bronze-aura"></div>
+                        Бронзовая аура
+                    </li>
+                    <li class="sub-feature">
+                        <span style="font-size:16px;">🔍</span>
+                        Приоритетная проверка
+                    </li>
+                </ul>
+                <div class="sub-pack-price">299 ₽ <small>/месяц</small></div>
+            </div>
+
+            <!-- Золото -->
+            <div class="sub-pack gold" onclick="selectSub(this, 'gold')">
+                <div class="sub-badge">Популярный</div>
+                <div class="sub-pack-title">
+                    <span class="gold-text">Золотая</span> <span class="white-text">середина</span>
+                </div>
+                <ul class="sub-features">
+                    <li class="sub-feature">
+                        <img class="sub-feature-icon" src="note-icon.png" alt="♪">
+                        50 нот каждый месяц
+                    </li>
+                    <li class="sub-feature">
+                        <div class="sub-feature-aura gold-aura"></div>
+                        Золотая аура
+                    </li>
+                    <li class="sub-feature">
+                        <span style="font-size:16px;">🎵</span>
+                        Плеер песен на сайте
+                        <span class="sub-feature-question" onclick="event.stopPropagation(); openPlayerDemo()">?</span>
+                    </li>
+                    <li class="sub-feature">
+                        <span style="font-size:16px;">📊</span>
+                        Статистика проверок
+                    </li>
+                </ul>
+                <div class="sub-pack-price">499 ₽ <small>/месяц</small></div>
+            </div>
+
+            <!-- Бриллиант -->
+            <div class="sub-pack diamond" onclick="selectSub(this, 'diamond')">
+                <div class="sub-pack-title">Бриллиантовый максимум</div>
+                <ul class="sub-features">
+                    <li class="sub-feature">
+                        <img class="sub-feature-icon" src="note-icon.png" alt="♪">
+                        100 нот каждый месяц
+                    </li>
+                    <li class="sub-feature">
+                        <div class="sub-feature-aura diamond-aura"></div>
+                        Бриллиантовая аура
+                    </li>
+                    <li class="sub-feature">
+                        <span style="font-size:16px;">🎵</span>
+                        Плеер песен на сайте
+                    </li>
+                    <li class="sub-feature">
+                        <span style="font-size:16px;">📊</span>
+                        Расширенная статистика
+                    </li>
+                    <li class="sub-feature">
+                        <span style="font-size:16px;">⭐</span>
+                        Эксклюзивный значок в профиле
+                    </li>
+                    <li class="sub-feature">
+                        <span style="font-size:16px;">🚀</span>
+                        Проверка без очереди
+                    </li>
+                </ul>
+                <div class="sub-pack-price">799 ₽ <small>/месяц</small></div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Заглушка оплаты -->
     <div class="popup-overlay" id="paymentSuccessOverlay">
@@ -353,6 +418,16 @@
         🔍 Найдите автора(ов) по обложке трека
         <br><small style="color:#777;">(кликните чтобы закрыть)</small>
     </div>
+
+    <!-- Попап демонстрации плеера -->
+<div class="player-demo-overlay" id="playerDemoOverlay">
+    <div class="player-demo-popup">
+        <img class="player-demo-gif" src="player-demo.gif" alt="Демо плеера">
+        <div class="player-demo-title">ПЛЕЕР</div>
+        <div class="player-demo-desc">Плеер проигрывает рандомные чистые песни при каждом новом заходе на сайт</div>
+        <button class="player-demo-close" onclick="closePlayerDemo()">Понятно</button>
+    </div>
+</div>
 
     <script src="script.js"></script>
 </body>
