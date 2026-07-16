@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="wth=device-width, initial-scale=1.0">
     <title>VORTEX AUDIO</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <!-- Скрытый input для загрузки аватара -->
@@ -55,7 +57,8 @@
                 <div class="guest-subtitle">Узнай, о чём поётся в песне. Проверь, безопасна ли она</div>
                 <img class="guest-logo" src="vortex-logo.png" alt="Vortex Logo">
                 <div class="guest-description">
-                    Vortex Audio — это сервис, который помогает узнать, о чём поётся в песне, и проверяет, безопасен ли текст для детей.
+                    Vortex Audio — это сервис, который помогает узнать, о чём поётся в песне, и проверяет, безопасен ли
+                    текст для детей.
                 </div>
             </div>
         </div>
@@ -82,37 +85,39 @@
 
         <div class="input-group">
             <div class="input-label">Название трека</div>
-            <input class="input-field" type="text" placeholder="Введите название...">
+            <!-- Добавили id="trackInputName" -->
+            <input class="input-field" type="text" id="trackInputName" placeholder="Введите название...">
         </div>
         <div class="input-group">
             <div class="input-label">Автор(ы) трека</div>
-            <input class="input-field" type="text" placeholder="Введите автора...">
-            <img 
-                class="help-icon" 
-                src="question-icon.png" 
-                alt="?"
-                data-tooltip="Найдите автора(ов) по обложке трека"
-                onclick="showInfoPopup()"
-            >
+            <!-- Добавили id="artistInputName" -->
+            <input class="input-field" type="text" id="artistInputName" placeholder="Введите автора...">
+            <img class="help-icon" src="question-icon.png" alt="?" data-tooltip="Найдите автора(ов) по обложке трека"
+                onclick="showInfoPopup()">
         </div>
-             <!-- Кнопка на странице 2 -->
-            <button class="submit-btn" id="checkTrackBtn">Проверить</button>
-            <img class="note-icon-btn" src="note-icon.png" alt="♪"> 1
-        </button>
+        <!-- Кнопка на странице 2 -->
+        <button class="submit-btn" id="checkTrackBtn">Проверить</button>
+
     </div>
 
     <!-- ==================== СТРАНИЦА 3 (плюсы) ==================== -->
     <div class="page" id="page3">
         <div class="what-is-title" id="whatIsTitle">Что это такое?</div>
         <div class="what-is-desc">
-            Vortex Audio — это умный помощник для родителей и всех, кто хочет понимать музыку. Ты вводишь название песни — сервис показывает текст, перевод и помечает, есть ли в нём нецензурные или опасные слова.
+            Vortex Audio — это умный помощник для родителей и всех, кто хочет понимать музыку. Ты вводишь название песни
+            — сервис показывает текст, перевод и помечает, есть ли в нём нецензурные или опасные слова.
         </div>
         <div class="advantages-title">Плюсы Vortex Audio:</div>
         <ul class="advantage-list">
-            <li class="advantage-item"><strong>● Гибкость</strong> — Vortex Audio работает на любом устройстве: будь то смартфон, ПК, и другие, где есть браузер и интернет.</li>
-            <li class="advantage-item"><strong>● Скорость</strong> — Vortex Audio предлагает проверку песни за считанные секунды.</li>
-            <li class="advantage-item"><strong>● Точность</strong> — В Vortex Audio загружены сотни библиотек со списками плохих и нецензурных выражений и слов — ни одна плохая песня не пройдёт как «чистая» через наш Vortex-фильтр.</li>
-            <li class="advantage-item"><strong>● Качество</strong> — ИИ от Vortex Audio подробно вам опишет, какой бит в песне, есть ли в ней плохие и нецензурные слова, а также даст общую оценку песни.</li>
+            <li class="advantage-item"><strong>● Гибкость</strong> — Vortex Audio работает на любом устройстве: будь то
+                смартфон, ПК, и другие, где есть браузер и интернет.</li>
+            <li class="advantage-item"><strong>● Скорость</strong> — Vortex Audio предлагает проверку песни за считанные
+                секунды.</li>
+            <li class="advantage-item"><strong>● Точность</strong> — В Vortex Audio загружены сотни библиотек со
+                списками плохих и нецензурных выражений и слов — ни одна плохая песня не пройдёт как «чистая» через наш
+                Vortex-фильтр.</li>
+            <li class="advantage-item"><strong>● Качество</strong> — ИИ от Vortex Audio подробно вам опишет, какой бит в
+                песне, есть ли в ней плохие и нецензурные слова, а также даст общую оценку песни.</li>
         </ul>
     </div>
 
@@ -121,7 +126,8 @@
         <div class="subtitles-text-block">
             <div class="subtitles-title">После проверки песни вы сами можете проверить, о чём поётся в ней</div>
             <div class="subtitles-desc">
-                На сайте Vortex Audio также есть функция показа субтитров: После проверки песни вы сами можете удостовериться в правильности анализа — ИИ подчеркнёт слова и фразы на понятном вам языке.
+                На сайте Vortex Audio также есть функция показа субтитров: После проверки песни вы сами можете
+                удостовериться в правильности анализа — ИИ подчеркнёт слова и фразы на понятном вам языке.
             </div>
         </div>
         <img class="subtitles-gif" src="demo.gif" alt="Демонстрация субтитров">
@@ -179,11 +185,15 @@
             <div class="stats-row">
                 <div class="stat-card">
                     <div class="stat-label">Баланс нот</div>
-                    <div class="stat-value" id="notesBalance">42</div>
+                    <div class="stat-value" id="notesBalance">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Бесплатных проверок</div>
+                    <div class="stat-value" id="freeChecks">3</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Переведено песен</div>
-                    <div class="stat-value" id="songsTranslated">17</div>
+                    <div class="stat-value" id="songsTranslated">0</div>
                 </div>
             </div>
 
@@ -198,7 +208,8 @@
             <h2>📄 Политика конфиденциальности Vortex Audio</h2>
             <div class="privacy-text">
                 <h3>1. Общие положения</h3>
-                <p>Настоящая политика конфиденциальности описывает, как Vortex Audio собирает, использует и защищает информацию, которую вы предоставляете при использовании сайта.</p>
+                <p>Настоящая политика конфиденциальности описывает, как Vortex Audio собирает, использует и защищает
+                    информацию, которую вы предоставляете при использовании сайта.</p>
 
                 <h3>2. Какие данные мы собираем</h3>
                 <p>Название трека и исполнитель (для поиска текста).</p>
@@ -214,7 +225,8 @@
                 <p>Мы не передаём ваши данные третьим лицам, за исключением случаев, предусмотренных законом.</p>
 
                 <h3>5. Хранение данных</h3>
-                <p>Мы храним данные только в течение времени, необходимого для выполнения запроса. История проверок не сохраняется, если вы не зарегистрированы.</p>
+                <p>Мы храним данные только в течение времени, необходимого для выполнения запроса. История проверок не
+                    сохраняется, если вы не зарегистрированы.</p>
 
                 <h3>6. Права пользователей</h3>
                 <p>Вы можете запросить удаление всех данных, связанных с вашим аккаунтом.</p>
@@ -251,7 +263,8 @@
             <!-- Переключатель: Ноты / Подписки -->
             <div class="shop-tabs">
                 <button class="shop-tab active" id="tabNotes" onclick="switchShopTab('notes')">Ноты</button>
-                <button class="shop-tab" id="tabSubs" onclick="switchShopTab('subs')">Подписки <span class="tab-arrow">→</span></button>
+                <button class="shop-tab" id="tabSubs" onclick="switchShopTab('subs')">Подписки <span
+                        class="tab-arrow">→</span></button>
             </div>
 
             <!-- Контент: Ноты -->
@@ -293,15 +306,18 @@
                     <div class="custom-fields">
                         <div class="custom-field">
                             <div class="custom-field-label">Количество нот</div>
-                            <input type="number" class="custom-field-input" id="customNotesInput" value="100" min="1" max="10000" oninput="onCustomNotesInput()">
+                            <input type="number" class="custom-field-input" id="customNotesInput" value="100" min="1"
+                                max="10000" oninput="onCustomNotesInput()">
                         </div>
                         <div class="custom-field">
                             <div class="custom-field-label">Сумма</div>
-                            <input type="number" class="custom-field-input" id="customPriceInput" value="1000" min="10" step="10" oninput="onCustomPriceInput()">
+                            <input type="number" class="custom-field-input" id="customPriceInput" value="1000" min="10"
+                                step="10" oninput="onCustomPriceInput()">
                         </div>
                     </div>
                     <div class="slider-container">
-                        <input type="range" class="slider" id="notesSlider" min="1" max="1000" value="100" step="1" oninput="onSliderInput()">
+                        <input type="range" class="slider" id="notesSlider" min="1" max="1000" value="100" step="1"
+                            oninput="onSliderInput()">
                     </div>
                     <div class="price-per-note">1 нота — 10 ₽</div>
                 </div>
@@ -310,125 +326,128 @@
             </div>
 
             <!-- Контент: Подписки -->
-<div class="shop-tab-content hidden" id="subsContent">
-    <div class="subs-sections">
-        <div class="subs-row">
-            <!-- Бронза -->
-            <div class="sub-pack bronze" onclick="selectSub(this, 'bronze')">
-                <div class="sub-pack-title">
-                    <span class="bronze-text">Бронзовый</span> <span class="white-text">минимум</span>
+            <div class="shop-tab-content hidden" id="subsContent">
+                <div class="subs-sections">
+                    <div class="subs-row">
+                        <!-- Бронза -->
+                        <div class="sub-pack bronze" onclick="selectSub(this, 'bronze')">
+                            <div class="sub-pack-title">
+                                <span class="bronze-text">Бронзовый</span> <span class="white-text">минимум</span>
+                            </div>
+                            <ul class="sub-features">
+                                <li class="sub-feature">
+                                    <img class="sub-feature-icon" src="note-icon.png" alt="♪">
+                                    25 нот каждый месяц
+                                </li>
+                                <li class="sub-feature">
+                                    <div class="sub-feature-aura bronze-aura"></div>
+                                    Бронзовая аура
+                                </li>
+                                <li class="sub-feature">
+                                    <span style="font-size:16px;">🔍</span>
+                                    Приоритетная проверка
+                                </li>
+                            </ul>
+                            <div class="sub-pack-price">299 ₽ <small>/месяц</small></div>
+                        </div>
+
+                        <!-- Золото -->
+                        <div class="sub-pack gold" onclick="selectSub(this, 'gold')">
+                            <div class="sub-badge">Популярный</div>
+                            <div class="sub-pack-title">
+                                <span class="gold-text">Золотая</span> <span class="white-text">середина</span>
+                            </div>
+                            <ul class="sub-features">
+                                <li class="sub-feature">
+                                    <img class="sub-feature-icon" src="note-icon.png" alt="♪">
+                                    50 нот каждый месяц
+                                </li>
+                                <li class="sub-feature">
+                                    <div class="sub-feature-aura gold-aura"></div>
+                                    Золотая аура
+                                </li>
+                                <li class="sub-feature">
+                                    <span style="font-size:16px;">🎵</span>
+                                    Плеер песен на сайте
+                                    <span class="sub-feature-question"
+                                        onclick="event.stopPropagation(); openPlayerDemo()">?</span>
+                                </li>
+                                <li class="sub-feature">
+                                    <span style="font-size:16px;">📊</span>
+                                    Статистика проверок
+                                </li>
+                            </ul>
+                            <div class="sub-pack-price">499 ₽ <small>/месяц</small></div>
+                        </div>
+
+                        <!-- Бриллиант -->
+                        <div class="sub-pack diamond" onclick="selectSub(this, 'diamond')">
+                            <div class="sub-pack-title">Бриллиантовый максимум</div>
+                            <ul class="sub-features">
+                                <li class="sub-feature">
+                                    <img class="sub-feature-icon" src="note-icon.png" alt="♪">
+                                    100 нот каждый месяц
+                                </li>
+                                <li class="sub-feature">
+                                    <div class="sub-feature-aura diamond-aura"></div>
+                                    Бриллиантовая аура
+                                </li>
+                                <li class="sub-feature">
+                                    <span style="font-size:16px;">🎵</span>
+                                    Плеер песен на сайте
+                                </li>
+                                <li class="sub-feature">
+                                    <span style="font-size:16px;">📊</span>
+                                    Расширенная статистика
+                                </li>
+                                <li class="sub-feature">
+                                    <span style="font-size:16px;">⭐</span>
+                                    Эксклюзивный значок в профиле
+                                </li>
+                                <li class="sub-feature">
+                                    <span style="font-size:16px;">🚀</span>
+                                    Проверка без очереди
+                                </li>
+                            </ul>
+                            <div class="sub-pack-price">799 ₽ <small>/месяц</small></div>
+                        </div>
+                    </div>
                 </div>
-                <ul class="sub-features">
-                    <li class="sub-feature">
-                        <img class="sub-feature-icon" src="note-icon.png" alt="♪">
-                        25 нот каждый месяц
-                    </li>
-                    <li class="sub-feature">
-                        <div class="sub-feature-aura bronze-aura"></div>
-                        Бронзовая аура
-                    </li>
-                    <li class="sub-feature">
-                        <span style="font-size:16px;">🔍</span>
-                        Приоритетная проверка
-                    </li>
-                </ul>
-                <div class="sub-pack-price">299 ₽ <small>/месяц</small></div>
             </div>
 
-            <!-- Золото -->
-            <div class="sub-pack gold" onclick="selectSub(this, 'gold')">
-                <div class="sub-badge">Популярный</div>
-                <div class="sub-pack-title">
-                    <span class="gold-text">Золотая</span> <span class="white-text">середина</span>
+            <!-- Заглушка оплаты -->
+            <div class="popup-overlay" id="paymentSuccessOverlay">
+                <div class="popup-content payment-success-content">
+                    ✅ Оплата завершена!
                 </div>
-                <ul class="sub-features">
-                    <li class="sub-feature">
-                        <img class="sub-feature-icon" src="note-icon.png" alt="♪">
-                        50 нот каждый месяц
-                    </li>
-                    <li class="sub-feature">
-                        <div class="sub-feature-aura gold-aura"></div>
-                        Золотая аура
-                    </li>
-                    <li class="sub-feature">
-                        <span style="font-size:16px;">🎵</span>
-                        Плеер песен на сайте
-                        <span class="sub-feature-question" onclick="event.stopPropagation(); openPlayerDemo()">?</span>
-                    </li>
-                    <li class="sub-feature">
-                        <span style="font-size:16px;">📊</span>
-                        Статистика проверок
-                    </li>
-                </ul>
-                <div class="sub-pack-price">499 ₽ <small>/месяц</small></div>
             </div>
 
-            <!-- Бриллиант -->
-            <div class="sub-pack diamond" onclick="selectSub(this, 'diamond')">
-                <div class="sub-pack-title">Бриллиантовый максимум</div>
-                <ul class="sub-features">
-                    <li class="sub-feature">
-                        <img class="sub-feature-icon" src="note-icon.png" alt="♪">
-                        100 нот каждый месяц
-                    </li>
-                    <li class="sub-feature">
-                        <div class="sub-feature-aura diamond-aura"></div>
-                        Бриллиантовая аура
-                    </li>
-                    <li class="sub-feature">
-                        <span style="font-size:16px;">🎵</span>
-                        Плеер песен на сайте
-                    </li>
-                    <li class="sub-feature">
-                        <span style="font-size:16px;">📊</span>
-                        Расширенная статистика
-                    </li>
-                    <li class="sub-feature">
-                        <span style="font-size:16px;">⭐</span>
-                        Эксклюзивный значок в профиле
-                    </li>
-                    <li class="sub-feature">
-                        <span style="font-size:16px;">🚀</span>
-                        Проверка без очереди
-                    </li>
-                </ul>
-                <div class="sub-pack-price">799 ₽ <small>/месяц</small></div>
+            <!-- Попап ошибки нот -->
+            <div class="popup-overlay" id="errorNotesOverlay">
+                <div class="popup-content error-popup-content">
+                    ❌ Ошибка: Недостаточно нот.
+                    <span class="buy-link" onclick="openShopFromError()">Купить?</span>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
 
-    <!-- Заглушка оплаты -->
-    <div class="popup-overlay" id="paymentSuccessOverlay">
-        <div class="popup-content payment-success-content">
-            ✅ Оплата завершена!
-        </div>
-    </div>
+            <!-- Окошко при клике на знак вопроса -->
+            <div class="info-popup" id="infoPopup" onclick="hideInfoPopup()">
+                🔍 Найдите автора(ов) по обложке трека
+                <br><small style="color:#777;">(кликните чтобы закрыть)</small>
+            </div>
 
-    <!-- Попап ошибки нот -->
-    <div class="popup-overlay" id="errorNotesOverlay">
-        <div class="popup-content error-popup-content">
-            ❌ Ошибка: Недостаточно нот.
-            <span class="buy-link" onclick="openShopFromError()">Купить?</span>
-        </div>
-    </div>
+            <!-- Попап демонстрации плеера -->
+            <div class="player-demo-overlay" id="playerDemoOverlay">
+                <div class="player-demo-popup">
+                    <img class="player-demo-gif" src="player-demo.gif" alt="Демо плеера">
+                    <div class="player-demo-title">ПЛЕЕР</div>
+                    <div class="player-demo-desc">Плеер проигрывает рандомные чистые песни при каждом новом заходе на
+                        сайт</div>
+                    <button class="player-demo-close" onclick="closePlayerDemo()">Понятно</button>
+                </div>
+            </div>
 
-    <!-- Окошко при клике на знак вопроса -->
-    <div class="info-popup" id="infoPopup" onclick="hideInfoPopup()">
-        🔍 Найдите автора(ов) по обложке трека
-        <br><small style="color:#777;">(кликните чтобы закрыть)</small>
-    </div>
-
-    <!-- Попап демонстрации плеера -->
-<div class="player-demo-overlay" id="playerDemoOverlay">
-    <div class="player-demo-popup">
-        <img class="player-demo-gif" src="player-demo.gif" alt="Демо плеера">
-        <div class="player-demo-title">ПЛЕЕР</div>
-        <div class="player-demo-desc">Плеер проигрывает рандомные чистые песни при каждом новом заходе на сайт</div>
-        <button class="player-demo-close" onclick="closePlayerDemo()">Понятно</button>
-    </div>
-</div>
-
-    <script src="script.js"></script>
+            <script src="script.js"></script>
 </body>
+
 </html>

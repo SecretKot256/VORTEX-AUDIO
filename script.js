@@ -5,8 +5,9 @@ let userData = {
     email: 'user@example.com',
     avatar: 'default-avatar.png',
     phone: null,
-    notesBalance: 42,
-    songsTranslated: 17,
+    notesBalance: 0,        // было 42, теперь 0 для теста
+    songsTranslated: 0,     // было 17
+    freeChecks: 3,          // бесплатные проверки
     lang: 'ru',
     subscription: null
 };
@@ -91,6 +92,28 @@ window.addEventListener('wheel', (e) => {
     }
 });
 
+// ========== ТАЧ-СКРОЛЛ ДЛЯ ТЕЛЕФОНОВ ==========
+let touchStartY = 0;
+let touchEndY = 0;
+
+window.addEventListener('touchstart', (e) => {
+    touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+window.addEventListener('touchend', (e) => {
+    touchEndY = e.changedTouches[0].screenY;
+    const diff = touchStartY - touchEndY;
+
+    // Свайп вверх (листаем вниз)
+    if (diff > 50 && currentPage < totalPages - 1) {
+        goToPage(currentPage + 1);
+    }
+    // Свайп вниз (листаем вверх)
+    else if (diff < -50 && currentPage > 0) {
+        goToPage(currentPage - 1);
+    }
+}, { passive: true });
+
 // ========== РЕГИСТРАЦИЯ ==========
 function showRegister() {
     document.getElementById('registerOverlay').classList.add('show');
@@ -107,6 +130,11 @@ function doRegister() {
         document.getElementById('headerAvatar').src = userData.avatar;
         updateTotalPages();
         goToPage(1);
+        
+        // ЯВНО ОБНОВЛЯЕМ КНОПКУ ПОСЛЕ ПЕРЕХОДА
+        setTimeout(() => {
+            updateCheckButton();
+        }, 100);
     } else {
         alert('Неверный логин. Попробуйте Secret');
     }
@@ -141,6 +169,7 @@ function openProfile() {
     document.getElementById('profileEmail').textContent = userData.email;
     document.getElementById('notesBalance').textContent = userData.notesBalance;
     document.getElementById('songsTranslated').textContent = userData.songsTranslated;
+    document.getElementById('freeChecks').textContent = userData.freeChecks;
 
     const ring = document.getElementById('avatarRing');
     ring.classList.remove('bronze', 'gold', 'diamond');
@@ -227,34 +256,35 @@ function connectPhone() {
 }
 
 // ========== КНОПКА ПРОВЕРКИ ==========
-function updateCheckButton() {
+window.updateCheckButton = function() {
     const btn = document.getElementById('checkTrackBtn');
-    if (!userData.isLoggedIn) {
-        btn.innerHTML = 'Проверить';
-        btn.classList.remove('disabled');
-        btn.onclick = showRegister;
-    } else if (userData.notesBalance < 1) {
-        btn.classList.add('disabled');
-        btn.innerHTML = 'Недостаточно нот';
-        btn.onclick = showErrorNotes;
-    } else {
-        btn.classList.remove('disabled');
-        btn.innerHTML = '<img class="note-icon-btn" src="note-icon.png" alt="♪"> 1';
-        btn.onclick = tryCheckTrack;
-    }
-}
+    if (!btn) return;
 
-function tryCheckTrack() {
-    if (userData.notesBalance >= 1) {
-        userData.notesBalance--;
-        userData.songsTranslated++;
-        document.getElementById('notesBalance').textContent = userData.notesBalance;
-        document.getElementById('songsTranslated').textContent = userData.songsTranslated;
-        updateCheckButton();
-        incrementTotalChecked();
-        alert('✅ Песня проверена!');
+    btn.classList.remove('disabled');
+    btn.style.background = '#6C5CE7';
+    btn.style.color = '#fff';
+
+    if (!userData.isLoggedIn) {
+        btn.textContent = 'Проверить';
+        btn.onclick = showRegister;
+    } else if (userData.notesBalance > 0) {
+        btn.innerHTML = '<img src="note-icon.png" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;">1 нота';
+        btn.onclick = tryCheckTrack;
+    } else if (userData.freeChecks > 0) {
+        btn.textContent = '🎁 Бесплатно (' + userData.freeChecks + ')';
+        btn.style.background = '#4CAF50';
+        btn.onclick = tryCheckTrack;
+    } else {
+        btn.classList.add('disabled');
+        btn.textContent = '❌ Не хватает нот';
+        btn.style.background = '#444';
+        btn.style.color = '#999';
+        btn.onclick = null;
     }
-}
+};
+
+// Сразу вызываем
+updateCheckButton();
 
 function showErrorNotes() {
     document.getElementById('errorNotesOverlay').classList.add('show');
@@ -473,7 +503,7 @@ document.getElementById('privacyOverlay').addEventListener('click', function (e)
 
 // ========== НОВОСТИ ==========
 function openNewsPage() {
-    document.getElementById('newsPage').classList.add('show');
+    window.location.href = 'news.html';
 }
 
 function closeNewsPage() {
@@ -504,6 +534,175 @@ function closePlayerDemo() {
 document.getElementById('playerDemoOverlay').addEventListener('click', function (e) {
     if (e.target === this) closePlayerDemo();
 });
+
+// ========== ПРОВЕРКА ПЕСНИ (ОТПРАВКА НА СЕРВЕР) ==========
+async function tryCheckTrack() {
+    const trackInput = document.querySelector('#page2 .input-field');
+    const artistInput = document.querySelectorAll('#page2 .input-field')[1];
+
+    const trackName = trackInput ? trackInput.value.trim() : '';
+    const artistName = artistInput ? artistInput.value.trim() : '';
+
+    if (!trackName) {
+        alert('Введите название трека!');
+        return;
+    }
+
+    const btn = document.getElementById('checkTrackBtn');
+    btn.innerHTML = '⏳ Анализируем...';
+    btn.classList.add('disabled');
+    btn.onclick = null;
+
+    // Списываем ноту или бесплатную проверку
+    if (userData.notesBalance > 0) {
+        userData.notesBalance--;
+    } else if (userData.freeChecks > 0) {
+        userData.freeChecks--;
+    } else {
+        updateCheckButton();
+        return;
+    }
+
+    userData.songsTranslated++;
+    document.getElementById('notesBalance').textContent = userData.notesBalance;
+    document.getElementById('songsTranslated').textContent = userData.songsTranslated;
+    document.getElementById('freeChecks').textContent = userData.freeChecks;
+    incrementTotalChecked();
+
+    // Отправляем на сервер
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                track_name: trackName,
+                artist: artistName
+            })
+        });
+
+        if (!response.ok) throw new Error('Ошибка сервера');
+
+        const result = await response.json();
+        console.log('ОТВЕТ БЭКЕНДА:', result);
+
+        if (result.success) {
+            const dataParam = encodeURIComponent(JSON.stringify(result));
+            window.location.href = 'result.html?data=' + dataParam;
+        } else {
+            alert(result.message || 'Песня не найдена');
+            userData.notesBalance++;
+            userData.songsTranslated--;
+            document.getElementById('notesBalance').textContent = userData.notesBalance;
+            document.getElementById('songsTranslated').textContent = userData.songsTranslated;
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert('Не удалось подключиться к серверу. Убедитесь, что backend.py запущен.');
+        userData.notesBalance++;
+        userData.songsTranslated--;
+        document.getElementById('notesBalance').textContent = userData.notesBalance;
+        document.getElementById('songsTranslated').textContent = userData.songsTranslated;
+    } finally {
+        updateCheckButton();
+    }
+}
+
+
+// ========== ИНТЕГРАЦИЯ С БЭКЕНДОМ VORTEX AUDIO ==========
+
+// Функция обновления состояния кнопки проверки
+function updateCheckButton() {
+    const checkBtn = document.getElementById('checkTrackBtn');
+    if (!checkBtn) return;
+
+    if (userData.isLoggedIn) {
+        checkBtn.innerHTML = 'Проверить';
+        checkBtn.classList.remove('disabled');
+
+        checkBtn.onclick = async function () {
+            // Ищем только название песни и автора
+            const trackInput = document.getElementById('trackInputName');
+            const artistInput = document.getElementById('artistInputName');
+
+            if (!trackInput || !trackInput.value.trim()) {
+                alert('Пожалуйста, введите название трека!');
+                return;
+            }
+
+            checkBtn.innerHTML = 'Анализируем...';
+            checkBtn.classList.add('disabled');
+
+            const formData = new FormData();
+            formData.append('track_name', trackInput.value.trim());
+            formData.append('artist_name', artistInput ? artistInput.value.trim() : '');
+
+            // Файл пока не отправляем, так как инпута для него в HTML нет
+
+            try {
+                const response = await fetch('http://localhost:5000/api/check', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Ошибка сервера');
+
+                const result = await response.json();
+
+if (result.status === 'success') {
+    // Маппим поля бэкенда под формат result.html
+    const mappedResult = {
+        success: true,
+        title: result.track_name,
+        artists: result.artist_name ? [result.artist_name] : [],
+        lyrics: result.lyrics,
+        lyrics_analysis: {
+            score: result.text_score,
+            verdict: result.text_reason,
+            bad_words_found: [],
+            is_clean: result.text_score >= 8
+        },
+        beat_analysis: {
+            score: result.beat_score,
+            description: result.beat_reason,
+            bpm: result.bpm,
+            style: ''
+        },
+        overall: {
+            score: result.total_score,
+            verdict: result.total_review,
+            mood: result.mood
+        }
+    };
+    
+    const dataParam = encodeURIComponent(JSON.stringify(mappedResult));
+    window.location.href = 'result.html?data=' + dataParam;
+} else {
+    alert(result.message || 'Песня не найдена');
+}
+            } finally {
+                checkBtn.innerHTML = 'Проверить';
+                checkBtn.classList.remove('disabled');
+            }
+        };
+    }
+}
+
+// Восстановление сессии после возврата с result.html
+if (sessionStorage.getItem('vortex_returning') === 'true') {
+    sessionStorage.removeItem('vortex_returning');
+    if (userData.isLoggedIn) {
+        document.getElementById('topIcons').style.display = 'flex';
+        document.getElementById('headerNickname').textContent = userData.nickname;
+        document.getElementById('headerAvatar').src = userData.avatar;
+        updateTotalPages();
+        goToPage(1);
+        updateCheckButton();
+    }
+}
+
+// Вызываем обновление кнопки, чтобы она сразу подцепила логику, если юзер авторизован
+updateCheckButton();
 
 // ========== ЗАПУСК ==========
 checkPremium();

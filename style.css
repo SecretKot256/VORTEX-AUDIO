@@ -1345,252 +1345,6 @@ html {
     display: none;
 }
 
-/* ========== АДАПТИВ ДЛЯ ТЕЛЕФОНОВ ========== */
-@media (max-width: 768px) {
-    .top-icons {
-        top: 10px;
-        left: 10px;
-        right: 10px;
-    }
-
-    .lang-btn {
-        width: 36px;
-        height: 36px;
-    }
-
-    .lang-flag {
-        width: 22px;
-        height: 22px;
-    }
-
-    .profile-btn {
-        padding: 6px 12px;
-        gap: 6px;
-    }
-
-    .profile-avatar {
-        width: 26px;
-        height: 26px;
-    }
-
-    .profile-nickname {
-        font-size: 12px;
-    }
-
-    /* Страница 1 */
-    .guest-title {
-        font-size: 24px;
-    }
-
-    .guest-subtitle {
-        font-size: 14px;
-        margin-bottom: 30px;
-    }
-
-    .guest-logo {
-        width: 100px;
-        height: 100px;
-        margin-bottom: 24px;
-    }
-
-    .guest-description {
-        font-size: 13px;
-        max-width: 300px;
-    }
-
-    .track-info {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .cover-clean {
-        width: 140px;
-        height: 140px;
-    }
-
-    .track-name {
-        font-size: 22px;
-    }
-
-    .verified-text {
-        font-size: 13px;
-    }
-
-    .check-btn {
-        padding: 14px 32px;
-        font-size: 16px;
-    }
-
-    /* Страница 2 */
-    .check-counter {
-        font-size: 14px;
-    }
-
-    .progress-bar-container {
-        width: 280px;
-    }
-
-    .input-group {
-        width: 280px;
-    }
-
-    .input-field {
-        padding: 12px 16px;
-        font-size: 14px;
-    }
-
-    .help-icon {
-        width: 20px;
-        height: 20px;
-        right: 12px;
-        top: 34px;
-    }
-
-    /* Страница 3 */
-    #page3 {
-        padding: 30px 20px;
-    }
-
-    .what-is-title {
-        font-size: 24px;
-    }
-
-    .what-is-desc {
-        font-size: 14px;
-    }
-
-    .advantages-title {
-        font-size: 20px;
-    }
-
-    .advantage-item {
-        font-size: 14px;
-    }
-
-    /* Страница 4 */
-    #page4 {
-        flex-direction: column;
-        padding: 30px 20px;
-        gap: 20px;
-    }
-
-    .subtitles-title {
-        font-size: 22px;
-    }
-
-    .subtitles-desc {
-        font-size: 14px;
-    }
-
-    .subtitles-gif {
-        width: 280px;
-        height: 280px;
-        margin: 0;
-    }
-
-    /* Футер */
-    #footer {
-        height: auto;
-        min-height: 33.33vh;
-        padding: 20px;
-    }
-
-    .footer-content {
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-    }
-
-    .footer-brand {
-        font-size: 18px;
-    }
-
-    .footer-link {
-        font-size: 13px;
-    }
-
-    /* Профиль */
-    .profile-popup {
-        width: 320px;
-        padding: 20px;
-    }
-
-    .profile-big-avatar {
-        width: 60px;
-        height: 60px;
-    }
-
-    .profile-nickname-big {
-        font-size: 16px;
-    }
-
-    .stat-card {
-        padding: 12px 14px;
-    }
-
-    .stat-value {
-        font-size: 20px;
-    }
-
-    /* Регистрация */
-    .register-popup-content {
-        width: 300px;
-        padding: 24px;
-    }
-
-    /* Магазин */
-    .shop-popup {
-        width: 340px;
-        padding: 20px;
-    }
-
-    .notes-row {
-        flex-wrap: wrap;
-    }
-
-    .note-pack {
-        min-width: 90px;
-        padding: 12px;
-    }
-
-    .note-pack-amount {
-        font-size: 16px;
-    }
-
-    .note-pack-price {
-        font-size: 13px;
-    }
-
-    .subs-row {
-        flex-direction: column;
-    }
-
-    .sub-pack {
-        min-height: auto;
-        padding: 14px;
-    }
-
-    .sub-pack-title {
-        font-size: 14px !important;
-    }
-
-    /* Политика */
-    .privacy-popup {
-        width: 320px;
-    }
-
-    /* Попап плеера */
-    .player-demo-popup {
-        width: 300px;
-        padding: 20px;
-    }
-
-    .player-demo-gif {
-        width: 260px;
-        height: 180px;
-    }
-}
-
 /* Исправление: нота не висит, кнопка ровно по центру */
 .submit-btn {
     display: flex;
@@ -1862,4 +1616,35 @@ html {
 
 .player-demo-close:hover {
     background: #7C6CF7;
+}
+
+.stats-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 100px;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
 }

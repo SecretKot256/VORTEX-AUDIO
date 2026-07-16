@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результат проверки — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="result.css">
+</head>
+<body>
+
+    <!-- Кнопка назад -->
+    <button class="back-btn" onclick="goBackToApp()">← Назад к проверке</button>
+
+    <!-- Заголовок -->
+    <h1 class="result-header" id="resultHeader">Результат проверки</h1>
+
+    <!-- Карточка трека -->
+    <div class="track-card" id="trackCard">
+        <div class="track-card-left">
+            <div class="track-cover" id="trackCover"></div>
+        </div>
+        <div class="track-card-right">
+            <div class="track-title" id="trackTitle">—</div>
+            <div class="track-artists" id="trackArtists">—</div>
+            <div class="track-bpm" id="trackBPM">—</div>
+            <span class="track-badge" id="trackBadge">—</span>
+        </div>
+    </div>
+
+    <!-- Оценки -->
+    <div class="scores-grid">
+        <!-- Текст -->
+        <div class="score-card">
+            <div class="score-label">📝 Оценка текста</div>
+            <div class="score-circle" id="lyricsScoreCircle">
+                <span id="lyricsScore">—</span>/10
+            </div>
+            <div class="score-verdict" id="lyricsVerdict">—</div>
+            <div class="score-details" id="lyricsDetails"></div>
+        </div>
+
+        <!-- Бит -->
+        <div class="score-card">
+            <div class="score-label">🎵 Оценка бита</div>
+            <div class="score-circle" id="beatScoreCircle">
+                <span id="beatScore">—</span>/10
+            </div>
+            <div class="score-verdict" id="beatVerdict">—</div>
+            <div class="score-details" id="beatDetails"></div>
+        </div>
+
+        <!-- Общая -->
+        <div class="score-card overall">
+            <div class="score-label">🌟 Общая оценка</div>
+            <div class="score-circle big" id="overallScoreCircle">
+                <span id="overallScore">—</span>/10
+            </div>
+            <div class="score-verdict" id="overallVerdict">—</div>
+            <div class="score-mood" id="overallMood"></div>
+        </div>
+    </div>
+
+    <!-- Кнопка показать текст -->
+    <div class="show-lyrics-btn" id="showLyricsBtn" onclick="showLyricsPopup()">
+        <span>Показать текст песни</span>
+        <span class="blur-hint">(нажмите, чтобы раскрыть)</span>
+    </div>
+
+    <!-- Кнопка поделиться -->
+    <button class="share-btn" onclick="shareResult()">📤 Поделиться результатом</button>
+
+    <!-- Попап с текстом -->
+    <div class="lyrics-overlay" id="lyricsOverlay">
+        <div class="lyrics-popup">
+            <button class="lyrics-close" onclick="closeLyricsPopup()">✕</button>
+            <h2>📄 Текст песни</h2>
+            <div class="lyrics-text" id="lyricsText">—</div>
+            <div class="lyrics-warning" id="lyricsWarning"></div>
+        </div>
+    </div>
+
+<script>
+    // Обложки для треков (ДОЛЖНО БЫТЬ В САМОМ ВЕРХУ)
+    const covers = {
+        "FUNK MI CAMINO": "cover-funk.jpg",
+        "MONTAGEM TOMADA": "cover-tomada.jpg",
+        "MATADORA": "cover-matadora.jpg"
+    };
+
+    // Получаем данные из URL
+    const params = new URLSearchParams(window.location.search);
+    const resultData = JSON.parse(decodeURIComponent(params.get('data') || '{}'));
+
+    if (resultData.success) {
+        renderResult(resultData);
+    } else {
+        document.getElementById('resultHeader').textContent = 'Песня не найдена';
+        document.getElementById('trackTitle').textContent = 'Попробуйте другое название';
+    }
+
+    function goBackToApp() {
+        sessionStorage.setItem('vortex_returning', 'true');
+        window.location.href = 'index.html';
+    }
+
+    function renderResult(data) {
+        // Карточка трека
+        document.getElementById('trackTitle').textContent = data.title || '—';
+        document.getElementById('trackArtists').textContent = (data.artists || []).join(', ');
+        document.getElementById('trackBPM').textContent = 'BPM: ' + (data.beat_analysis?.bpm || '—');
+        document.getElementById('trackBadge').textContent = data.beat_analysis?.style || '—';
+        
+        // Обложка
+        const coverUrl = covers[data.title] || 'cover.jpg';
+        document.getElementById('trackCover').style.backgroundImage = `url('${coverUrl}')`;
+
+        // Оценка текста
+        const lyricsScore = data.lyrics_analysis?.score || 0;
+        document.getElementById('lyricsScore').textContent = lyricsScore;
+        document.getElementById('lyricsVerdict').textContent = data.lyrics_analysis?.verdict || '—';
+        document.getElementById('lyricsDetails').innerHTML = 
+            (data.lyrics_analysis?.bad_words?.length > 0 
+                ? '⚠️ Найдены слова: <strong>' + data.lyrics_analysis.bad_words.join(', ') + '</strong>' 
+                : '✅ Нецензурных слов не найдено');
+        updateCircleColor('lyricsScoreCircle', lyricsScore);
+
+        // Оценка бита
+        const beatScore = data.beat_analysis?.score || 0;
+        document.getElementById('beatScore').textContent = beatScore;
+        document.getElementById('beatVerdict').textContent = data.beat_analysis?.description || '—';
+        document.getElementById('beatDetails').innerHTML = 
+            'Стиль: <strong>' + (data.beat_analysis?.style || '—') + '</strong> | BPM: <strong>' + (data.beat_analysis?.bpm || '—') + '</strong>';
+        updateCircleColor('beatScoreCircle', beatScore);
+
+        // Общая оценка
+        const overallScore = data.overall?.score || 0;
+        document.getElementById('overallScore').textContent = overallScore;
+        document.getElementById('overallVerdict').textContent = data.overall?.verdict || '—';
+        document.getElementById('overallMood').textContent = data.overall?.mood || '';
+        updateCircleColor('overallScoreCircle', overallScore);
+
+        // Текст песни
+        if (data.lyrics_analysis?.is_clean) {
+            document.getElementById('lyricsWarning').innerHTML = '✅ Текст полностью чистый';
+            document.getElementById('lyricsWarning').style.color = '#4CAF50';
+        } else {
+            document.getElementById('lyricsWarning').innerHTML = '⚠️ В тексте найдены сомнительные слова';
+            document.getElementById('lyricsWarning').style.color = '#e74c3c';
+        }
+
+        // Анимация появления
+        setTimeout(() => {
+            document.getElementById('resultHeader').classList.add('visible');
+        }, 100);
+    }
+
+    function updateCircleColor(id, score) {
+        const circle = document.getElementById(id);
+        if (score >= 8) circle.style.borderColor = '#4CAF50';
+        else if (score >= 5) circle.style.borderColor = '#ffa500';
+        else circle.style.borderColor = '#e74c3c';
+    }
+
+    function showLyricsPopup() {
+        const lyrics = resultData.lyrics || 'Текст отсутствует';
+        const badWords = resultData.lyrics_analysis?.bad_words || [];
+
+        let highlightedLyrics = lyrics;
+        badWords.forEach(word => {
+            const regex = new RegExp(`(${word})`, 'gi');
+            highlightedLyrics = highlightedLyrics.replace(regex, '<span class="bad-word">$1</span>');
+        });
+
+        document.getElementById('lyricsText').innerHTML = highlightedLyrics.replace(/\n/g, '<br>');
+        document.getElementById('lyricsOverlay').classList.add('show');
+    }
+
+    function closeLyricsPopup() {
+        document.getElementById('lyricsOverlay').classList.remove('show');
+    }
+
+    document.getElementById('lyricsOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeLyricsPopup();
+    });
+
+    function shareResult() {
+        const text = 'Проверил песню в VORTEX AUDIO! Общая оценка: ' + 
+                     (resultData.overall?.score || '—') + '/10';
+        if (navigator.share) {
+            navigator.share({ title: 'VORTEX AUDIO', text: text, url: window.location.href });
+        } else {
+            navigator.clipboard.writeText(text + ' ' + window.location.href);
+            alert('Ссылка скопирована!');
+        }
+    }
+</script>
+</body>
+</html>

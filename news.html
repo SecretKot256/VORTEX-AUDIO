@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новости VORTEX AUDIO</title>
+    <link rel="stylesheet" href="news.css">
+</head>
+<body>
+
+    <!-- Кнопка назад -->
+    <a href="index.html" class="back-btn">← Назад</a>
+
+    <!-- Заголовок -->
+    <h1 class="news-header" id="newsHeader">НОВОСТИ VORTEX AUDIO</h1>
+
+    <!-- Карточка с записями -->
+    <div class="news-card">
+        <div class="news-card-top">
+            <span class="news-card-title">Свежие записи</span>
+            <div class="news-arrows">
+                <button class="news-arrow" id="prevBtn" onclick="changePost(-1)">◀</button>
+                <button class="news-arrow" id="nextBtn" onclick="changePost(1)">▶</button>
+            </div>
+        </div>
+        <div class="news-date" id="newsDate"></div>
+        <div class="news-content" id="newsContent"></div>
+        <div class="news-counter" id="newsCounter"></div>
+    </div>
+
+    <!-- Все записи списком внизу -->
+    <div class="all-news" id="allNews"></div>
+
+    <script>
+    // ===== БАЗА НОВОСТЕЙ =====
+    const newsData = [
+        {
+            date: "13 июля 2026",
+            title: "Запуск VORTEX AUDIO",
+            content: "Мы рады сообщить о запуске сервиса VORTEX AUDIO! Теперь вы можете проверять тексты песен на безопасность. Первые 3 проверки — бесплатно для всех новых пользователей.",
+            tag: "Новое"
+        },
+        {
+            date: "10 июля 2026",
+            title: "Добавлены подписки",
+            content: "Теперь доступны три уровня подписок: Бронзовый, Золотой и Бриллиантовый. Каждый уровень даёт уникальные бонусы и ноты каждый месяц.",
+            tag: "Обновление"
+        },
+        {
+            date: "5 июля 2026",
+            title: "Библиотека плохих слов",
+            content: "Мы расширили библиотеку плохих слов до 500+ выражений на 4 языках. Точность проверки значительно выросла.",
+            tag: "Улучшение"
+        },
+        {
+            date: "1 июля 2026",
+            title: "VORTEX AUDIO в разработке",
+            content: "Наша команда усердно работает над созданием лучшего сервиса для проверки песен. Следите за обновлениями!",
+            tag: "Анонс"
+        }
+    ];
+
+    let currentPost = 0;
+
+    function renderPost(index) {
+        if (index < 0) index = newsData.length - 1;
+        if (index >= newsData.length) index = 0;
+        currentPost = index;
+
+        const post = newsData[index];
+        document.getElementById('newsDate').textContent = post.date;
+        document.getElementById('newsContent').innerHTML = `
+            <h2>${post.title}</h2>
+            <span class="news-tag">${post.tag}</span>
+            <p>${post.content}</p>
+        `;
+        document.getElementById('newsCounter').textContent = `${index + 1} / ${newsData.length}`;
+    }
+
+    function changePost(direction) {
+        renderPost(currentPost + direction);
+    }
+
+    function renderAllNews() {
+        const container = document.getElementById('allNews');
+        let html = '<h2 style="margin-bottom:20px;">Все записи</h2>';
+
+        newsData.forEach((post, i) => {
+            html += `
+                <div class="all-news-item" onclick="openNewsPopup(${i})">
+                    <span class="all-news-date">${post.date}</span>
+                    <span class="all-news-title">${post.title}</span>
+                    <span class="news-tag">${post.tag}</span>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    // ===== ПОПАП С ПОЛНОЙ ЗАПИСЬЮ (как в Steam) =====
+    function openNewsPopup(index) {
+        const post = newsData[index];
+        
+        // Создаём оверлей
+        const overlay = document.createElement('div');
+        overlay.className = 'news-popup-overlay';
+        overlay.id = 'newsPopupOverlay';
+        
+        // Создаём попап
+        overlay.innerHTML = `
+            <div class="news-popup">
+                <button class="news-popup-close" onclick="closeNewsPopup()">✕</button>
+                <div class="news-popup-date">${post.date}</div>
+                <h2 class="news-popup-title">${post.title}</h2>
+                <span class="news-tag" style="margin-bottom:16px;">${post.tag}</span>
+                <div class="news-popup-content">
+                    <p>${post.content}</p>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(overlay);
+        
+        // Закрытие по клику на оверлей
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closeNewsPopup();
+        });
+        
+        // Анимация появления
+        setTimeout(() => overlay.classList.add('show'), 10);
+        
+        // Закрытие по Escape
+        document.addEventListener('keydown', handleEscape);
+    }
+
+    function closeNewsPopup() {
+        const overlay = document.getElementById('newsPopupOverlay');
+        if (overlay) {
+            overlay.classList.remove('show');
+            setTimeout(() => overlay.remove(), 300);
+        }
+        document.removeEventListener('keydown', handleEscape);
+    }
+
+    function handleEscape(e) {
+        if (e.key === 'Escape') closeNewsPopup();
+    }
+
+    // Запуск
+    renderPost(0);
+    renderAllNews();
+
+    // Анимация заголовка
+    setTimeout(() => {
+        document.getElementById('newsHeader').classList.add('visible');
+    }, 200);
+</script>
+</body>
+</html>
