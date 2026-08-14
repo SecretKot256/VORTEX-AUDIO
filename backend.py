@@ -1,135 +1,150 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
+import lyricsgenius
+import re
+import sqlite3
+import hashlib
 
+# Flask приложение ДОЛЖНО быть создано первым
 app = Flask(__name__)
 CORS(app)
 
-# ===== БАЗА ДАННЫХ ПЕСЕН =====
-vortex_database = {
-    "funk mi camino": {
-        "title": "FUNK MI CAMINO",
-        "artists": ["Sayfalse", "Junior RCE"],
-        "lyrics": "Dale dale mueve el cuerpo\nFunk mi camino funk mi camino\nLa noche es nuestra no hay freno\nBaila conmigo baila conmigo",
-        "bpm": 130,
-        "style": "Brazilian Funk / Phonk",
-        "genre_mood": "energetic"
-    },
-    "montagem tomada": {
-        "title": "MONTAGEM TOMADA",
-        "artists": ["MXZI"],
-        "lyrics": "Montagem tomada o baile vai começar\nO grave bate forte não dá pra parar\nMontagem tomada a noite é nossa\nSente o fluxo deixa o som te levar",
-        "bpm": 120,
-        "style": "Slowed + Reverb Phonk",
-        "genre_mood": "atmospheric"
-    },
-    "matadora": {
-        "title": "MATADORA",
-        "artists": ["DJ Asul"],
-        "lyrics": "[Инструментальный трек]",
-        "bpm": 130,
-        "style": "Aggressive Phonk / Classic",
-        "genre_mood": "aggressive"
-    }
+GENIUS_TOKEN = "5fMiLqzrNMCnLai6U8JX5YtP1xg7oaJsdSn8S52TEF6JpLCedifYnSoNpOzaflqE"
+genius = lyricsgenius.Genius(GENIUS_TOKEN)
+genius.verbose = False
+genius.remove_section_headers = True
+genius.skip_non_songs = True
+
+BAD_WORDS = {
+    "бля", "блять", "сука", "суки", "нахер", "нахуй", "хуй", "хуя", "хуе", "хую",
+    "пизда", "пиздец", "пизды", "ебать", "ебал", "ебаный", "заебал", "ублюдок",
+    "гондон", "гандон", "мразь", "пидор", "пидорас", "дебил", "идиот", "даун",
+    "жопа", "говно", "залупа",
+    "puta", "puto", "mierda", "cabron", "joder", "coño", "pendejo", "verga", "pinche",
+    "caralho", "porra", "merda", "foder", "foda", "buceta", "viado", "bicha"
 }
 
-# ===== БИБЛИОТЕКА ПЛОХИХ СЛОВ =====
-bad_words = {
-    "блять", "сука", "нахер", "хуй", "пизда", "ебать", "ублюдок", "гандон", "мразь",
-    "fuck", "shit", "bitch", "asshole", "damn", "bastard", "dick", "pussy", "whore", "slut",
-    "puta", "mierda", "cabron", "joder", "coño", "pendejo",
-    "caralho", "porra", "merda", "foder", "buceta",
-}
+# База данных
+def init_db():
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS users
+        (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT, email TEXT,
+         avatar TEXT DEFAULT 'default-avatar.png', phone TEXT, notes_balance INTEGER DEFAULT 0,
+         free_checks INTEGER DEFAULT 3, songs_checked INTEGER DEFAULT 0, subscription TEXT DEFAULT 'none')''')
+    conn.commit()
+    conn.close()
 
-# ===== ФУНКЦИИ =====
+init_db()
 
-def normalize_text(text):
-    return text.lower().strip()
-
-def find_song(track_name):
-    query = normalize_text(track_name)
-    if query in vortex_database:
-        return vortex_database[query]
-    for key, data in vortex_database.items():
-        if query in key or key in query:
-            return data
-    return None
-
-def count_bad_words(lyrics):
-    text_lower = normalize_text(lyrics)
-    words = text_lower.split()
-    found = [w for w in words if w in bad_words]
-    return len(found), found
+# Функции
+def search_genius(track_name, artist_name=""):
+    try:
+        song = genius.search_song(track_name, artist_name if artist_name else None)
+        if song:
+            lyrics = song.lyrics
+            lines = lyrics.split('\n')
+            if lines and 'lyrics' in lines[0].lower():
+                lines = lines[1:]
+            lyrics = '\n'.join(lines).strip()
+            return song.title, song.artist, lyrics, song.song_art_image_url
+        return None, None, None, None
+    except:
+        return None, None, None, None
 
 def analyze_lyrics(lyrics):
-    if not lyrics or lyrics.startswith("[Инструментальный"):
-        return {"score": 10, "verdict": "Инструментальный трек — текст отсутствует.", "bad_words": [], "is_clean": True}
-    
-    bad_count, bad_list = count_bad_words(lyrics)
-    words = lyrics.split()
-    total = len(words)
-    
-    if bad_count == 0:
-        return {"score": 10, "verdict": "Текст полностью чистый. Отличная работа!", "bad_words": [], "is_clean": True}
-    elif bad_count <= 2:
-        return {"score": 7, "verdict": f"Найдено {bad_count} сомнительных слова. В целом приемлемо.", "bad_words": bad_list, "is_clean": False}
-    elif bad_count <= 5:
-        return {"score": 4, "verdict": f"Обнаружено {bad_count} нецензурных слов. Текст требует внимания.", "bad_words": bad_list, "is_clean": False}
-    else:
-        return {"score": 1, "verdict": f"Много нецензурной лексики ({bad_count} слов). Не рекомендуется.", "bad_words": bad_list, "is_clean": False}
+    if not lyrics:
+        return {"status": "no_lyrics", "verdict": "Текст не найден", "is_clean": None, "bad_words": []}
+    if lyrics.strip().startswith("[Инструментальный"):
+        return {"status": "instrumental", "verdict": "Инструментал", "is_clean": True, "bad_words": []}
+    words = re.findall(r'\b\w+\b', lyrics.lower())
+    bad = list(set(w for w in words if w in BAD_WORDS))
+    if not bad:
+        return {"status": "clean", "verdict": "Чисто", "is_clean": True, "bad_words": []}
+    return {"status": "dirty", "verdict": "Грязь", "is_clean": False, "bad_words": bad}
 
-def analyze_beat(bpm, style):
-    if bpm >= 140:
-        return {"score": 3, "description": f"Очень быстрый и агрессивный бит ({bpm} BPM). Может вызывать перевозбуждение.", "bpm": bpm, "style": style}
-    elif bpm >= 120:
-        return {"score": 5, "description": f"Энергичный ритм ({bpm} BPM). Подходит для активного прослушивания.", "bpm": bpm, "style": style}
-    elif bpm >= 100:
-        return {"score": 7, "description": f"Умеренный темп ({bpm} BPM). Приятный и сбалансированный ритм.", "bpm": bpm, "style": style}
-    else:
-        return {"score": 8, "description": f"Спокойный ритм ({bpm} BPM). Расслабляющая атмосфера.", "bpm": bpm, "style": style}
+# API
+@app.route('/api/register', methods=['POST'])
+def register():
+    data = request.json
+    username = data.get('username', '').strip()
+    password = data.get('password', '').strip()
+    email = data.get('email', '').strip()
+    
+    if not username or not password:
+        return jsonify({"success": False, "message": "Заполните все поля!"})
+    
+    hashed = hashlib.sha256(password.encode()).hexdigest()
+    
+    try:
+        conn = sqlite3.connect('users.db')
+        c = conn.cursor()
+        c.execute("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", 
+                  (username, hashed, email))
+        conn.commit()
+        conn.close()
+        return jsonify({"success": True, "message": "Регистрация успешна!"})
+    except sqlite3.IntegrityError:
+        return jsonify({"success": False, "message": "Пользователь уже существует!"})
 
-def get_overall(lyrics_score, beat_score, mood):
-    overall = round((lyrics_score + beat_score) / 2, 1)
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data.get('username', '').strip()
+    password = data.get('password', '').strip()
     
-    if overall >= 8:
-        verdict = f"🌟 Отличная песня! ({overall}/10)\nТрек безопасен для прослушивания. Чистый текст и приятный бит."
-    elif overall >= 5:
-        verdict = f"👍 Хорошая песня ({overall}/10)\nВ целом приемлемо, но есть замечания."
-    else:
-        verdict = f"🚫 Опасная песня ({overall}/10)\nТрек не рекомендуется. Содержит нецензурную лексику или агрессивный бит."
+    hashed = hashlib.sha256(password.encode()).hexdigest()
     
-    mood_map = {"energetic": "🎉 Весёлая и энергичная!", "atmospheric": "🌙 Атмосферная и задумчивая.", "aggressive": "💥 Агрессивная и напористая."}
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM users WHERE username=? AND password=?", (username, hashed))
+    user = c.fetchone()
+    conn.close()
     
-    return {"score": overall, "verdict": verdict, "mood": mood_map.get(mood, "🎵 Нейтральное настроение.")}
-
-# ===== API =====
+    if user:
+        return jsonify({"success": True, "user": {
+            "username": user[1], "email": user[3], "avatar": user[4],
+            "notes_balance": user[6], "free_checks": user[7], 
+            "songs_checked": user[8], "subscription": user[9]
+        }})
+    return jsonify({"success": False, "message": "Неверный логин или пароль!"})
 
 @app.route('/api/check', methods=['POST'])
 def check_track():
     data = request.json
     track_name = data.get('track_name', '').strip()
     artist = data.get('artist', '').strip()
-    
     if not track_name:
         return jsonify({"success": False, "message": "Введите название трека!"}), 400
     
-    song = find_song(track_name)
+    title, artist_name, lyrics, cover_url = search_genius(track_name, artist)
+    if not title:
+        return jsonify({"success": False, "message": f"'{track_name}' не найдена"})
     
-    if not song:
-        return jsonify({"success": False, "message": f"Песня '{track_name}' не найдена в базе VORTEX AUDIO."})
+    analysis = analyze_lyrics(lyrics)
     
-    lyrics_analysis = analyze_lyrics(song['lyrics'])
-    beat_analysis = analyze_beat(song['bpm'], song['style'])
-    overall = get_overall(lyrics_analysis['score'], beat_analysis['score'], song['genre_mood'])
+    if analysis['status'] == 'instrumental':
+        lscore, lverdict = 10, "Инструментальный трек"
+    elif analysis['is_clean']:
+        lscore, lverdict = 10, "Текст чистый!"
+    elif len(analysis['bad_words']) <= 2:
+        lscore, lverdict = 6, f"Найдено {len(analysis['bad_words'])} плохих слова"
+    else:
+        lscore, lverdict = 2, f"Много мата ({len(analysis['bad_words'])} слов)"
+    
+    overall = round((lscore + 7) / 2, 1)
+    overall_verdict = f"🌟 Отлично! ({overall}/10)" if overall >= 8 else f"👍 Хорошо ({overall}/10)" if overall >= 5 else f"🚫 Плохо ({overall}/10)"
     
     return jsonify({
         "success": True,
-        "title": song['title'],
-        "artists": song['artists'],
-        "lyrics": song['lyrics'],
-        "lyrics_analysis": lyrics_analysis,
-        "beat_analysis": beat_analysis,
-        "overall": overall
+        "title": title,
+        "artists": [artist_name or artist or "Unknown"],
+        "lyrics": lyrics or "",
+        "cover_url": cover_url or "",
+        "source": "genius",
+        "lyrics_analysis": analysis,
+        "beat_analysis": {"score": 7, "description": "Бит будет позже", "bpm": 120, "style": ""},
+        "overall": {"score": overall, "verdict": overall_verdict, "mood": "🎵"}
     })
 
 if __name__ == '__main__':

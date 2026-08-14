@@ -8,11 +8,24 @@
 </head>
 <body>
 
-    <!-- Кнопка назад -->
     <button class="back-btn" onclick="goBackToApp()">← Назад к проверке</button>
 
-    <!-- Заголовок -->
     <h1 class="result-header" id="resultHeader">Результат проверки</h1>
+
+    <!-- Попап выбора варианта -->
+    <div class="variant-overlay" id="variantOverlay">
+        <div class="variant-popup">
+            <div class="variant-search">
+                <input type="text" class="variant-search-input" id="variantSearchInput" 
+                       placeholder="Поиск..." oninput="filterVariants()">
+            </div>
+            <div class="variant-list" id="variantList"></div>
+            <div class="variant-nav" id="variantNav"></div>
+            <button class="variant-confirm-btn" id="variantConfirmBtn" onclick="confirmVariant()">
+                Проверить выбранное
+            </button>
+        </div>
+    </div>
 
     <!-- Карточка трека -->
     <div class="track-card" id="trackCard">
@@ -22,14 +35,12 @@
         <div class="track-card-right">
             <div class="track-title" id="trackTitle">—</div>
             <div class="track-artists" id="trackArtists">—</div>
-            <div class="track-bpm" id="trackBPM">—</div>
             <span class="track-badge" id="trackBadge">—</span>
         </div>
     </div>
 
     <!-- Оценки -->
     <div class="scores-grid">
-        <!-- Текст -->
         <div class="score-card">
             <div class="score-label">📝 Оценка текста</div>
             <div class="score-circle" id="lyricsScoreCircle">
@@ -39,17 +50,14 @@
             <div class="score-details" id="lyricsDetails"></div>
         </div>
 
-        <!-- Бит -->
         <div class="score-card">
             <div class="score-label">🎵 Оценка бита</div>
             <div class="score-circle" id="beatScoreCircle">
                 <span id="beatScore">—</span>/10
             </div>
             <div class="score-verdict" id="beatVerdict">—</div>
-            <div class="score-details" id="beatDetails"></div>
         </div>
 
-        <!-- Общая -->
         <div class="score-card overall">
             <div class="score-label">🌟 Общая оценка</div>
             <div class="score-circle big" id="overallScoreCircle">
@@ -60,13 +68,12 @@
         </div>
     </div>
 
-    <!-- Кнопка показать текст -->
-    <div class="show-lyrics-btn" id="showLyricsBtn" onclick="showLyricsPopup()">
+    <div class="show-lyrics-btn" onclick="showLyricsPopup()">
         <span>Показать текст песни</span>
         <span class="blur-hint">(нажмите, чтобы раскрыть)</span>
     </div>
 
-    <!-- Кнопка поделиться -->
+    <button class="translate-btn" onclick="translateLyrics()">🌐 Перевести текст</button>
     <button class="share-btn" onclick="shareResult()">📤 Поделиться результатом</button>
 
     <!-- Попап с текстом -->
@@ -79,120 +86,225 @@
         </div>
     </div>
 
-<script>
-    // Обложки для треков (ДОЛЖНО БЫТЬ В САМОМ ВЕРХУ)
-    const covers = {
-        "FUNK MI CAMINO": "cover-funk.jpg",
-        "MONTAGEM TOMADA": "cover-tomada.jpg",
-        "MATADORA": "cover-matadora.jpg"
-    };
+    <script>
+        // ===== ДАННЫЕ =====
+        const covers = {
+            "FUNK MI CAMINO": "cover-funk.jpg",
+            "MONTAGEM TOMADA": "cover-tomada.jpg",
+            "MATADORA": "cover-matadora.jpg"
+        };
 
-    // Получаем данные из URL
-    const params = new URLSearchParams(window.location.search);
-    const resultData = JSON.parse(decodeURIComponent(params.get('data') || '{}'));
+        const params = new URLSearchParams(window.location.search);
+        const resultData = JSON.parse(decodeURIComponent(params.get('data') || '{}'));
 
-    if (resultData.success) {
-        renderResult(resultData);
-    } else {
-        document.getElementById('resultHeader').textContent = 'Песня не найдена';
-        document.getElementById('trackTitle').textContent = 'Попробуйте другое название';
-    }
+        let selectedVariantIndex = 0;
 
-    function goBackToApp() {
-        sessionStorage.setItem('vortex_returning', 'true');
-        window.location.href = 'index.html';
-    }
-
-    function renderResult(data) {
-        // Карточка трека
-        document.getElementById('trackTitle').textContent = data.title || '—';
-        document.getElementById('trackArtists').textContent = (data.artists || []).join(', ');
-        document.getElementById('trackBPM').textContent = 'BPM: ' + (data.beat_analysis?.bpm || '—');
-        document.getElementById('trackBadge').textContent = data.beat_analysis?.style || '—';
-        
-        // Обложка
-        const coverUrl = covers[data.title] || 'cover.jpg';
-        document.getElementById('trackCover').style.backgroundImage = `url('${coverUrl}')`;
-
-        // Оценка текста
-        const lyricsScore = data.lyrics_analysis?.score || 0;
-        document.getElementById('lyricsScore').textContent = lyricsScore;
-        document.getElementById('lyricsVerdict').textContent = data.lyrics_analysis?.verdict || '—';
-        document.getElementById('lyricsDetails').innerHTML = 
-            (data.lyrics_analysis?.bad_words?.length > 0 
-                ? '⚠️ Найдены слова: <strong>' + data.lyrics_analysis.bad_words.join(', ') + '</strong>' 
-                : '✅ Нецензурных слов не найдено');
-        updateCircleColor('lyricsScoreCircle', lyricsScore);
-
-        // Оценка бита
-        const beatScore = data.beat_analysis?.score || 0;
-        document.getElementById('beatScore').textContent = beatScore;
-        document.getElementById('beatVerdict').textContent = data.beat_analysis?.description || '—';
-        document.getElementById('beatDetails').innerHTML = 
-            'Стиль: <strong>' + (data.beat_analysis?.style || '—') + '</strong> | BPM: <strong>' + (data.beat_analysis?.bpm || '—') + '</strong>';
-        updateCircleColor('beatScoreCircle', beatScore);
-
-        // Общая оценка
-        const overallScore = data.overall?.score || 0;
-        document.getElementById('overallScore').textContent = overallScore;
-        document.getElementById('overallVerdict').textContent = data.overall?.verdict || '—';
-        document.getElementById('overallMood').textContent = data.overall?.mood || '';
-        updateCircleColor('overallScoreCircle', overallScore);
-
-        // Текст песни
-        if (data.lyrics_analysis?.is_clean) {
-            document.getElementById('lyricsWarning').innerHTML = '✅ Текст полностью чистый';
-            document.getElementById('lyricsWarning').style.color = '#4CAF50';
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        if (resultData.success) {
+            if (resultData.variants && resultData.variants.length > 1) {
+                showVariantPopup(resultData.variants);
+            } else {
+                renderResult(resultData);
+            }
         } else {
-            document.getElementById('lyricsWarning').innerHTML = '⚠️ В тексте найдены сомнительные слова';
-            document.getElementById('lyricsWarning').style.color = '#e74c3c';
+            document.getElementById('resultHeader').textContent = 'Песня не найдена';
+            document.getElementById('trackTitle').textContent = 'Попробуйте другое название';
         }
 
-        // Анимация появления
-        setTimeout(() => {
-            document.getElementById('resultHeader').classList.add('visible');
-        }, 100);
-    }
+        // ===== ПОПАП ВЫБОРА ВАРИАНТА =====
+        function showVariantPopup(variants) {
+            document.getElementById('variantOverlay').style.display = 'flex';
+            renderVariants(variants);
+        }
 
-    function updateCircleColor(id, score) {
-        const circle = document.getElementById(id);
-        if (score >= 8) circle.style.borderColor = '#4CAF50';
-        else if (score >= 5) circle.style.borderColor = '#ffa500';
-        else circle.style.borderColor = '#e74c3c';
-    }
+        function renderVariants(variants) {
+            const list = document.getElementById('variantList');
+            const nav = document.getElementById('variantNav');
+            
+            list.innerHTML = variants.map((v, i) => `
+                <div class="variant-item ${i === selectedVariantIndex ? 'selected' : ''}" 
+                     onclick="selectVariant(${i})">
+                    <img class="variant-cover" src="${v.cover_url || 'cover.jpg'}" 
+                         onerror="this.src='cover.jpg'">
+                    <div class="variant-info">
+                        <div class="variant-title">${v.title}</div>
+                        <div class="variant-artist">${v.artist}</div>
+                    </div>
+                </div>
+            `).join('');
 
-    function showLyricsPopup() {
-        const lyrics = resultData.lyrics || 'Текст отсутствует';
-        const badWords = resultData.lyrics_analysis?.bad_words || [];
+            nav.innerHTML = variants.length > 1 ? `
+                <button class="nav-arrow" onclick="prevVariant()" ${selectedVariantIndex === 0 ? 'disabled' : ''}>◀</button>
+                <span>${selectedVariantIndex + 1} / ${variants.length}</span>
+                <button class="nav-arrow" onclick="nextVariant()" ${selectedVariantIndex === variants.length - 1 ? 'disabled' : ''}>▶</button>
+            ` : '';
+        }
 
-        let highlightedLyrics = lyrics;
-        badWords.forEach(word => {
-            const regex = new RegExp(`(${word})`, 'gi');
-            highlightedLyrics = highlightedLyrics.replace(regex, '<span class="bad-word">$1</span>');
+        function selectVariant(index) {
+            selectedVariantIndex = index;
+            renderVariants(resultData.variants);
+        }
+
+        function prevVariant() {
+            if (selectedVariantIndex > 0) {
+                selectVariant(selectedVariantIndex - 1);
+            }
+        }
+
+        function nextVariant() {
+            if (selectedVariantIndex < resultData.variants.length - 1) {
+                selectVariant(selectedVariantIndex + 1);
+            }
+        }
+
+        function filterVariants() {
+            const query = document.getElementById('variantSearchInput').value.toLowerCase();
+            const filtered = resultData.variants.filter(v => 
+                v.title.toLowerCase().includes(query) || 
+                v.artist.toLowerCase().includes(query)
+            );
+            selectedVariantIndex = 0;
+            renderVariants(filtered);
+        }
+
+        function confirmVariant() {
+            document.getElementById('variantOverlay').style.display = 'none';
+            
+            // Отправляем запрос с выбранным вариантом
+            const variant = resultData.variants[selectedVariantIndex];
+            fetch('http://127.0.0.1:5000/api/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    track_name: variant.title,
+                    artist: variant.artist
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) renderResult(data);
+            });
+        }
+
+        // ===== РЕНДЕР РЕЗУЛЬТАТА =====
+        function renderResult(data) {
+            document.getElementById('trackTitle').textContent = data.title || '—';
+            document.getElementById('trackArtists').textContent = (data.artists || []).join(', ');
+            document.getElementById('trackBadge').textContent = data.source === 'genius' ? 'Genius' : 'VORTEX DB';
+
+            const coverUrl = data.cover_url || covers[data.title] || 'cover.jpg';
+            document.getElementById('trackCover').style.backgroundImage = `url('${coverUrl}')`;
+
+            const lyricsScore = data.lyrics_analysis?.score || 0;
+            document.getElementById('lyricsScore').textContent = lyricsScore;
+            document.getElementById('lyricsVerdict').textContent = data.lyrics_analysis?.verdict || '—';
+            document.getElementById('lyricsDetails').innerHTML = 
+                (data.lyrics_analysis?.bad_words?.length > 0 
+                    ? '⚠️ Найдены слова: <strong>' + data.lyrics_analysis.bad_words.join(', ') + '</strong>' 
+                    : '✅ Нецензурных слов не найдено');
+            updateCircleColor('lyricsScoreCircle', lyricsScore);
+
+            const beatScore = data.beat_analysis?.score || 0;
+            document.getElementById('beatScore').textContent = beatScore;
+            document.getElementById('beatVerdict').textContent = data.beat_analysis?.description || '—';
+            updateCircleColor('beatScoreCircle', beatScore);
+
+            const overallScore = data.overall?.score || 0;
+            document.getElementById('overallScore').textContent = overallScore;
+            document.getElementById('overallVerdict').textContent = data.overall?.verdict || '—';
+            document.getElementById('overallMood').textContent = data.overall?.mood || '';
+            updateCircleColor('overallScoreCircle', overallScore);
+
+            document.getElementById('lyricsText').innerHTML = 
+                (data.lyrics_analysis?.highlighted_text || data.lyrics || '').replace(/\n/g, '<br>');
+
+            if (data.lyrics_analysis?.status === 'instrumental') {
+                document.getElementById('lyricsWarning').innerHTML = '🎵 Инструментальный трек';
+                document.getElementById('lyricsWarning').style.color = '#ffa500';
+            } else if (data.lyrics_analysis?.is_clean) {
+                document.getElementById('lyricsWarning').innerHTML = '✅ Текст полностью чистый';
+                document.getElementById('lyricsWarning').style.color = '#4CAF50';
+            } else {
+                document.getElementById('lyricsWarning').innerHTML = '⚠️ Найдена нецензурная лексика';
+                document.getElementById('lyricsWarning').style.color = '#e74c3c';
+            }
+
+            if (data.lyrics_analysis?.age_18_plus) {
+                document.getElementById('lyricsWarning').innerHTML += '<br>🔞 Только 18+';
+            }
+
+            setTimeout(() => {
+                document.getElementById('resultHeader').classList.add('visible');
+            }, 100);
+        }
+
+        // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
+        function updateCircleColor(id, score) {
+            const circle = document.getElementById(id);
+            if (score >= 8) circle.style.borderColor = '#4CAF50';
+            else if (score >= 5) circle.style.borderColor = '#ffa500';
+            else circle.style.borderColor = '#e74c3c';
+        }
+
+        function goBackToApp() {
+            sessionStorage.setItem('vortex_returning', 'true');
+            window.location.href = 'index.html';
+        }
+
+        function showLyricsPopup() {
+            document.getElementById('lyricsOverlay').classList.add('show');
+        }
+
+        function closeLyricsPopup() {
+            document.getElementById('lyricsOverlay').classList.remove('show');
+        }
+
+        document.getElementById('lyricsOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeLyricsPopup();
         });
 
-        document.getElementById('lyricsText').innerHTML = highlightedLyrics.replace(/\n/g, '<br>');
-        document.getElementById('lyricsOverlay').classList.add('show');
-    }
-
-    function closeLyricsPopup() {
-        document.getElementById('lyricsOverlay').classList.remove('show');
-    }
-
-    document.getElementById('lyricsOverlay').addEventListener('click', function(e) {
-        if (e.target === this) closeLyricsPopup();
-    });
-
-    function shareResult() {
-        const text = 'Проверил песню в VORTEX AUDIO! Общая оценка: ' + 
-                     (resultData.overall?.score || '—') + '/10';
-        if (navigator.share) {
-            navigator.share({ title: 'VORTEX AUDIO', text: text, url: window.location.href });
-        } else {
-            navigator.clipboard.writeText(text + ' ' + window.location.href);
-            alert('Ссылка скопирована!');
+        function shareResult() {
+            const text = 'Проверил песню в VORTEX AUDIO! Общая оценка: ' + 
+                         (resultData.overall?.score || '—') + '/10';
+            if (navigator.share) {
+                navigator.share({ title: 'VORTEX AUDIO', text: text });
+            } else {
+                navigator.clipboard.writeText(text);
+                alert('Ссылка скопирована!');
+            }
         }
-    }
-</script>
+
+        function translateLyrics() {
+            const lyrics = resultData.lyrics || '';
+            const lang = detectLanguage(lyrics);
+            
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${lang}&tl=ru&dt=t&q=${encodeURIComponent(lyrics)}`;
+            
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    let translated = '';
+                    data[0].forEach(part => translated += part[0]);
+                    
+                    const popup = document.createElement('div');
+                    popup.className = 'translate-popup';
+                    popup.innerHTML = `
+                        <div class="translate-content">
+                            <button onclick="this.parentElement.parentElement.remove()">✕</button>
+                            <h3>🌐 Перевод (${lang.toUpperCase()} → Русский)</h3>
+                            <div class="translate-text">${translated.replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `;
+                    document.body.appendChild(popup);
+                });
+        }
+
+        function detectLanguage(text) {
+            if (/[а-яё]/i.test(text)) return 'ru';
+            if (/[áàâãéêíóôõúç]/i.test(text)) return 'pt';
+            if (/[áéíóúñü]/i.test(text)) return 'es';
+            return 'en';
+        }
+    </script>
 </body>
 </html>

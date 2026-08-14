@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблица лидеров — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="leaderboard.css">
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← Назад</a>
+
+    <h1 class="lb-header" id="lbHeader">ТАБЛИЦА ЛИДЕРОВ</h1>
+
+    <div class="lb-controls">
+        <button class="lb-filter-btn" onclick="toggleFilterPopup()">
+            📊 Таблица лидеров по...
+        </button>
+        <button class="lb-sort-btn" onclick="toggleSortPopup()">
+            🔽 Сортировать
+        </button>
+    </div>
+
+    <!-- Попап фильтра -->
+    <div class="lb-popup" id="filterPopup">
+        <button onclick="setFilter('checks')">✅ Проверкам песен</button>
+        <button onclick="setFilter('notes')">💎 Накопленным нотам</button>
+        <button onclick="setFilter('subscription')">👑 Уровню подписки</button>
+    </div>
+
+    <!-- Попап сортировки -->
+    <div class="lb-popup" id="sortPopup">
+        <button onclick="setSort('az')">🔤 А-Я</button>
+        <button onclick="setSort('top')">⬆ От первого</button>
+        <button onclick="setSort('bottom')">⬇ От последнего</button>
+    </div>
+
+    <!-- Таблица -->
+    <table class="lb-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Игрок</th>
+                <th id="filterLabel">Проверки</th>
+                <th>Подписка</th>
+            </tr>
+        </thead>
+        <tbody id="lbBody">
+            <tr>
+                <td>🥇</td>
+                <td><img src="default-avatar.png" class="lb-avatar"> Secret</td>
+                <td>142</td>
+                <td>💎 Бриллиант</td>
+            </tr>
+            <tr>
+                <td>🥈</td>
+                <td><img src="default-avatar.png" class="lb-avatar"> VortexPro</td>
+                <td>98</td>
+                <td>🥇 Золото</td>
+            </tr>
+            <tr>
+                <td>🥉</td>
+                <td><img src="default-avatar.png" class="lb-avatar"> MusicMaster</td>
+                <td>76</td>
+                <td>🥉 Бронза</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><img src="default-avatar.png" class="lb-avatar"> BeatHunter</td>
+                <td>54</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td><img src="default-avatar.png" class="lb-avatar"> LyricKing</td>
+                <td>31</td>
+                <td>—</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function toggleFilterPopup() {
+            document.getElementById('filterPopup').classList.toggle('show');
+            document.getElementById('sortPopup').classList.remove('show');
+        }
+
+        function toggleSortPopup() {
+            document.getElementById('sortPopup').classList.toggle('show');
+            document.getElementById('filterPopup').classList.remove('show');
+        }
+
+        function setFilter(type) {
+            const labels = { checks: 'Проверки', notes: 'Ноты', subscription: 'Подписка' };
+            document.getElementById('filterLabel').textContent = labels[type];
+            document.getElementById('filterPopup').classList.remove('show');
+        }
+
+        function setSort(type) {
+            document.getElementById('sortPopup').classList.remove('show');
+            // Тут будет логика сортировки
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.lb-filter-btn') && !e.target.closest('#filterPopup')) {
+                document.getElementById('filterPopup').classList.remove('show');
+            }
+            if (!e.target.closest('.lb-sort-btn') && !e.target.closest('#sortPopup')) {
+                document.getElementById('sortPopup').classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

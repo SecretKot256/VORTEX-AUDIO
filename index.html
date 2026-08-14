@@ -15,20 +15,18 @@
 
     <!-- Иконки всегда сверху -->
     <div class="top-icons" id="topIcons" style="display: none;">
+        <!-- Переключатель темы слева -->
+        <label class="theme-switch" title="Переключить тему">
+            <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+            <span class="theme-slider"></span>
+        </label>
+
+        <!-- Язык по центру -->
         <div class="lang-btn" onclick="toggleLangPopup()">
             <img class="lang-flag" id="currentFlag" src="flag-ru.png" alt="RU">
         </div>
-        <div class="lang-popup" id="langPopup">
-            <button class="lang-option" onclick="setLang('ru')">
-                <img class="lang-option-flag" src="flag-ru.png" alt="RU">
-                Русский
-            </button>
-            <button class="lang-option" onclick="setLang('en')">
-                <img class="lang-option-flag" src="flag-uk.png" alt="UK">
-                English
-            </button>
-        </div>
 
+        <!-- Профиль справа -->
         <div class="profile-btn" onclick="openProfile()" id="profileButton">
             <img class="profile-avatar" id="headerAvatar" src="default-avatar.png" alt="Avatar">
             <span class="profile-nickname" id="headerNickname">User</span>
@@ -37,6 +35,7 @@
 
     <!-- ==================== СТРАНИЦА 1 (гость/премиум) ==================== -->
     <div class="page" id="page1">
+        <!-- Премиум -->
         <div class="top-section" id="premiumContent">
             <div class="bg-blurred"></div>
             <div class="track-info">
@@ -51,23 +50,44 @@
             </div>
         </div>
 
+        <!-- Гость -->
         <div class="top-section hidden" id="guestContent">
             <div class="guest-content">
-                <div class="guest-title">Узнай текст песни за секунды</div>
-                <div class="guest-subtitle">Узнай, о чём поётся в песне. Проверь, безопасна ли она</div>
+                <div class="guest-hero-text">Ты слушаешь. Мы фильтруем.</div>
                 <img class="guest-logo" src="vortex-logo.png" alt="Vortex Logo">
-                <div class="guest-description">
-                    Vortex Audio — это сервис, который помогает узнать, о чём поётся в песне, и проверяет, безопасен ли
-                    текст для детей.
+                <div class="guest-logo-text">Все имеют право слушать безопасные песни. Но что, если песня на незнакомом
+                    языке?
+                    Тут в помощь приходит VORTEX AUDIO - Проверь текст песни за секунды</div>
+                <div class="brands-scroll">
+                    <div class="brands-track" id="brandsTrack">
+                        <span class="brand-item">🎵 Spotify</span>
+                        <span class="brand-item">🎧 Apple Music</span>
+                        <span class="brand-item">📻 Deezer</span>
+                        <span class="brand-item">🎤 Genius</span>
+                        <span class="brand-item">🎼 Shazam</span>
+                        <span class="brand-item">📀 Sony Music</span>
+                        <span class="brand-item">🎹 Universal</span>
+                        <span class="brand-item">🎵 Spotify</span>
+                        <span class="brand-item">🎧 Apple Music</span>
+                        <span class="brand-item">📻 Deezer</span>
+                        <span class="brand-item">🎤 Genius</span>
+                        <span class="brand-item">🎼 Shazam</span>
+                        <span class="brand-item">📀 Sony Music</span>
+                        <span class="brand-item">🎹 Universal</span>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Нижняя секция -->
         <div class="bottom-section">
-            <button class="check-btn" onclick="goToPage(1)">
-                Проверить
-                <span class="arrow-down">↓</span>
-            </button>
+            <div class="bottom-content">
+                <div class="guest-short-desc">Первая песня — бесплатно</div>
+                <button class="check-btn" onclick="goToPage(1)">
+                    Проверить
+                    <span class="arrow-down">↓</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -97,7 +117,7 @@
         </div>
         <!-- Кнопка на странице 2 -->
         <button class="submit-btn" id="checkTrackBtn">Проверить</button>
-
+        <button class="leaderboard-btn" onclick="openLeaderboard()">🏆 Таблица лидеров</button>
     </div>
 
     <!-- ==================== СТРАНИЦА 3 (плюсы) ==================== -->
@@ -198,6 +218,7 @@
             </div>
 
             <button class="buy-notes-btn" onclick="openShop()">💰 Купить ноты</button>
+            <button class="buy-notes-btn" style="background:#444; margin-top:8px;" onclick="logout()">🚪 Выйти</button>
         </div>
     </div>
 

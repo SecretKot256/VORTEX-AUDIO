@@ -5,17 +5,15 @@ let userData = {
     email: 'user@example.com',
     avatar: 'default-avatar.png',
     phone: null,
-    notesBalance: 0,        // было 42, теперь 0 для теста
-    songsTranslated: 0,     // было 17
-    freeChecks: 3,          // бесплатные проверки
+    notesBalance: 0,
+    songsTranslated: 0,
+    freeChecks: 3,
     lang: 'ru',
     subscription: null
 };
 
 const savedAvatar = localStorage.getItem('vortex_avatar');
-if (savedAvatar) {
-    userData.avatar = savedAvatar;
-}
+if (savedAvatar) userData.avatar = savedAvatar;
 
 function saveUserData() {
     if (userData.avatar !== 'default-avatar.png') {
@@ -23,6 +21,20 @@ function saveUserData() {
     } else {
         localStorage.removeItem('vortex_avatar');
     }
+}
+
+// ========== ТЕМА ==========
+function toggleTheme() {
+    const isLight = document.getElementById('themeToggle').checked;
+    document.body.classList.toggle('light', isLight);
+    localStorage.setItem('vortex_theme', isLight ? 'light' : 'dark');
+}
+
+const savedTheme = localStorage.getItem('vortex_theme');
+if (savedTheme === 'light') {
+    document.body.classList.add('light');
+    const toggle = document.getElementById('themeToggle');
+    if (toggle) toggle.checked = true;
 }
 
 // ========== ПРЕМИУМ ==========
@@ -40,21 +52,20 @@ function checkPremium() {
 // ========== НАВИГАЦИЯ ==========
 let currentPage = 0;
 let totalPages = 4;
+let scrollAccumulator = 0;
+const scrollThreshold = window.innerHeight / 3;
 
 function updateTotalPages() {
     if (userData.isLoggedIn) {
         totalPages = 3;
         document.getElementById('page3').style.display = 'none';
         document.getElementById('page4').style.display = 'none';
-        updateCheckButton();
     } else {
         totalPages = 5;
         document.getElementById('page3').style.display = 'flex';
         document.getElementById('page4').style.display = 'flex';
-        document.getElementById('checkTrackBtn').innerHTML = 'Проверить';
-        document.getElementById('checkTrackBtn').classList.remove('disabled');
-        document.getElementById('checkTrackBtn').onclick = showRegister;
     }
+    updateCheckButton();
 }
 
 function goToPage(index) {
@@ -85,33 +96,26 @@ function goToPage(index) {
 }
 
 window.addEventListener('wheel', (e) => {
-    if (e.deltaY > 0 && currentPage < totalPages - 1) {
+    scrollAccumulator += e.deltaY;
+    if (scrollAccumulator > scrollThreshold && currentPage < totalPages - 1) {
         goToPage(currentPage + 1);
-    } else if (e.deltaY < 0 && currentPage > 0) {
+        scrollAccumulator = 0;
+    } else if (scrollAccumulator < -scrollThreshold && currentPage > 0) {
         goToPage(currentPage - 1);
+        scrollAccumulator = 0;
     }
 });
 
-// ========== ТАЧ-СКРОЛЛ ДЛЯ ТЕЛЕФОНОВ ==========
+// ========== ТАЧ-СКРОЛЛ ==========
 let touchStartY = 0;
-let touchEndY = 0;
-
 window.addEventListener('touchstart', (e) => {
     touchStartY = e.changedTouches[0].screenY;
 }, { passive: true });
 
 window.addEventListener('touchend', (e) => {
-    touchEndY = e.changedTouches[0].screenY;
-    const diff = touchStartY - touchEndY;
-
-    // Свайп вверх (листаем вниз)
-    if (diff > 50 && currentPage < totalPages - 1) {
-        goToPage(currentPage + 1);
-    }
-    // Свайп вниз (листаем вверх)
-    else if (diff < -50 && currentPage > 0) {
-        goToPage(currentPage - 1);
-    }
+    const diff = touchStartY - e.changedTouches[0].screenY;
+    if (diff > scrollThreshold && currentPage < totalPages - 1) goToPage(currentPage + 1);
+    else if (diff < -scrollThreshold && currentPage > 0) goToPage(currentPage - 1);
 }, { passive: true });
 
 // ========== РЕГИСТРАЦИЯ ==========
@@ -119,29 +123,51 @@ function showRegister() {
     document.getElementById('registerOverlay').classList.add('show');
 }
 
-function doRegister() {
-    const login = document.getElementById('regLogin').value;
-    if (login === 'Secret') {
-        userData.isLoggedIn = true;
-        userData.nickname = login;
-        document.getElementById('registerOverlay').classList.remove('show');
-        document.getElementById('topIcons').style.display = 'flex';
-        document.getElementById('headerNickname').textContent = login;
-        document.getElementById('headerAvatar').src = userData.avatar;
-        updateTotalPages();
-        goToPage(1);
-        
-        // ЯВНО ОБНОВЛЯЕМ КНОПКУ ПОСЛЕ ПЕРЕХОДА
-        setTimeout(() => {
-            updateCheckButton();
-        }, 100);
-    } else {
-        alert('Неверный логин. Попробуйте Secret');
+async function doRegister() {
+    const username = document.getElementById('regLogin').value.trim();
+    const email = document.querySelector('#registerOverlay input[type="email"]')?.value || '';
+    const password = document.querySelector('#registerOverlay input[type="password"]')?.value || '';
+
+    if (!username || !password) {
+        alert('Заполните логин и пароль!');
+        return;
+    }
+
+    try {
+        const response = await fetch('https://SavaVortexAudio.pythonanywhere.com/api/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password, email })
+        });
+        const result = await response.json();
+
+        if (result.success) {
+            userData.isLoggedIn = true;
+            userData.nickname = username;
+            userData.email = email;
+            userData.notesBalance = 0;
+            userData.freeChecks = 1;
+
+            document.getElementById('registerOverlay').classList.remove('show');
+            document.getElementById('topIcons').style.display = 'flex';
+            document.getElementById('headerNickname').textContent = username;
+            updateTotalPages();
+            goToPage(1);
+
+            const trackInput = document.getElementById('trackInputName');
+            if (trackInput && trackInput.value.trim()) {
+                setTimeout(() => tryCheckTrack(), 500);
+            }
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        alert('Сервер недоступен. Используйте логин Secret.');
     }
 }
 
-document.getElementById('registerOverlay').addEventListener('click', function (e) {
-    if (e.target === this) document.getElementById('registerOverlay').classList.remove('show');
+document.getElementById('registerOverlay').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('show');
 });
 
 // ========== ЯЗЫК ==========
@@ -197,25 +223,19 @@ function closeProfile() {
     document.getElementById('avatarEditMenu').classList.remove('show');
 }
 
-document.getElementById('profileOverlay').addEventListener('click', function (e) {
+document.getElementById('profileOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeProfile();
 });
 
 // ========== АВАТАР ==========
-function toggleAvatarMenu() {
-    document.getElementById('avatarEditMenu').classList.toggle('show');
-}
-
-function uploadAvatar() {
-    document.getElementById('avatarEditMenu').classList.remove('show');
-    document.getElementById('avatarFileInput').click();
-}
+function toggleAvatarMenu() { document.getElementById('avatarEditMenu').classList.toggle('show'); }
+function uploadAvatar() { document.getElementById('avatarEditMenu').classList.remove('show'); document.getElementById('avatarFileInput').click(); }
 
 function handleAvatarUpload(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = function(e) {
             userData.avatar = e.target.result;
             document.getElementById('profileAvatar').src = userData.avatar;
             document.getElementById('headerAvatar').src = userData.avatar;
@@ -234,7 +254,7 @@ function deleteAvatar() {
     saveUserData();
 }
 
-document.addEventListener('click', function (e) {
+document.addEventListener('click', function(e) {
     if (!e.target.closest('.avatar-edit-btn') && !e.target.closest('.avatar-edit-menu')) {
         document.getElementById('avatarEditMenu').classList.remove('show');
     }
@@ -255,8 +275,23 @@ function connectPhone() {
     }
 }
 
+// ========== ВЫХОД ==========
+function logout() {
+    document.cookie = 'vortex_login=; max-age=0; path=/';
+    document.cookie = 'vortex_avatar=; max-age=0; path=/';
+    userData.isLoggedIn = false;
+    userData.nickname = 'User';
+    userData.avatar = 'default-avatar.png';
+    closeProfile();
+    document.getElementById('topIcons').style.display = 'none';
+    document.getElementById('headerNickname').textContent = 'User';
+    document.getElementById('headerAvatar').src = 'default-avatar.png';
+    updateTotalPages();
+    goToPage(0);
+}
+
 // ========== КНОПКА ПРОВЕРКИ ==========
-window.updateCheckButton = function() {
+function updateCheckButton() {
     const btn = document.getElementById('checkTrackBtn');
     if (!btn) return;
 
@@ -281,67 +316,37 @@ window.updateCheckButton = function() {
         btn.style.color = '#999';
         btn.onclick = null;
     }
-};
-
-// Сразу вызываем
-updateCheckButton();
-
-function showErrorNotes() {
-    document.getElementById('errorNotesOverlay').classList.add('show');
 }
 
-function openShopFromError() {
-    document.getElementById('errorNotesOverlay').classList.remove('show');
-    openShop();
-}
+function showErrorNotes() { document.getElementById('errorNotesOverlay').classList.add('show'); }
+function openShopFromError() { document.getElementById('errorNotesOverlay').classList.remove('show'); openShop(); }
 
-document.getElementById('errorNotesOverlay').addEventListener('click', function (e) {
-    if (e.target === this) this.classList.remove('show');
-});
-
-// ========== СЧЁТЧИК ПРОВЕРОК (анимация только последних цифр) ==========
+// ========== СЧЁТЧИК ==========
 let totalChecked = 25000;
 let counterInterval = null;
 
-function formatNumber(num) {
-    return num.toLocaleString('ru-RU');
-}
+function formatNumber(num) { return num.toLocaleString('ru-RU'); }
 
 function renderCounter() {
     const container = document.getElementById('totalChecked');
     const numStr = formatNumber(totalChecked);
     let html = '';
-
     for (let i = 0; i < numStr.length; i++) {
         const char = numStr[i];
-        if (char === ' ' || char === ',') {
-            html += '<span class="counter-separator"> </span>';
-        } else {
-            html += `<span class="counter-digit-wrapper"><span class="counter-digit">${char}</span></span>`;
-        }
+        if (char === ' ' || char === ',') html += '<span class="counter-separator"> </span>';
+        else html += `<span class="counter-digit-wrapper"><span class="counter-digit">${char}</span></span>`;
     }
-
     container.innerHTML = html;
 }
 
 function animateLastDigits(oldNum, newNum) {
     const oldStr = formatNumber(oldNum);
     const newStr = formatNumber(newNum);
-
-    // Находим, сколько последних цифр изменилось
     let diffIndex = -1;
     for (let i = newStr.length - 1; i >= 0; i--) {
-        if (newStr[i] !== oldStr[i]) {
-            diffIndex = i;
-        } else {
-            break;
-        }
+        if (newStr[i] !== oldStr[i]) { diffIndex = i; } else break;
     }
-
     const wrappers = document.querySelectorAll('.counter-digit-wrapper');
-    const separators = document.querySelectorAll('.counter-separator');
-
-    // Анимируем только изменившиеся цифры
     for (let i = diffIndex; i < wrappers.length; i++) {
         if (wrappers[i]) {
             const digit = wrappers[i].querySelector('.counter-digit');
@@ -382,14 +387,8 @@ function updateProgressBar() {
     document.getElementById('progressFill').style.width = progress + '%';
 }
 
-renderCounter();
-startCounterAuto();
-updateProgressBar();
-
-// ========== МАГАЗИН НОТ ==========
-let selectedNotes = 100;
-let selectedPrice = 1000;
-let shopTab = 'notes';
+// ========== МАГАЗИН ==========
+let selectedNotes = 100, selectedPrice = 1000, shopTab = 'notes';
 
 function openShop() {
     document.getElementById('shopBalance').textContent = userData.notesBalance + ' нот';
@@ -403,32 +402,22 @@ function openShop() {
 
 function switchShopTab(tab) {
     shopTab = tab;
-    if (tab === 'notes') {
-        document.getElementById('tabNotes').classList.add('active');
-        document.getElementById('tabSubs').classList.remove('active');
-        document.getElementById('notesContent').classList.remove('hidden');
-        document.getElementById('subsContent').classList.add('hidden');
-    } else {
-        document.getElementById('tabSubs').classList.add('active');
-        document.getElementById('tabNotes').classList.remove('active');
-        document.getElementById('subsContent').classList.remove('hidden');
-        document.getElementById('notesContent').classList.add('hidden');
-    }
+    document.getElementById('tabNotes').classList.toggle('active', tab === 'notes');
+    document.getElementById('tabSubs').classList.toggle('active', tab === 'subs');
+    document.getElementById('notesContent').classList.toggle('hidden', tab !== 'notes');
+    document.getElementById('subsContent').classList.toggle('hidden', tab !== 'subs');
 }
 
 function selectPack(element, notes, price) {
     clearPackSelection();
     element.classList.add('selected');
-    selectedNotes = notes;
-    selectedPrice = price;
+    selectedNotes = notes; selectedPrice = price;
     document.getElementById('customNotesInput').value = notes;
     document.getElementById('customPriceInput').value = price;
     document.getElementById('notesSlider').value = notes;
 }
 
-function clearPackSelection() {
-    document.querySelectorAll('.note-pack').forEach(p => p.classList.remove('selected'));
-}
+function clearPackSelection() { document.querySelectorAll('.note-pack').forEach(p => p.classList.remove('selected')); }
 
 function onSliderInput() {
     clearPackSelection();
@@ -442,8 +431,7 @@ function onCustomNotesInput() {
     clearPackSelection();
     let notes = parseInt(document.getElementById('customNotesInput').value);
     if (isNaN(notes) || notes < 1) notes = 1;
-    selectedNotes = notes;
-    selectedPrice = notes * 10;
+    selectedNotes = notes; selectedPrice = notes * 10;
     document.getElementById('customPriceInput').value = selectedPrice;
     document.getElementById('notesSlider').value = Math.min(notes, 1000);
 }
@@ -452,8 +440,7 @@ function onCustomPriceInput() {
     clearPackSelection();
     let price = parseInt(document.getElementById('customPriceInput').value);
     if (isNaN(price) || price < 10) price = 10;
-    selectedPrice = price;
-    selectedNotes = Math.floor(price / 10);
+    selectedPrice = price; selectedNotes = Math.floor(price / 10);
     document.getElementById('customNotesInput').value = selectedNotes;
     document.getElementById('notesSlider').value = Math.min(selectedNotes, 1000);
 }
@@ -467,101 +454,51 @@ function selectSub(element, sub) {
 
 function buyNotes() {
     document.getElementById('shopOverlay').classList.remove('show');
-
     setTimeout(() => {
         document.getElementById('paymentSuccessOverlay').classList.add('show');
         userData.notesBalance += selectedNotes;
         document.getElementById('notesBalance').textContent = userData.notesBalance;
         updateCheckButton();
-
-        setTimeout(() => {
-            document.getElementById('paymentSuccessOverlay').classList.remove('show');
-        }, 2000);
+        setTimeout(() => document.getElementById('paymentSuccessOverlay').classList.remove('show'), 2000);
     }, 1000);
 }
 
-document.getElementById('shopOverlay').addEventListener('click', function (e) {
-    if (e.target === this) this.classList.remove('show');
-});
+document.getElementById('shopOverlay').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
+document.getElementById('paymentSuccessOverlay').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
+document.getElementById('errorNotesOverlay').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
 
-document.getElementById('paymentSuccessOverlay').addEventListener('click', function (e) {
-    if (e.target === this) this.classList.remove('show');
-});
+// ========== ПОЛИТИКА / НОВОСТИ / ИНФО ==========
+function openPrivacyPopup() { document.getElementById('privacyOverlay').classList.add('show'); }
+function closePrivacyPopup() { document.getElementById('privacyOverlay').classList.remove('show'); }
+document.getElementById('privacyOverlay').addEventListener('click', function(e) { if (e.target === this) closePrivacyPopup(); });
 
-// ========== ПОЛИТИКА ==========
-function openPrivacyPopup() {
-    document.getElementById('privacyOverlay').classList.add('show');
-}
+function openNewsPage() { window.location.href = 'news.html'; }
+function openLeaderboard() { window.open('leaderboard.html', '_blank'); }
 
-function closePrivacyPopup() {
-    document.getElementById('privacyOverlay').classList.remove('show');
-}
+function showInfoPopup() { document.getElementById('infoPopup').classList.add('show'); setTimeout(() => document.getElementById('infoPopup').classList.remove('show'), 2500); }
+function hideInfoPopup() { document.getElementById('infoPopup').classList.remove('show'); }
 
-document.getElementById('privacyOverlay').addEventListener('click', function (e) {
-    if (e.target === this) closePrivacyPopup();
-});
+function openPlayerDemo() { document.getElementById('playerDemoOverlay').classList.add('show'); }
+function closePlayerDemo() { document.getElementById('playerDemoOverlay').classList.remove('show'); }
+document.getElementById('playerDemoOverlay').addEventListener('click', function(e) { if (e.target === this) closePlayerDemo(); });
 
-// ========== НОВОСТИ ==========
-function openNewsPage() {
-    window.location.href = 'news.html';
-}
-
-function closeNewsPage() {
-    document.getElementById('newsPage').classList.remove('show');
-}
-
-// ========== ВСПЛЫВАЮЩИЕ ОКНА ==========
-function showInfoPopup() {
-    document.getElementById('infoPopup').classList.add('show');
-    setTimeout(() => {
-        document.getElementById('infoPopup').classList.remove('show');
-    }, 2500);
-}
-
-function hideInfoPopup() {
-    document.getElementById('infoPopup').classList.remove('show');
-}
-
-// ========== ДЕМО ПЛЕЕРА ==========
-function openPlayerDemo() {
-    document.getElementById('playerDemoOverlay').classList.add('show');
-}
-
-function closePlayerDemo() {
-    document.getElementById('playerDemoOverlay').classList.remove('show');
-}
-
-document.getElementById('playerDemoOverlay').addEventListener('click', function (e) {
-    if (e.target === this) closePlayerDemo();
-});
-
-// ========== ПРОВЕРКА ПЕСНИ (ОТПРАВКА НА СЕРВЕР) ==========
+// ========== ПРОВЕРКА ПЕСНИ ==========
 async function tryCheckTrack() {
-    const trackInput = document.querySelector('#page2 .input-field');
-    const artistInput = document.querySelectorAll('#page2 .input-field')[1];
-
+    const trackInput = document.getElementById('trackInputName');
+    const artistInput = document.getElementById('artistInputName');
     const trackName = trackInput ? trackInput.value.trim() : '';
     const artistName = artistInput ? artistInput.value.trim() : '';
 
-    if (!trackName) {
-        alert('Введите название трека!');
-        return;
-    }
+    if (!trackName) { alert('Введите название трека!'); return; }
 
     const btn = document.getElementById('checkTrackBtn');
     btn.innerHTML = '⏳ Анализируем...';
     btn.classList.add('disabled');
     btn.onclick = null;
 
-    // Списываем ноту или бесплатную проверку
-    if (userData.notesBalance > 0) {
-        userData.notesBalance--;
-    } else if (userData.freeChecks > 0) {
-        userData.freeChecks--;
-    } else {
-        updateCheckButton();
-        return;
-    }
+    if (userData.notesBalance > 0) userData.notesBalance--;
+    else if (userData.freeChecks > 0) userData.freeChecks--;
+    else { updateCheckButton(); return; }
 
     userData.songsTranslated++;
     document.getElementById('notesBalance').textContent = userData.notesBalance;
@@ -569,142 +506,65 @@ async function tryCheckTrack() {
     document.getElementById('freeChecks').textContent = userData.freeChecks;
     incrementTotalChecked();
 
-    // Отправляем на сервер
     try {
-        const response = await fetch('http://127.0.0.1:5000/api/check', {
+        const response = await fetch('https://SavaVortexAudio.pythonanywhere.com/api/check', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                track_name: trackName,
-                artist: artistName
-            })
+            body: JSON.stringify({ track_name: trackName, artist: artistName })
         });
-
-        if (!response.ok) throw new Error('Ошибка сервера');
-
         const result = await response.json();
-        console.log('ОТВЕТ БЭКЕНДА:', result);
-
         if (result.success) {
-            const dataParam = encodeURIComponent(JSON.stringify(result));
-            window.location.href = 'result.html?data=' + dataParam;
+            window.location.href = 'result.html?data=' + encodeURIComponent(JSON.stringify(result));
         } else {
             alert(result.message || 'Песня не найдена');
             userData.notesBalance++;
             userData.songsTranslated--;
-            document.getElementById('notesBalance').textContent = userData.notesBalance;
-            document.getElementById('songsTranslated').textContent = userData.songsTranslated;
         }
-
     } catch (error) {
-        console.error(error);
-        alert('Не удалось подключиться к серверу. Убедитесь, что backend.py запущен.');
+        alert('Сервер недоступен.');
         userData.notesBalance++;
         userData.songsTranslated--;
-        document.getElementById('notesBalance').textContent = userData.notesBalance;
-        document.getElementById('songsTranslated').textContent = userData.songsTranslated;
     } finally {
         updateCheckButton();
     }
 }
 
-
-// ========== ИНТЕГРАЦИЯ С БЭКЕНДОМ VORTEX AUDIO ==========
-
-// Функция обновления состояния кнопки проверки
-function updateCheckButton() {
-    const checkBtn = document.getElementById('checkTrackBtn');
-    if (!checkBtn) return;
-
-    if (userData.isLoggedIn) {
-        checkBtn.innerHTML = 'Проверить';
-        checkBtn.classList.remove('disabled');
-
-        checkBtn.onclick = async function () {
-            // Ищем только название песни и автора
-            const trackInput = document.getElementById('trackInputName');
-            const artistInput = document.getElementById('artistInputName');
-
-            if (!trackInput || !trackInput.value.trim()) {
-                alert('Пожалуйста, введите название трека!');
-                return;
-            }
-
-            checkBtn.innerHTML = 'Анализируем...';
-            checkBtn.classList.add('disabled');
-
-            const formData = new FormData();
-            formData.append('track_name', trackInput.value.trim());
-            formData.append('artist_name', artistInput ? artistInput.value.trim() : '');
-
-            // Файл пока не отправляем, так как инпута для него в HTML нет
-
-            try {
-                const response = await fetch('http://localhost:5000/api/check', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!response.ok) throw new Error('Ошибка сервера');
-
-                const result = await response.json();
-
-if (result.status === 'success') {
-    // Маппим поля бэкенда под формат result.html
-    const mappedResult = {
-        success: true,
-        title: result.track_name,
-        artists: result.artist_name ? [result.artist_name] : [],
-        lyrics: result.lyrics,
-        lyrics_analysis: {
-            score: result.text_score,
-            verdict: result.text_reason,
-            bad_words_found: [],
-            is_clean: result.text_score >= 8
-        },
-        beat_analysis: {
-            score: result.beat_score,
-            description: result.beat_reason,
-            bpm: result.bpm,
-            style: ''
-        },
-        overall: {
-            score: result.total_score,
-            verdict: result.total_review,
-            mood: result.mood
-        }
-    };
-    
-    const dataParam = encodeURIComponent(JSON.stringify(mappedResult));
-    window.location.href = 'result.html?data=' + dataParam;
-} else {
-    alert(result.message || 'Песня не найдена');
-}
-            } finally {
-                checkBtn.innerHTML = 'Проверить';
-                checkBtn.classList.remove('disabled');
-            }
-        };
+// ========== АВТОЛОГИН ==========
+function autoLoginFromCookies() {
+    const cookies = document.cookie.split('; ');
+    let login = null, avatar = null;
+    cookies.forEach(cookie => {
+        const [name, value] = cookie.split('=');
+        if (name === 'vortex_login') login = value;
+        if (name === 'vortex_avatar') avatar = value;
+    });
+    if (login) {
+        userData.isLoggedIn = true;
+        userData.nickname = login;
+        if (avatar) userData.avatar = avatar;
+        document.getElementById('topIcons').style.display = 'flex';
+        document.getElementById('headerNickname').textContent = login;
+        document.getElementById('headerAvatar').src = userData.avatar;
+        updateTotalPages();
+        goToPage(1);
     }
 }
 
-// Восстановление сессии после возврата с result.html
+// Восстановление после result.html
 if (sessionStorage.getItem('vortex_returning') === 'true') {
     sessionStorage.removeItem('vortex_returning');
     if (userData.isLoggedIn) {
         document.getElementById('topIcons').style.display = 'flex';
-        document.getElementById('headerNickname').textContent = userData.nickname;
-        document.getElementById('headerAvatar').src = userData.avatar;
         updateTotalPages();
         goToPage(1);
-        updateCheckButton();
     }
 }
 
-// Вызываем обновление кнопки, чтобы она сразу подцепила логику, если юзер авторизован
-updateCheckButton();
-
 // ========== ЗАПУСК ==========
+renderCounter();
+startCounterAuto();
+updateProgressBar();
+autoLoginFromCookies();
 checkPremium();
 updateTotalPages();
-updateCheckButton();
+updateCheckButton();    
