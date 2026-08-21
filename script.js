@@ -134,7 +134,7 @@ async function doRegister() {
     }
 
     try {
-        const response = await fetch('https://SavaVortexAudio.pythonanywhere.com/api/check', {
+        const response = await fetch('https://savavortexaudio.pythonanywhere.com/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password, email })
@@ -162,11 +162,11 @@ async function doRegister() {
             alert(result.message);
         }
     } catch (error) {
-        alert('Сервер недоступен. Используйте логин Secret.');
+        alert('Сервер недоступен. Попробуйте позже.');
     }
 }
 
-document.getElementById('registerOverlay').addEventListener('click', function(e) {
+document.getElementById('registerOverlay').addEventListener('click', function (e) {
     if (e.target === this) this.classList.remove('show');
 });
 
@@ -223,7 +223,7 @@ function closeProfile() {
     document.getElementById('avatarEditMenu').classList.remove('show');
 }
 
-document.getElementById('profileOverlay').addEventListener('click', function(e) {
+document.getElementById('profileOverlay').addEventListener('click', function (e) {
     if (e.target === this) closeProfile();
 });
 
@@ -235,7 +235,7 @@ function handleAvatarUpload(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             userData.avatar = e.target.result;
             document.getElementById('profileAvatar').src = userData.avatar;
             document.getElementById('headerAvatar').src = userData.avatar;
@@ -254,7 +254,7 @@ function deleteAvatar() {
     saveUserData();
 }
 
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     if (!e.target.closest('.avatar-edit-btn') && !e.target.closest('.avatar-edit-menu')) {
         document.getElementById('avatarEditMenu').classList.remove('show');
     }
@@ -463,14 +463,14 @@ function buyNotes() {
     }, 1000);
 }
 
-document.getElementById('shopOverlay').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
-document.getElementById('paymentSuccessOverlay').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
-document.getElementById('errorNotesOverlay').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
+document.getElementById('shopOverlay').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('show'); });
+document.getElementById('paymentSuccessOverlay').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('show'); });
+document.getElementById('errorNotesOverlay').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('show'); });
 
 // ========== ПОЛИТИКА / НОВОСТИ / ИНФО ==========
 function openPrivacyPopup() { document.getElementById('privacyOverlay').classList.add('show'); }
 function closePrivacyPopup() { document.getElementById('privacyOverlay').classList.remove('show'); }
-document.getElementById('privacyOverlay').addEventListener('click', function(e) { if (e.target === this) closePrivacyPopup(); });
+document.getElementById('privacyOverlay').addEventListener('click', function (e) { if (e.target === this) closePrivacyPopup(); });
 
 function openNewsPage() { window.location.href = 'news.html'; }
 function openLeaderboard() { window.open('leaderboard.html', '_blank'); }
@@ -480,7 +480,7 @@ function hideInfoPopup() { document.getElementById('infoPopup').classList.remove
 
 function openPlayerDemo() { document.getElementById('playerDemoOverlay').classList.add('show'); }
 function closePlayerDemo() { document.getElementById('playerDemoOverlay').classList.remove('show'); }
-document.getElementById('playerDemoOverlay').addEventListener('click', function(e) { if (e.target === this) closePlayerDemo(); });
+document.getElementById('playerDemoOverlay').addEventListener('click', function (e) { if (e.target === this) closePlayerDemo(); });
 
 // ========== ПРОВЕРКА ПЕСНИ ==========
 async function tryCheckTrack() {
