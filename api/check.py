@@ -61,3 +61,18 @@ def check_track():
 def handler(request, context):
     with app.test_request_context(path=request.path, method=request.method, data=request.body, headers=request.headers):
         return app.full_dispatch_request()
+    from werkzeug.wrappers import Response
+
+def handler(request):
+    with app.test_request_context(
+        path=request.path,
+        method=request.method,
+        data=request.body,
+        headers=request.headers
+    ):
+        response = app.full_dispatch_request()
+        return Response(
+            response.get_data(),
+            status=response.status_code,
+            headers=dict(response.headers)
+        )
