@@ -1,0 +1,10 @@
+{
+    "functions": {
+        "api/check.py": {
+            "runtime": "python3.11"
+        }
+    },
+    "rewrites": [
+        { "source": "/api/check", "destination": "/api/check" }
+    ]
+}
