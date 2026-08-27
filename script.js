@@ -134,7 +134,7 @@ async function doRegister() {
     }
 
     try {
-        const response = await fetch('https://savavortexaudio.pythonanywhere.com/api/register', {
+        const response = await fetch('https://vortexaudio.vercel.app/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password, email })
@@ -507,7 +507,7 @@ async function tryCheckTrack() {
     incrementTotalChecked();
 
     try {
-        const response = await fetch('https://SavaVortexAudio.pythonanywhere.com/api/check', {
+        const response = await fetch('https://vortexaudio.vercel.app/api/check', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ track_name: trackName, artist: artistName })
