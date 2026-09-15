@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="faq.css">
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← Назад</a>
+
+    <h1 class="faq-header" id="faqHeader">ЧАСТЫЕ ВОПРОСЫ</h1>
+    <p class="faq-subtitle">Всё, что вы хотели знать о VORTEX AUDIO</p>
+
+    <div class="faq-list">
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>💎 Сколько стоит проверка песни?</span>
+                <span class="faq-arrow">▾</span>
+            </div>
+            <div class="faq-answer">Первая проверка — бесплатно для новых пользователей. Дальше — 1 нота за проверку. Ноты можно купить в магазине или получить через подписку.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>🎵 Как вы анализируете текст?</span>
+                <span class="faq-arrow">▾</span>
+            </div>
+            <div class="faq-answer">Мы получаем текст через Genius API, затем проверяем каждое слово через библиотеку плохих слов на 4 языках: русском, английском, испанском и португальском.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>🔞 Что значит оценка «Грязь»?</span>
+                <span class="faq-arrow">▾</span>
+            </div>
+            <div class="faq-answer">В тексте найдена нецензурная лексика. Такие песни мы не рекомендуем детям до 18 лет. Точный список слов можно посмотреть в результате проверки.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>🎧 Можно ли проверить свою песню?</span>
+                <span class="faq-arrow">▾</span>
+            </div>
+            <div class="faq-answer">Да! Если песня есть на Genius — просто введи название. Если нет — скоро мы добавим загрузку MP3-файла.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>👑 Что дают подписки?</span>
+                <span class="faq-arrow">▾</span>
+            </div>
+            <div class="faq-answer">Бронза — 25 нот/мес. Золото — 50 нот + плеер + статистика. Бриллиант — 100 нот + все фичи + приоритетная проверка.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>🔒 Безопасны ли мои данные?</span>
+                <span class="faq-arrow">▾</span>
+            </div>
+            <div class="faq-answer">Да. Мы не передаём данные третьим лицам. Пароли хешируются. Можете ознакомиться с политикой конфиденциальности.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>🌐 На каких языках работает сервис?</span>
+                <span class="faq-arrow">▾</span>
+            </div>
+            <div class="faq-answer">Интерфейс — русский и английский. Анализ текста — на русском, английском, испанском и португальском.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">
+                <span>📱 Можно ли пользоваться с телефона?</span>
+                <span class="faq-arrow">▾</span>
+            </div>
+            <div class="faq-answer">Да! Сайт полностью адаптирован для мобильных устройств. Просто откройте в браузере.</div>
+        </div>
+
+    </div>
+
+    <div class="faq-footer">
+        <a class="footer-link" href="faq.html">FAQ</a>
+        Не нашли ответ? <a href="mailto:support@vortexaudio.com">Напишите нам</a>
+    </div>
+
+    <script>
+        function toggleFaq(item) {
+            const answer = item.querySelector('.faq-answer');
+            const arrow = item.querySelector('.faq-arrow');
+            
+            if (item.classList.contains('active')) {
+                item.classList.remove('active');
+                answer.style.maxHeight = '0';
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                item.classList.add('active');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        setTimeout(() => {
+            document.getElementById('faqHeader').classList.add('visible');
+        }, 200);
+    </script>
+</body>
+</html>

@@ -54,6 +54,7 @@ let currentPage = 0;
 let totalPages = 4;
 let scrollAccumulator = 0;
 const scrollThreshold = window.innerHeight / 3;
+let isScrolling = false; // Блокировка во время анимации
 
 function updateTotalPages() {
     if (userData.isLoggedIn) {
@@ -71,7 +72,10 @@ function updateTotalPages() {
 function goToPage(index) {
     if (index >= totalPages) index = totalPages - 1;
     if (index < 0) index = 0;
+    if (index === currentPage) return;
+
     currentPage = index;
+    isScrolling = true;
 
     document.getElementById('page1').style.transform = `translateY(-${index * 100}vh)`;
     document.getElementById('page2').style.transform = `translateY(calc(100vh - ${index * 100}vh))`;
@@ -93,10 +97,19 @@ function goToPage(index) {
             document.getElementById('whatIsTitle').classList.add('visible');
         }, 500);
     }
+
+    // Разблокировка через 700мс (длительность анимации)
+    setTimeout(() => {
+        isScrolling = false;
+        scrollAccumulator = 0;
+    }, 500);
 }
 
 window.addEventListener('wheel', (e) => {
+    if (isScrolling) return; // Блокируем во время анимации
+
     scrollAccumulator += e.deltaY;
+
     if (scrollAccumulator > scrollThreshold && currentPage < totalPages - 1) {
         goToPage(currentPage + 1);
         scrollAccumulator = 0;
@@ -104,6 +117,12 @@ window.addEventListener('wheel', (e) => {
         goToPage(currentPage - 1);
         scrollAccumulator = 0;
     }
+
+    // Сбрасываем накопление если долго не скроллят
+    clearTimeout(window.scrollResetTimer);
+    window.scrollResetTimer = setTimeout(() => {
+        scrollAccumulator = 0;
+    }, 200);
 });
 
 // ========== ТАЧ-СКРОЛЛ ==========
@@ -113,9 +132,16 @@ window.addEventListener('touchstart', (e) => {
 }, { passive: true });
 
 window.addEventListener('touchend', (e) => {
+    if (isScrolling) return;
+
     const diff = touchStartY - e.changedTouches[0].screenY;
-    if (diff > scrollThreshold && currentPage < totalPages - 1) goToPage(currentPage + 1);
-    else if (diff < -scrollThreshold && currentPage > 0) goToPage(currentPage - 1);
+    const threshold = window.innerHeight / 5;
+
+    if (diff > threshold && currentPage < totalPages - 1) {
+        goToPage(currentPage + 1);
+    } else if (diff < -threshold && currentPage > 0) {
+        goToPage(currentPage - 1);
+    }
 }, { passive: true });
 
 // ========== РЕГИСТРАЦИЯ ==========
@@ -134,12 +160,13 @@ async function doRegister() {
     }
 
     try {
-        const response = await fetch('https://vortexaudio.vercel.app/api/register', {
+        const response = await fetch('http://127.0.0.1:5000/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password, email })
         });
         const result = await response.json();
+        console.log('ОТВЕТ РЕГИСТРАЦИИ:', result);
 
         if (result.success) {
             userData.isLoggedIn = true;
@@ -147,6 +174,10 @@ async function doRegister() {
             userData.email = email;
             userData.notesBalance = 0;
             userData.freeChecks = 1;
+
+            // СОХРАНЯЕМ В LOCALSTORAGE
+            localStorage.setItem('vortex_logged_user', username);
+            localStorage.setItem('vortex_logged_email', email);
 
             document.getElementById('registerOverlay').classList.remove('show');
             document.getElementById('topIcons').style.display = 'flex';
@@ -183,8 +214,9 @@ function setLang(lang) {
 }
 
 document.addEventListener('click', (e) => {
-    if (!e.target.closest('.lang-btn') && !e.target.closest('.lang-popup')) {
-        document.getElementById('langPopup').classList.remove('show');
+    const popup = document.getElementById('langPopup');
+    if (popup && !e.target.closest('.lang-btn') && !e.target.closest('.lang-popup')) {
+        popup.classList.remove('show');
     }
 });
 
@@ -277,6 +309,8 @@ function connectPhone() {
 
 // ========== ВЫХОД ==========
 function logout() {
+    localStorage.removeItem('vortex_logged_user');
+    localStorage.removeItem('vortex_logged_email');
     document.cookie = 'vortex_login=; max-age=0; path=/';
     document.cookie = 'vortex_avatar=; max-age=0; path=/';
     userData.isLoggedIn = false;
@@ -468,8 +502,14 @@ document.getElementById('paymentSuccessOverlay').addEventListener('click', funct
 document.getElementById('errorNotesOverlay').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('show'); });
 
 // ========== ПОЛИТИКА / НОВОСТИ / ИНФО ==========
-function openPrivacyPopup() { document.getElementById('privacyOverlay').classList.add('show'); }
-function closePrivacyPopup() { document.getElementById('privacyOverlay').classList.remove('show'); }
+function openPrivacyPopup() {
+    document.getElementById('privacyOverlay').classList.add('show');
+}
+
+function closePrivacyPopup() {
+    document.getElementById('privacyOverlay').classList.remove('show');
+    showToast('Политика конфиденциальности принята', 'success');
+}
 document.getElementById('privacyOverlay').addEventListener('click', function (e) { if (e.target === this) closePrivacyPopup(); });
 
 function openNewsPage() { window.location.href = 'news.html'; }
@@ -489,7 +529,10 @@ async function tryCheckTrack() {
     const trackName = trackInput ? trackInput.value.trim() : '';
     const artistName = artistInput ? artistInput.value.trim() : '';
 
-    if (!trackName) { alert('Введите название трека!'); return; }
+    if (!trackName) {
+        alert('Введите название трека!');
+        return;
+    }
 
     const btn = document.getElementById('checkTrackBtn');
     btn.innerHTML = '⏳ Анализируем...';
@@ -507,20 +550,26 @@ async function tryCheckTrack() {
     incrementTotalChecked();
 
     try {
-        const response = await fetch('https://vortexaudio.vercel.app/api/check', {
+        const response = await fetch('http://127.0.0.1:5000/api/check', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ track_name: trackName, artist: artistName })
         });
+
         const result = await response.json();
+        console.log('ОТВЕТ СЕРВЕРА:', result);
+
         if (result.success) {
-            window.location.href = 'result.html?data=' + encodeURIComponent(JSON.stringify(result));
+            runLoader(() => {
+                window.location.href = 'result.html?data=' + encodeURIComponent(JSON.stringify(result));
+            });
         } else {
             alert(result.message || 'Песня не найдена');
             userData.notesBalance++;
             userData.songsTranslated--;
         }
     } catch (error) {
+        console.error(error);
         alert('Сервер недоступен.');
         userData.notesBalance++;
         userData.songsTranslated--;
@@ -531,6 +580,23 @@ async function tryCheckTrack() {
 
 // ========== АВТОЛОГИН ==========
 function autoLoginFromCookies() {
+    // Сначала проверяем localStorage
+    const savedUser = localStorage.getItem('vortex_logged_user');
+    const savedEmail = localStorage.getItem('vortex_logged_email');
+
+    if (savedUser) {
+        userData.isLoggedIn = true;
+        userData.nickname = savedUser;
+        userData.email = savedEmail || 'user@example.com';
+        document.getElementById('topIcons').style.display = 'flex';
+        document.getElementById('headerNickname').textContent = savedUser;
+        document.getElementById('headerAvatar').src = userData.avatar;
+        updateTotalPages();
+        goToPage(1);
+        return;
+    }
+
+    // Если нет — проверяем куки (старый метод)
     const cookies = document.cookie.split('; ');
     let login = null, avatar = null;
     cookies.forEach(cookie => {
@@ -550,15 +616,157 @@ function autoLoginFromCookies() {
     }
 }
 
-// Восстановление после result.html
-if (sessionStorage.getItem('vortex_returning') === 'true') {
-    sessionStorage.removeItem('vortex_returning');
-    if (userData.isLoggedIn) {
-        document.getElementById('topIcons').style.display = 'flex';
-        updateTotalPages();
-        goToPage(1);
+// ========== ЗАГРУЗОЧНЫЙ ЭКРАН ==========
+function runLoader(callback) {
+    const loader = document.getElementById('loaderScreen');
+    if (!loader) {
+        if (callback) callback();
+        return;
     }
+
+    // Показываем экран
+    loader.style.display = 'flex';
+    loader.classList.remove('hide');
+
+    const letters = document.querySelector('.loader-letters');
+    const V = document.getElementById('loaderV');
+    const A = document.getElementById('loaderA');
+    const title = document.getElementById('loaderTitle');
+    const team = document.querySelector('.loader-team');
+
+    // Сбрасываем классы
+    letters.classList.remove('moved');
+    V.classList.remove('filled');
+    A.classList.remove('filled');
+    title.classList.remove('visible');
+    team.classList.remove('visible');
+
+    setTimeout(() => {
+        V.classList.add('filled');
+        A.classList.add('filled');
+    }, 300);
+
+    setTimeout(() => {
+        letters.classList.add('moved');
+    }, 1900);
+
+    setTimeout(() => {
+        title.classList.add('visible');
+    }, 2300);
+
+    setTimeout(() => {
+        team.classList.add('visible');
+    }, 2900);
+
+    setTimeout(() => {
+        loader.classList.add('hide');
+        setTimeout(() => {
+            loader.style.display = 'none';
+            if (callback) callback();
+        }, 700);
+    }, 3600);
 }
+
+// Запуск лоадера только при первом заходе
+if (!sessionStorage.getItem('loaderShown')) {
+    sessionStorage.setItem('loaderShown', 'true');
+    window.addEventListener('load', () => {
+        runLoader();
+    });
+} else {
+    // Лоадер уже показан — прячем его сразу
+    const loader = document.getElementById('loaderScreen');
+    if (loader) loader.style.display = 'none';
+}
+
+// ========== КНОПКА НАВЕРХ ==========
+function scrollToTop() {
+    goToPage(0);
+}
+
+// Показываем кнопку когда уходим с первой страницы
+window.addEventListener('wheel', () => {
+    const btn = document.getElementById('scrollTopBtn');
+    if (!btn) return;
+
+    if (currentPage > 0) {
+        btn.classList.add('visible');
+    } else {
+        btn.classList.remove('visible');
+    }
+});
+
+// Проверяем при переключении страниц
+const originalGoToPage = goToPage;
+goToPage = function (index) {
+    originalGoToPage(index);
+    const btn = document.getElementById('scrollTopBtn');
+    if (btn) {
+        if (index > 0) btn.classList.add('visible');
+        else btn.classList.remove('visible');
+    }
+};
+
+// ========== СИСТЕМА УВЕДОМЛЕНИЙ ==========
+function createToastContainer() {
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+    return container;
+}
+
+function showToast(message, type = 'info', duration = 3000) {
+    const container = createToastContainer();
+
+    const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+    };
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
+        <span class="toast-text">${message}</span>
+    `;
+
+    container.appendChild(toast);
+
+    // Появление
+    setTimeout(() => toast.classList.add('show'), 10);
+
+    // Удаление
+    setTimeout(() => {
+        toast.classList.remove('show');
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 400);
+    }, duration);
+}
+
+// Заменяем alert на тосты
+window.alert = function (message) {
+    let type = 'info';
+    const msg = String(message).toLowerCase();
+
+    if (msg.includes('✅') || msg.includes('успеш') || msg.includes('проверена') || msg.includes('скопирована')) {
+        type = 'success';
+    } else if (msg.includes('❌') || msg.includes('ошиб') || msg.includes('неверн') || msg.includes('недоступ') || msg.includes('не найдена')) {
+        type = 'error';
+    } else if (msg.includes('⚠️') || msg.includes('вним') || msg.includes('номер долж') || msg.includes('заполните')) {
+        type = 'warning';
+    } else if (msg.includes('🎁') || msg.includes('бесплатн')) {
+        type = 'info';
+    }
+
+    // Убираем эмодзи из текста
+    const cleanMessage = String(message).replace(/[✅❌⚠️ℹ️🎁]/g, '').trim();
+    showToast(cleanMessage, type);
+};
 
 // ========== ЗАПУСК ==========
 renderCounter();

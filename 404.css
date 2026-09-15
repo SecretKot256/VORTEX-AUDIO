@@ -1,0 +1,95 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #0b0f1a, #1a0b2e);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.error-container {
+    padding: 20px;
+}
+
+.error-code {
+    font-size: 120px;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 4px rgba(255,255,255,0.2);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.8s cubic-bezier(0.2, 0, 0.4, 1);
+}
+
+.error-code.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.error-vortex {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 20px 0;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.error-vortex span {
+    color: #6C5CE7;
+    animation: pulseLetter 2s ease-in-out infinite;
+}
+
+.error-vortex span:nth-child(1) { animation-delay: 0s; }
+.error-vortex span:nth-child(2) { animation-delay: 0.2s; }
+.error-vortex span:nth-child(3) { animation-delay: 0.4s; }
+.error-vortex span:nth-child(4) { animation-delay: 0.6s; }
+.error-vortex span:nth-child(5) { animation-delay: 0.8s; }
+.error-vortex span:nth-child(6) { animation-delay: 1s; }
+
+@keyframes pulseLetter {
+    0%, 100% { opacity: 0.3; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-10px); }
+}
+
+.error-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.error-desc {
+    font-size: 16px;
+    color: #888;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.error-btn {
+    display: inline-block;
+    padding: 14px 30px;
+    background: #6C5CE7;
+    color: #fff;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.error-btn:hover {
+    background: #7C6CF7;
+    box-shadow: 0 0 25px rgba(108,92,231,0.4);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .error-code { font-size: 80px; }
+    .error-title { font-size: 22px; }
+    .error-desc { font-size: 14px; }
+}

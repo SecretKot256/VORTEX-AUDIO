@@ -1,0 +1,239 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #0b0f1a, #1a0b2e);
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.back-btn {
+    position: fixed;
+    top: 20px; left: 20px;
+    padding: 10px 20px;
+    background: rgba(26,26,26,0.9);
+    border: 1px solid #333;
+    border-radius: 25px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #252525;
+    color: #fff;
+}
+
+.about-header {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 800;
+    padding: 60px 20px 10px;
+    letter-spacing: 2px;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.6s ease;
+}
+
+.about-header.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.about-subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 16px;
+    margin-bottom: 50px;
+}
+
+.about-section {
+    max-width: 700px;
+    margin: 0 auto 30px;
+    background: rgba(20,20,20,0.8);
+    border: 1px solid #2a2a2a;
+    border-radius: 18px;
+    padding: 30px;
+}
+
+.about-section h2 {
+    font-size: 22px;
+    margin-bottom: 16px;
+    color: #fff;
+}
+
+.about-section p {
+    font-size: 15px;
+    color: #bbb;
+    line-height: 1.7;
+}
+
+/* Шаги */
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.step-num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6C5CE7, #a78bfa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.step-text strong {
+    font-size: 16px;
+    color: #fff;
+}
+
+.step-text span {
+    font-size: 14px;
+    color: #888;
+}
+
+/* Цифры */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.stat-box {
+    background: rgba(30,30,30,0.6);
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stat-box:hover {
+    border-color: #6C5CE7;
+    transform: translateY(-3px);
+}
+
+.stat-num {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #fff, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #888;
+}
+
+/* Команда */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.team-card {
+    background: rgba(30,30,30,0.6);
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.team-card:hover {
+    border-color: #6C5CE7;
+    transform: translateY(-3px);
+}
+
+.team-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6C5CE7, #a78bfa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 auto 12px;
+}
+
+.team-name {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.team-role {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Контакты */
+.contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.contact-btn {
+    padding: 12px 24px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 25px;
+    color: #ddd;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.contact-btn:hover {
+    background: #6C5CE7;
+    border-color: #6C5CE7;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(108,92,231,0.4);
+}
+
+.about-footer {
+    text-align: center;
+    color: #555;
+    font-size: 13px;
+    padding: 40px 20px;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .about-header { font-size: 26px; padding-top: 50px; }
+    .about-section { padding: 20px; }
+    .about-section h2 { font-size: 18px; }
+    .stat-num { font-size: 22px; }
+    .step-num { width: 36px; height: 36px; font-size: 16px; }
+}

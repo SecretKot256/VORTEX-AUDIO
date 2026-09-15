@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<!-- Верхняя панель -->
+<div class="top-icons">
+    <!-- Профиль (только на ПК) -->
+    <div class="profile-btn desktop-only" onclick="openProfile()" id="profileButton">
+        <img class="profile-avatar" id="headerAvatar" src="default-avatar.png" alt="Avatar">
+        <span class="profile-nickname" id="headerNickname">User</span>
+    </div>
+
+    <!-- Бургер -->
+    <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</div>
+
+<!-- Бургер-меню -->
+<div class="burger-menu" id="burgerMenu">
+    <div class="burger-header">МЕНЮ</div>
+
+    <!-- Профиль (только на телефоне) -->
+    <div class="burger-item mobile-only" onclick="openProfile()">
+        <span>👤 Профиль</span>
+    </div>
+
+    <a class="burger-item" href="leaderboard.html" target="_blank">
+        <span>🏆 Таблица лидеров</span>
+    </a>
+    <a class="burger-item" href="news.html">
+        <span>📰 Новости</span>
+    </a>
+    <a class="burger-item" href="faq.html">
+        <span>❓ FAQ</span>
+    </a>
+    <a class="burger-item" href="about.html">
+        <span>📄 О нас</span>
+    </a>
+    <div class="burger-item" onclick="openPrivacyFromBurger()">
+        <span>📋 Политика</span>
+    </div>
+
+    <div class="burger-divider"></div>
+
+    <!-- Язык -->
+    <div class="burger-item" onclick="toggleLangPopup()">
+        <span>🌐 Язык</span>
+    </div>
+
+    <!-- Тема -->
+    <label class="burger-item theme-item">
+        <span>🌙 Тема</span>
+        <label class="theme-switch" onclick="event.stopPropagation()">
+            <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+            <span class="theme-slider"></span>
+        </label>
+    </label>
+
+    <div class="burger-divider"></div>
+
+    <div class="burger-item logout-item" onclick="logout()">
+        <span>🚪 Выйти</span>
+    </div>
+</div>
+
+<!-- Оверлей -->
+<div class="burger-overlay" id="burgerOverlay" onclick="closeBurger()"></div>
+
+<!-- Попап языка -->
+<div class="lang-popup" id="langPopup">
+    <h3>🌐 Выберите язык</h3>
+    <button class="lang-option" onclick="setLang('ru')">
+        <img class="lang-option-flag" src="flag-ru.png" alt="RU">
+        <div><div>Русский</div><div class="lang-sub">Russian</div></div>
+        <span class="lang-check">✓</span>
+    </button>
+    <button class="lang-option" onclick="setLang('en')">
+        <img class="lang-option-flag" src="flag-uk.png" alt="UK">
+        <div><div>English</div><div class="lang-sub">Английский</div></div>
+        <span class="lang-check">✓</span>
+    </button>
+</div>
+
+    <!-- Основной контент -->
+    <div class="dashboard-content">
+
+        <!-- Счётчик -->
+        <div class="check-counter">
+            Всего проверено песен: <span class="counter-number" id="totalChecked">25 000</span>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">1 000 000 песен — промокод на скидку 25%</div>
+        </div>
+
+        <!-- Форма -->
+        <div class="input-group">
+            <div class="input-label">Название трека</div>
+            <input class="input-field" type="text" id="trackInputName" placeholder="Введите название...">
+        </div>
+        <div class="input-group">
+            <div class="input-label">Автор(ы) трека</div>
+            <input class="input-field" type="text" id="artistInputName" placeholder="Введите автора...">
+            <img class="help-icon" src="question-icon.png" alt="?" data-tooltip="Найдите автора(ов) по обложке трека" onclick="showInfoPopup()">
+        </div>
+
+        <!-- Кнопка проверки -->
+        <button class="submit-btn" id="checkTrackBtn">Проверить</button>
+
+        <!-- Кнопка таблицы лидеров -->
+        <button class="leaderboard-btn" onclick="openLeaderboard()">🏆 Таблица лидеров</button>
+    </div>
+
+    <!-- ========== ПРОФИЛЬ ========== -->
+    <div class="profile-overlay" id="profileOverlay">
+        <div class="profile-popup">
+            <button class="profile-close" onclick="closeProfile()">✕</button>
+            <div class="profile-popup-header">
+                <div class="avatar-wrapper">
+                    <div class="avatar-ring" id="avatarRing">
+                        <img class="profile-big-avatar" id="profileAvatar" src="default-avatar.png" alt="Avatar">
+                    </div>
+                    <button class="avatar-edit-btn" onclick="toggleAvatarMenu()">✎</button>
+                    <div class="avatar-edit-menu" id="avatarEditMenu">
+                        <button class="avatar-menu-btn" onclick="uploadAvatar()">📷 Загрузить фото</button>
+                        <button class="avatar-menu-btn delete" onclick="deleteAvatar()">🗑 Удалить фото</button>
+                    </div>
+                </div>
+                <div class="profile-popup-info">
+                    <div class="profile-nickname-big" id="profileNickname">User</div>
+                    <div class="profile-email" id="profileEmail">user@example.com</div>
+                    <div class="profile-phone">
+                        <span>📱</span>
+                        <span id="phoneText">Номер не подключён</span>
+                    </div>
+                    <button class="connect-phone-btn" id="connectPhoneBtn" onclick="connectPhone()">Подключить номер</button>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-label">Баланс нот</div>
+                    <div class="stat-value" id="notesBalance">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Бесплатных проверок</div>
+                    <div class="stat-value" id="freeChecks">1</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Проверено песен</div>
+                    <div class="stat-value" id="songsTranslated">0</div>
+                </div>
+            </div>
+
+            <button class="buy-notes-btn" onclick="openShop()">💰 Купить ноты</button>
+            <button class="buy-notes-btn logout-btn" onclick="logout()">🚪 Выйти</button>
+        </div>
+    </div>
+
+    <!-- ========== МАГАЗИН ========== -->
+    <div class="shop-popup-overlay" id="shopOverlay">
+        <div class="shop-popup">
+            <div class="shop-tabs">
+                <button class="shop-tab active" id="tabNotes" onclick="switchShopTab('notes')">Ноты</button>
+                <button class="shop-tab" id="tabSubs" onclick="switchShopTab('subs')">Подписки</button>
+            </div>
+
+            <div class="shop-tab-content" id="notesContent">
+                <div class="shop-balance">Ваш баланс: <span id="shopBalance">0 нот</span></div>
+                <div class="notes-sections">
+                    <div class="notes-row">
+                        <div class="note-pack" onclick="selectPack(this, 10, 79)"><div class="note-pack-amount">10 нот</div><div class="note-pack-price">79 ₽</div></div>
+                        <div class="note-pack" onclick="selectPack(this, 50, 399)"><div class="note-pack-amount">50 нот</div><div class="note-pack-price">399 ₽</div></div>
+                        <div class="note-pack" onclick="selectPack(this, 100, 799)"><div class="note-pack-amount">100 нот</div><div class="note-pack-price">799 ₽</div></div>
+                    </div>
+                    <div class="notes-row">
+                        <div class="note-pack" onclick="selectPack(this, 250, 2299)"><div class="note-pack-amount">250 нот</div><div class="note-pack-price">2 299 ₽</div></div>
+                        <div class="note-pack" onclick="selectPack(this, 500, 3599)"><div class="note-pack-amount">500 нот</div><div class="note-pack-price">3 599 ₽</div></div>
+                        <div class="note-pack" onclick="selectPack(this, 1000, 7999)"><div class="note-pack-amount">1000 нот</div><div class="note-pack-price">7 999 ₽</div></div>
+                    </div>
+                </div>
+                <div class="custom-section">
+                    <div class="custom-fields">
+                        <div class="custom-field">
+                            <div class="custom-field-label">Количество нот</div>
+                            <input type="number" class="custom-field-input" id="customNotesInput" value="100" min="1" oninput="onCustomNotesInput()">
+                        </div>
+                        <div class="custom-field">
+                            <div class="custom-field-label">Сумма</div>
+                            <input type="number" class="custom-field-input" id="customPriceInput" value="1000" min="10" oninput="onCustomPriceInput()">
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" class="slider" id="notesSlider" min="1" max="1000" value="100" oninput="onSliderInput()">
+                    </div>
+                    <div class="price-per-note">1 нота — 10 ₽</div>
+                </div>
+                <button class="buy-btn" onclick="buyNotes()">Купить</button>
+            </div>
+
+            <div class="shop-tab-content hidden" id="subsContent">
+                <div class="subs-row">
+                    <div class="sub-pack bronze" onclick="selectSub(this, 'bronze')">
+                        <div class="sub-pack-title"><span class="bronze-text">Бронзовый</span> <span class="white-text">минимум</span></div>
+                        <ul class="sub-features">
+                            <li class="sub-feature">🎵 25 нот каждый месяц</li>
+                            <li class="sub-feature">🥉 Бронзовая аура</li>
+                        </ul>
+                        <div class="sub-pack-price">299 ₽ <small>/мес</small></div>
+                    </div>
+                    <div class="sub-pack gold" onclick="selectSub(this, 'gold')">
+                        <div class="sub-badge">Популярный</div>
+                        <div class="sub-pack-title"><span class="gold-text">Золотая</span> <span class="white-text">середина</span></div>
+                        <ul class="sub-features">
+                            <li class="sub-feature">🎵 50 нот каждый месяц</li>
+                            <li class="sub-feature">🥇 Золотая аура</li>
+                            <li class="sub-feature">🎧 Плеер песен</li>
+                        </ul>
+                        <div class="sub-pack-price">499 ₽ <small>/мес</small></div>
+                    </div>
+                    <div class="sub-pack diamond" onclick="selectSub(this, 'diamond')">
+                        <div class="sub-pack-title">Бриллиантовый максимум</div>
+                        <ul class="sub-features">
+                            <li class="sub-feature">🎵 100 нот каждый месяц</li>
+                            <li class="sub-feature">💎 Бриллиантовая аура</li>
+                            <li class="sub-feature">🎧 Плеер песен</li>
+                            <li class="sub-feature">🚀 Проверка без очереди</li>
+                        </ul>
+                        <div class="sub-pack-price">799 ₽ <small>/мес</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Заглушка оплаты -->
+    <div class="popup-overlay" id="paymentSuccessOverlay">
+        <div class="popup-content payment-success-content">✅ Оплата завершена!</div>
+    </div>
+
+    <!-- Ошибка нот -->
+    <div class="popup-overlay" id="errorNotesOverlay">
+        <div class="popup-content error-popup-content">
+            ❌ Ошибка: Недостаточно нот. <span class="buy-link" onclick="openShopFromError()">Купить?</span>
+        </div>
+    </div>
+
+    <!-- Инфо попап -->
+    <div class="info-popup" id="infoPopup" onclick="hideInfoPopup()">
+        🔍 Найдите автора(ов) по обложке трека<br>
+        <small style="color:#777;">(кликните чтобы закрыть)</small>
+    </div>
+
+    <!-- Загрузка аватара -->
+    <input type="file" id="avatarFileInput" accept="image/*" onchange="handleAvatarUpload(event)" style="display:none;">
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

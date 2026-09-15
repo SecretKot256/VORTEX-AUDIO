@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="404.css">
+</head>
+<body>
+
+    <div class="error-container">
+        <div class="error-code" id="errorCode">404</div>
+            <div class="error-vortex">
+    <span>V</span>
+    <span>O</span>
+    <span>R</span>
+    <span>T</span>
+    <span>E</span>
+    <span>X</span>
+</div>
+<div class="error-vortex">
+    <span>A</span>
+    <span>U</span>
+    <span>D</span>
+    <span>I</span>
+    <span>O</span>
+</div>
+        <h1 class="error-title">Ой! Страница потерялась</h1>
+        <p class="error-desc">
+            Кажется, вы потерялись.<br>
+            Но вы можете вернуться на главную!
+        </p>
+        <a href="index.html" class="error-btn">← На главную</a>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.getElementById('errorCode').classList.add('visible');
+        }, 200);
+    </script>
+</body>
+</html>
