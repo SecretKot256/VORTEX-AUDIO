@@ -1,7 +1,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: 'Geogrotesque Cyr', 'Segoe UI', Arial, sans-serif;
     background: linear-gradient(135deg, #0b0f1a, #1a0b2e);
     color: #fff;
     min-height: 100vh;

@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: 'Geogrotesque Cyr', 'Segoe UI', Arial, sans-serif;
     background: linear-gradient(135deg, #0b0f1a, #1a0b2e);
     color: #fff;
     min-height: 100vh;
@@ -1203,10 +1203,45 @@ body.light {
     color: #222 !important;
 }
 
-body.light .dashboard-content,
-body.light .check-counter,
-body.light .counter-number {
-    color: #222;
+body.light .burger-menu {
+    background: #fff;
+    border-color: #ddd;
+}
+
+body.light .burger-item {
+    color: #333;
+}
+
+body.light .burger-item:hover {
+    background: #f0f0f0;
+}
+
+body.light .burger-header {
+    color: #888;
+}
+
+body.light .burger-divider {
+    background: #ddd;
+}
+
+body.light .profile-btn,
+body.light .burger-btn {
+    background: rgba(255,255,255,0.9);
+    border-color: #ddd;
+}
+
+body.light .profile-btn:hover,
+body.light .burger-btn:hover {
+    background: #f0f0f0;
+    border-color: #6C5CE7;
+}
+
+body.light .burger-btn span {
+    background: #333;
+}
+
+body.light .profile-nickname {
+    color: #333;
 }
 
 body.light .input-field {
@@ -1219,111 +1254,76 @@ body.light .input-label {
     color: #666;
 }
 
+body.light .check-counter {
+    color: #666;
+}
+
+body.light .counter-number {
+    color: #222;
+}
+
 body.light .progress-bar-track {
     background: #ddd;
 }
 
+body.light .progress-text {
+    color: #999;
+}
+
+body.light .leaderboard-btn {
+    color: #666;
+    border-color: #ddd;
+}
+
+body.light .leaderboard-btn:hover {
+    color: #6C5CE7;
+    border-color: #6C5CE7;
+}
+
 body.light .profile-popup,
 body.light .shop-popup,
-body.light .lang-popup,
-body.light .popup-content {
+body.light .popup-content,
+body.light .info-popup {
     background: #fff;
-    border-color: #ddd;
+    border: 1px solid #e0e0e0;
     color: #222;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
 
 body.light .stat-card,
 body.light .note-pack,
 body.light .custom-section,
 body.light .sub-pack {
+    background: #f8f8f8;
+    border: 1px solid #e5e5e5;
+}
+
+body.light .custom-field-input {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    color: #222;
+}
+
+body.light .shop-tab {
     background: #f0f0f0;
-    border-color: #ddd;
+    border: 1px solid #ddd;
+    color: #666;
 }
 
-/* ========== ТОСТЫ ========== */
-.toast-container {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 80;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    pointer-events: none;
-    align-items: center;
+body.light .profile-close {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    color: #333;
 }
 
-.toast {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 18px 28px;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 14px;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 500;
-    min-width: 340px;
-    max-width: 90vw;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7);
-    transform: translateY(-150%);
-    opacity: 0;
-    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-    pointer-events: auto;
-}
-
-.toast.show {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.toast.hide {
-    transform: translateY(-150%);
-    opacity: 0;
-}
-
-.toast-icon {
-    font-size: 22px;
-    flex-shrink: 0;
-}
-
-.toast-text {
-    flex-grow: 1;
-    line-height: 1.4;
-}
-
-.toast.success {
-    border-color: #4CAF50;
-    background: linear-gradient(90deg, rgba(76, 175, 80, 0.2), #1a1a1a);
-}
-
-.toast.error {
+body.light .profile-close:hover {
+    background: #e74c3c;
     border-color: #e74c3c;
-    background: linear-gradient(90deg, rgba(231, 76, 60, 0.2), #1a1a1a);
+    color: #fff;
 }
 
-.toast.warning {
-    border-color: #ffa500;
-    background: linear-gradient(90deg, rgba(255, 165, 0, 0.2), #1a1a1a);
-}
-
-.toast.info {
-    border-color: #6C5CE7;
-    background: linear-gradient(90deg, rgba(108, 92, 231, 0.2), #1a1a1a);
-}
-
-@media (max-width: 480px) {
-    .toast {
-        min-width: auto;
-        width: 90vw;
-        max-width: 90vw;
-        padding: 14px 20px;
-        font-size: 14px;
-    }
-
-    .toast-icon {
-        font-size: 18px;
-    }
+body.light .info-popup {
+    background: #fff;
+    border-color: #ddd;
+    color: #222;
 }

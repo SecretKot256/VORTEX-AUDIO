@@ -17,6 +17,7 @@ function loadUser() {
     const savedUser = localStorage.getItem('vortex_logged_user');
     const savedEmail = localStorage.getItem('vortex_logged_email');
     const savedAvatar = localStorage.getItem('vortex_avatar');
+    
 
     if (!savedUser) {
         window.location.href = 'auth.html';
@@ -55,9 +56,18 @@ function toggleLangPopup() {
 
 function setLang(lang) {
     userData.lang = lang;
-    const flagMap = { ru: 'flag-ru.png', en: 'flag-uk.png' };
-    document.getElementById('currentFlag').src = flagMap[lang];
+    localStorage.setItem('vortex_lang', lang);
+    
+    // Отмечаем активный язык
+    document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('active'));
+    
+    // Подсвечиваем выбранный
+    const options = document.querySelectorAll('.lang-option');
+    if (lang === 'ru' && options[0]) options[0].classList.add('active');
+    if (lang === 'en' && options[1]) options[1].classList.add('active');
+    
     document.getElementById('langPopup').classList.remove('show');
+    showToast(lang === 'ru' ? 'Язык: Русский' : 'Language: English', 'success');
 }
 
 document.addEventListener('click', (e) => {
@@ -351,7 +361,7 @@ function hideInfoPopup() {
 }
 
 function openLeaderboard() {
-    window.open('leaderboard.html', '_blank');
+    window.location.href = 'leaderboard.html';
 }
 
 // ========== ТОСТЫ ==========
@@ -411,6 +421,15 @@ function toggleLangPopup() {
     closeBurger();
     document.getElementById('langPopup').classList.toggle('show');
 }
+
+document.addEventListener('click', (e) => {
+    const popup = document.getElementById('langPopup');
+    if (popup && popup.classList.contains('show') 
+        && !e.target.closest('.lang-popup') 
+        && !e.target.closest('[onclick*="toggleLangPopup"]')) {
+        popup.classList.remove('show');
+    }
+});
 
 // ========== ЗАПУСК ==========
 loadUser();

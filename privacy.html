@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Политика конфиденциальности — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="privacy.css">
+    <link rel="stylesheet" href="toast.css">
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← На главную</a>
+
+    <h1 class="privacy-header" id="privacyHeader">📄 Политика конфиденциальности</h1>
+    <p class="privacy-subtitle">Vortex Audio · Team Vortex</p>
+
+    <div class="privacy-content">
+
+        <section class="privacy-section">
+            <h2>1. Общие положения</h2>
+            <p>Настоящая политика конфиденциальности описывает, как Vortex Audio собирает, использует и защищает информацию, которую вы предоставляете при использовании сайта.</p>
+        </section>
+
+        <section class="privacy-section">
+            <h2>2. Какие данные мы собираем</h2>
+            <ul>
+                <li>Название трека и исполнитель (для поиска текста).</li>
+                <li>Дата и время запроса — для улучшения работы сервиса.</li>
+                <li>IP-адрес (в обезличенном виде) — для подсчёта статистики.</li>
+            </ul>
+        </section>
+
+        <section class="privacy-section">
+            <h2>3. Как мы используем данные</h2>
+            <ul>
+                <li>Для предоставления результата проверки.</li>
+                <li>Для улучшения точности фильтрации.</li>
+                <li>Для анализа популярных запросов.</li>
+            </ul>
+        </section>
+
+        <section class="privacy-section">
+            <h2>4. Передача данных третьим лицам</h2>
+            <p>Мы не передаём ваши данные третьим лицам, за исключением случаев, предусмотренных законом.</p>
+        </section>
+
+        <section class="privacy-section">
+            <h2>5. Хранение данных</h2>
+            <p>Мы храним данные только в течение времени, необходимого для выполнения запроса. История проверок не сохраняется, если вы не зарегистрированы.</p>
+        </section>
+
+        <section class="privacy-section">
+            <h2>6. Права пользователей</h2>
+            <p>Вы можете запросить удаление всех данных, связанных с вашим аккаунтом. Для этого напишите нам через контакты на странице «О нас».</p>
+        </section>
+
+        <section class="privacy-section">
+            <h2>7. Изменения в политике</h2>
+            <p>Мы можем обновлять эту политику. Обо всех изменениях мы будем уведомлять на главной странице.</p>
+        </section>
+
+        <div class="privacy-footer">
+            <p>Дата последнего обновления: <strong>16 сентября 2026</strong></p>
+            <p>© 2026 Team Vortex. Все права защищены.</p>
+        </div>
+
+    </div>
+
+    <div class="accept-block">
+        <button class="accept-btn" onclick="acceptPrivacy()">✓ Принять политику</button>
+    </div>
+
+    <script>
+        function acceptPrivacy() {
+            localStorage.setItem('vortex_privacy_accepted', 'true');
+            showToast('Политика конфиденциальности принята', 'success');
+            setTimeout(() => window.history.back(), 800);
+        }
+
+        // Тосты
+        function showToast(message, type = 'info') {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span class="toast-icon">${icons[type]}</span><span class="toast-text">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 600);
+            }, 3000);
+        }
+
+        // Анимация заголовка
+        setTimeout(() => {
+            document.getElementById('privacyHeader').classList.add('visible');
+        }, 100);
+    </script>
+</body>
+</html>

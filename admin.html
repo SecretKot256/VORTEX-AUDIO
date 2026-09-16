@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="toast.css">
+</head>
+<body>
+
+    <!-- Шапка -->
+    <div class="admin-topbar">
+        <div class="admin-brand">
+            <span class="admin-brand-text">VORTEX ADMIN</span>
+        </div>
+        <div class="admin-user">
+            <span id="adminName">Secret</span>
+            <button class="admin-logout" onclick="logoutAdmin()">🚪 Выйти</button>
+        </div>
+    </div>
+
+    <!-- Вкладки -->
+    <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchTab('stats')">📊 Статистика</button>
+        <button class="admin-tab" onclick="switchTab('news')">📰 Новости</button>
+        <button class="admin-tab" onclick="switchTab('users')">👥 Пользователи</button>
+    </div>
+
+    <!-- Вкладка: Статистика -->
+    <div class="admin-content" id="tab-stats">
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value" id="statUsers">—</div>
+                <div class="stat-label">Пользователей</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">🎵</div>
+                <div class="stat-value" id="statChecks">—</div>
+                <div class="stat-label">Проверок песен</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">📰</div>
+                <div class="stat-value" id="statNews">—</div>
+                <div class="stat-label">Новостей</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Вкладка: Новости -->
+    <div class="admin-content hidden" id="tab-news">
+        <div class="news-form">
+            <h2>➕ Создать новость</h2>
+            <input type="text" id="newsTitle" placeholder="Заголовок" class="admin-input">
+            <input type="text" id="newsTag" placeholder="Тег (Новое, Обновление и т.д.)" class="admin-input">
+            <textarea id="newsContent" placeholder="Текст новости..." class="admin-textarea" rows="6"></textarea>
+            <button class="admin-btn primary" onclick="createNews()">📤 Опубликовать</button>
+        </div>
+
+        <div class="news-list">
+            <h2>📋 Все новости</h2>
+            <div id="newsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Вкладка: Пользователи -->
+    <div class="admin-content hidden" id="tab-users">
+        <h2>👥 Все пользователи</h2>
+        <div id="usersContainer"></div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

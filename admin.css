@@ -1,0 +1,286 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Geogrotesque Cyr', 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #0b0f1a, #1a0b2e);
+    color: #fff;
+    min-height: 100vh;
+    padding: 0 0 60px;
+}
+
+.admin-brand-text {
+    font-family: 'Ciutadella', 'Geogrotesque Cyr', sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #6C5CE7;
+}
+
+.admin-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 14px;
+    color: #aaa;
+}
+
+.admin-logout {
+    padding: 8px 16px;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.admin-logout:hover {
+    background: #e74c3c;
+}
+
+/* ===== ВКЛАДКИ ===== */
+.admin-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px 20px;
+    flex-wrap: wrap;
+}
+
+.admin-tab {
+    padding: 12px 26px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 25px;
+    color: #999;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: inherit;
+}
+
+.admin-tab:hover {
+    background: #222;
+    color: #fff;
+}
+
+.admin-tab.active {
+    background: #6C5CE7;
+    color: #fff;
+    border-color: #6C5CE7;
+}
+
+/* ===== КОНТЕНТ ===== */
+.admin-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ===== СТАТИСТИКА ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.stat-box {
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid #2a2a2a;
+    border-radius: 18px;
+    padding: 30px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.stat-box:hover {
+    border-color: #6C5CE7;
+    transform: translateY(-4px);
+}
+
+.stat-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+
+.stat-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===== ФОРМА НОВОСТЕЙ ===== */
+.news-form {
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid #2a2a2a;
+    border-radius: 18px;
+    padding: 26px;
+    margin-bottom: 30px;
+}
+
+.news-form h2,
+.news-list h2 {
+    font-size: 18px;
+    margin-bottom: 18px;
+    color: #fff;
+}
+
+.admin-input,
+.admin-textarea {
+    width: 100%;
+    padding: 14px 18px;
+    background: #0d0d0d;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 15px;
+    margin-bottom: 12px;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.admin-input:focus,
+.admin-textarea:focus {
+    border-color: #6C5CE7;
+}
+
+.admin-btn {
+    padding: 14px 30px;
+    background: #6C5CE7;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: inherit;
+}
+
+.admin-btn:hover {
+    background: #7C6CF7;
+    transform: translateY(-2px);
+}
+
+/* ===== СПИСКИ ===== */
+.news-item,
+.user-item {
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    transition: 0.2s;
+}
+
+.news-item:hover,
+.user-item:hover {
+    border-color: #444;
+}
+
+.news-item-info,
+.user-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-grow: 1;
+}
+
+.news-item-title,
+.user-item-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.news-item-date,
+.user-item-sub {
+    font-size: 12px;
+    color: #777;
+}
+
+.news-item-tag {
+    font-size: 10px;
+    padding: 3px 10px;
+    background: #6C5CE7;
+    border-radius: 10px;
+    color: #fff;
+    align-self: flex-start;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.delete-btn {
+    padding: 8px 16px;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 18px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 600px) {
+    .admin-topbar {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .admin-brand-text {
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+
+    .admin-tabs {
+        gap: 8px;
+        padding: 16px 12px;
+    }
+
+    .admin-tab {
+        padding: 10px 18px;
+        font-size: 13px;
+    }
+
+    .admin-content {
+        padding: 16px;
+    }
+
+    .news-form {
+        padding: 18px;
+    }
+
+    .stat-value {
+        font-size: 28px;
+    }
+}

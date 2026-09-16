@@ -1,0 +1,188 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Geogrotesque Cyr', 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #0b0f1a, #1a0b2e);
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background: rgba(26,26,26,0.9);
+    border: 1px solid #333;
+    border-radius: 25px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #252525;
+    color: #fff;
+    border-color: #555;
+}
+
+/* Заголовок */
+.privacy-header {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 800;
+    padding: 60px 20px 10px;
+    letter-spacing: 1px;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.6s ease;
+}
+
+.privacy-header.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.privacy-subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 40px;
+}
+
+/* Контент */
+.privacy-content {
+    max-width: 750px;
+    margin: 0 auto 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.privacy-section {
+    background: rgba(20,20,20,0.8);
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+.privacy-section:hover {
+    border-color: #3a3a3a;
+}
+
+.privacy-section h2 {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+.privacy-section p {
+    font-size: 15px;
+    color: #bbb;
+    margin-bottom: 8px;
+}
+
+.privacy-section ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.privacy-section li {
+    font-size: 15px;
+    color: #bbb;
+    padding-left: 20px;
+    position: relative;
+}
+
+.privacy-section li::before {
+    content: "●";
+    position: absolute;
+    left: 0;
+    color: #6C5CE7;
+    font-size: 10px;
+    top: 6px;
+}
+
+/* Футер */
+.privacy-footer {
+    text-align: center;
+    padding: 24px;
+    color: #666;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.privacy-footer strong {
+    color: #aaa;
+}
+
+/* Кнопка Принять */
+.accept-block {
+    max-width: 750px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.accept-btn {
+    padding: 16px 50px;
+    background: #6C5CE7;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+}
+
+.accept-btn:hover {
+    background: #7C6CF7;
+    box-shadow: 0 0 30px rgba(108,92,231,0.5);
+    transform: translateY(-2px);
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .privacy-header {
+        font-size: 24px;
+        padding: 60px 16px 10px;
+    }
+
+    .privacy-subtitle {
+        font-size: 12px;
+        margin-bottom: 24px;
+    }
+
+    .privacy-content {
+        gap: 14px;
+    }
+
+    .privacy-section {
+        padding: 18px;
+    }
+
+    .privacy-section h2 {
+        font-size: 16px;
+    }
+
+    .privacy-section p,
+    .privacy-section li {
+        font-size: 13px;
+    }
+
+    .accept-btn {
+        padding: 14px 36px;
+        font-size: 15px;
+    }
+}

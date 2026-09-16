@@ -5,6 +5,7 @@ import re
 import hashlib
 import json
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -13,7 +14,7 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE')
     return response
 
 GENIUS_TOKEN = "5fMiLqzrNMCnLai6U8JX5YtP1xg7oaJsdSn8S52TEF6JpLCedifYnSoNpOzaflqE"
@@ -31,8 +32,13 @@ BAD_WORDS = {
     "caralho", "porra", "merda", "foder", "foda", "buceta", "viado", "bicha"
 }
 
-# ===== БАЗА В JSON =====
+# ===== АДМИН =====
+ADMIN_USERNAME = "Admin Vortex Audio"
+ADMIN_PASSWORD = "AdminVA2105"  # для проверки
+
+# ===== ФАЙЛЫ =====
 DB_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'users.json')
+NEWS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'news.json')
 
 def load_users():
     if not os.path.exists(DB_FILE):
@@ -46,6 +52,19 @@ def load_users():
 def save_users(users):
     with open(DB_FILE, 'w', encoding='utf-8') as f:
         json.dump(users, f, ensure_ascii=False, indent=2)
+
+def load_news():
+    if not os.path.exists(NEWS_FILE):
+        return {"news": [], "next_id": 1}
+    try:
+        with open(NEWS_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except:
+        return {"news": [], "next_id": 1}
+
+def save_news(data):
+    with open(NEWS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 # ===== ФУНКЦИИ =====
 def search_genius(track_name, artist_name=""):
@@ -73,7 +92,7 @@ def analyze_lyrics(lyrics):
         return {"status": "clean", "verdict": "Чисто", "is_clean": True, "bad_words": []}
     return {"status": "dirty", "verdict": "Грязь", "is_clean": False, "bad_words": bad}
 
-# ===== API =====
+# ===== API АУТЕНТИФИКАЦИИ =====
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.json
@@ -98,7 +117,9 @@ def register():
         "notes_balance": 0,
         "free_checks": 1,
         "songs_checked": 0,
-        "subscription": "none"
+        "subscription": "none",
+        "is_admin": username == ADMIN_USERNAME,
+        "created_at": datetime.now().isoformat()
     }
     save_users(users)
     
@@ -122,15 +143,19 @@ def login():
             "notes_balance": u.get('notes_balance', 0),
             "free_checks": u.get('free_checks', 1),
             "songs_checked": u.get('songs_checked', 0),
-            "subscription": u.get('subscription', 'none')
+            "subscription": u.get('subscription', 'none'),
+            "is_admin": u.get('is_admin', username == ADMIN_USERNAME)
         }})
     return jsonify({"success": False, "message": "Неверный логин или пароль!"})
 
+# ===== API ПРОВЕРКИ =====
 @app.route('/api/check', methods=['POST'])
 def check_track():
     data = request.json
     track_name = data.get('track_name', '').strip()
     artist = data.get('artist', '').strip()
+    username = data.get('username', '').strip()
+    
     if not track_name:
         return jsonify({"success": False, "message": "Введите название трека!"}), 400
     
@@ -152,6 +177,13 @@ def check_track():
     overall = round((lscore + 7) / 2, 1)
     overall_verdict = f"🌟 Отлично! ({overall}/10)" if overall >= 8 else f"👍 Хорошо ({overall}/10)" if overall >= 5 else f"🚫 Плохо ({overall}/10)"
     
+    # Обновляем статистику юзера
+    if username:
+        users = load_users()
+        if username in users:
+            users[username]['songs_checked'] = users[username].get('songs_checked', 0) + 1
+            save_users(users)
+    
     return jsonify({
         "success": True,
         "title": title,
@@ -162,6 +194,106 @@ def check_track():
         "lyrics_analysis": analysis,
         "beat_analysis": {"score": 7, "description": "Бит будет позже", "bpm": 120, "style": ""},
         "overall": {"score": overall, "verdict": overall_verdict, "mood": "🎵"}
+    })
+
+# ===== API НОВОСТЕЙ (публичное) =====
+@app.route('/api/news', methods=['GET'])
+def get_news():
+    data = load_news()
+    # Сортируем: новые сверху
+    news = sorted(data['news'], key=lambda x: x.get('id', 0), reverse=True)
+    return jsonify({"success": True, "news": news})
+
+# ===== API АДМИНКИ =====
+def check_admin(username):
+    return username == ADMIN_USERNAME
+
+@app.route('/api/admin/news', methods=['POST'])
+def create_news():
+    data = request.json
+    username = data.get('username', '').strip()
+    
+    if not check_admin(username):
+        return jsonify({"success": False, "message": "Нет доступа"}), 403
+    
+    title = data.get('title', '').strip()
+    content = data.get('content', '').strip()
+    tag = data.get('tag', 'Новое').strip()
+    
+    if not title or not content:
+        return jsonify({"success": False, "message": "Заполните все поля!"})
+    
+    news_data = load_news()
+    new_news = {
+        "id": news_data['next_id'],
+        "title": title,
+        "content": content,
+        "tag": tag,
+        "date": datetime.now().strftime("%d.%m.%Y"),
+        "created_at": datetime.now().isoformat()
+    }
+    news_data['news'].append(new_news)
+    news_data['next_id'] += 1
+    save_news(news_data)
+    
+    return jsonify({"success": True, "news": new_news})
+
+@app.route('/api/admin/news/<int:news_id>', methods=['DELETE'])
+def delete_news(news_id):
+    data = request.json or {}
+    username = data.get('username', '').strip()
+    
+    if not check_admin(username):
+        return jsonify({"success": False, "message": "Нет доступа"}), 403
+    
+    news_data = load_news()
+    news_data['news'] = [n for n in news_data['news'] if n['id'] != news_id]
+    save_news(news_data)
+    
+    return jsonify({"success": True})
+
+@app.route('/api/admin/users', methods=['GET'])
+def admin_get_users():
+    username = request.args.get('username', '').strip()
+    
+    if not check_admin(username):
+        return jsonify({"success": False, "message": "Нет доступа"}), 403
+    
+    users = load_users()
+    user_list = []
+    for name, data in users.items():
+        user_list.append({
+            "username": name,
+            "email": data.get('email', ''),
+            "notes_balance": data.get('notes_balance', 0),
+            "free_checks": data.get('free_checks', 0),
+            "songs_checked": data.get('songs_checked', 0),
+            "subscription": data.get('subscription', 'none'),
+            "created_at": data.get('created_at', '')
+        })
+    
+    return jsonify({"success": True, "users": user_list})
+
+@app.route('/api/admin/stats', methods=['GET'])
+def admin_get_stats():
+    username = request.args.get('username', '').strip()
+    
+    if not check_admin(username):
+        return jsonify({"success": False, "message": "Нет доступа"}), 403
+    
+    users = load_users()
+    news_data = load_news()
+    
+    total_checks = sum(u.get('songs_checked', 0) for u in users.values())
+    total_users = len(users)
+    
+    return jsonify({
+        "success": True,
+        "stats": {
+            "total_users": total_users,
+            "total_checks": total_checks,
+            "total_news": len(news_data['news'])
+        }
     })
 
 if __name__ == '__main__':

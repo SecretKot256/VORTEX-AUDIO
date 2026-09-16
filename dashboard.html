@@ -1,94 +1,104 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Проверка — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="toast.css">
 </head>
+
 <body>
 
-<!-- Верхняя панель -->
-<div class="top-icons">
-    <!-- Профиль (только на ПК) -->
-    <div class="profile-btn desktop-only" onclick="openProfile()" id="profileButton">
-        <img class="profile-avatar" id="headerAvatar" src="default-avatar.png" alt="Avatar">
-        <span class="profile-nickname" id="headerNickname">User</span>
+    <!-- Верхняя панель -->
+    <div class="top-icons">
+        <!-- Профиль (только на ПК) -->
+        <div class="profile-btn desktop-only" onclick="openProfile()" id="profileButton">
+            <img class="profile-avatar" id="headerAvatar" src="default-avatar.png" alt="Avatar">
+            <span class="profile-nickname" id="headerNickname">User</span>
+        </div>
+
+        <!-- Бургер -->
+        <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </div>
 
-    <!-- Бургер -->
-    <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-</div>
+    <!-- Бургер-меню -->
+    <div class="burger-menu" id="burgerMenu">
+        <div class="burger-header">МЕНЮ</div>
 
-<!-- Бургер-меню -->
-<div class="burger-menu" id="burgerMenu">
-    <div class="burger-header">МЕНЮ</div>
+        <!-- Профиль (только на телефоне) -->
+        <div class="burger-item mobile-only" onclick="openProfile()">
+            <span>👤 Профиль</span>
+        </div>
 
-    <!-- Профиль (только на телефоне) -->
-    <div class="burger-item mobile-only" onclick="openProfile()">
-        <span>👤 Профиль</span>
-    </div>
+        <a class="burger-item" href="leaderboard.html" target="_blank">
+            <span>🏆 Таблица лидеров</span>
+        </a>
+        <a class="burger-item" href="news.html">
+            <span>📰 Новости</span>
+        </a>
+        <a class="burger-item" href="faq.html">
+            <span>❓ FAQ</span>
+        </a>
+        <a class="burger-item" href="about.html">
+            <span>📄 О нас</span>
+        </a>
+        <a class="burger-item" href="privacy.html">
+            <span>📋 Политика</span>
+        </a>
 
-    <a class="burger-item" href="leaderboard.html" target="_blank">
-        <span>🏆 Таблица лидеров</span>
-    </a>
-    <a class="burger-item" href="news.html">
-        <span>📰 Новости</span>
-    </a>
-    <a class="burger-item" href="faq.html">
-        <span>❓ FAQ</span>
-    </a>
-    <a class="burger-item" href="about.html">
-        <span>📄 О нас</span>
-    </a>
-    <div class="burger-item" onclick="openPrivacyFromBurger()">
-        <span>📋 Политика</span>
-    </div>
+        <div class="burger-divider"></div>
 
-    <div class="burger-divider"></div>
+        <!-- Язык -->
+        <a class="burger-item" href="lang.html">
+            <span>🌐 Язык</span>
+        </a>
 
-    <!-- Язык -->
-    <div class="burger-item" onclick="toggleLangPopup()">
-        <span>🌐 Язык</span>
-    </div>
-
-    <!-- Тема -->
-    <label class="burger-item theme-item">
-        <span>🌙 Тема</span>
-        <label class="theme-switch" onclick="event.stopPropagation()">
-            <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
-            <span class="theme-slider"></span>
+        <!-- Тема -->
+        <label class="burger-item theme-item">
+            <span>🌙 Тема</span>
+            <label class="theme-switch" onclick="event.stopPropagation()">
+                <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+                <span class="theme-slider"></span>
+            </label>
         </label>
-    </label>
 
-    <div class="burger-divider"></div>
+        <div class="burger-divider"></div>
 
-    <div class="burger-item logout-item" onclick="logout()">
-        <span>🚪 Выйти</span>
+        <div class="burger-item logout-item" onclick="logout()">
+            <span>🚪 Выйти</span>
+        </div>
     </div>
-</div>
 
-<!-- Оверлей -->
-<div class="burger-overlay" id="burgerOverlay" onclick="closeBurger()"></div>
+    <!-- Оверлей -->
+    <div class="burger-overlay" id="burgerOverlay" onclick="closeBurger()"></div>
 
-<!-- Попап языка -->
-<div class="lang-popup" id="langPopup">
-    <h3>🌐 Выберите язык</h3>
-    <button class="lang-option" onclick="setLang('ru')">
-        <img class="lang-option-flag" src="flag-ru.png" alt="RU">
-        <div><div>Русский</div><div class="lang-sub">Russian</div></div>
-        <span class="lang-check">✓</span>
-    </button>
-    <button class="lang-option" onclick="setLang('en')">
-        <img class="lang-option-flag" src="flag-uk.png" alt="UK">
-        <div><div>English</div><div class="lang-sub">Английский</div></div>
-        <span class="lang-check">✓</span>
-    </button>
-</div>
+    <!-- Попап языка -->
+    <div class="lang-popup" id="langPopup">
+        <h3>🌐 Выберите язык</h3>
+        <button class="lang-option" onclick="setLang('ru')">
+            <img class="lang-option-flag" src="flag-ru.png" alt="RU">
+            <div>
+                <div>Русский</div>
+                <div class="lang-sub">Russian</div>
+            </div>
+            <span class="lang-check">✓</span>
+        </button>
+        <button class="lang-option" onclick="setLang('en')">
+            <img class="lang-option-flag" src="flag-uk.png" alt="UK">
+            <div>
+                <div>English</div>
+                <div class="lang-sub">Английский</div>
+            </div>
+            <span class="lang-check">✓</span>
+        </button>
+    </div>
 
     <!-- Основной контент -->
     <div class="dashboard-content">
@@ -112,7 +122,8 @@
         <div class="input-group">
             <div class="input-label">Автор(ы) трека</div>
             <input class="input-field" type="text" id="artistInputName" placeholder="Введите автора...">
-            <img class="help-icon" src="question-icon.png" alt="?" data-tooltip="Найдите автора(ов) по обложке трека" onclick="showInfoPopup()">
+            <img class="help-icon" src="question-icon.png" alt="?" data-tooltip="Найдите автора(ов) по обложке трека"
+                onclick="showInfoPopup()">
         </div>
 
         <!-- Кнопка проверки -->
@@ -144,7 +155,8 @@
                         <span>📱</span>
                         <span id="phoneText">Номер не подключён</span>
                     </div>
-                    <button class="connect-phone-btn" id="connectPhoneBtn" onclick="connectPhone()">Подключить номер</button>
+                    <button class="connect-phone-btn" id="connectPhoneBtn" onclick="connectPhone()">Подключить
+                        номер</button>
                 </div>
             </div>
 
@@ -180,29 +192,50 @@
                 <div class="shop-balance">Ваш баланс: <span id="shopBalance">0 нот</span></div>
                 <div class="notes-sections">
                     <div class="notes-row">
-                        <div class="note-pack" onclick="selectPack(this, 10, 79)"><div class="note-pack-amount">10 нот</div><div class="note-pack-price">79 ₽</div></div>
-                        <div class="note-pack" onclick="selectPack(this, 50, 399)"><div class="note-pack-amount">50 нот</div><div class="note-pack-price">399 ₽</div></div>
-                        <div class="note-pack" onclick="selectPack(this, 100, 799)"><div class="note-pack-amount">100 нот</div><div class="note-pack-price">799 ₽</div></div>
+                        <div class="note-pack" onclick="selectPack(this, 10, 79)">
+                            <div class="note-pack-amount">10 нот</div>
+                            <div class="note-pack-price">79 ₽</div>
+                        </div>
+                        <div class="note-pack" onclick="selectPack(this, 50, 399)">
+                            <div class="note-pack-amount">50 нот</div>
+                            <div class="note-pack-price">399 ₽</div>
+                        </div>
+                        <div class="note-pack" onclick="selectPack(this, 100, 799)">
+                            <div class="note-pack-amount">100 нот</div>
+                            <div class="note-pack-price">799 ₽</div>
+                        </div>
                     </div>
                     <div class="notes-row">
-                        <div class="note-pack" onclick="selectPack(this, 250, 2299)"><div class="note-pack-amount">250 нот</div><div class="note-pack-price">2 299 ₽</div></div>
-                        <div class="note-pack" onclick="selectPack(this, 500, 3599)"><div class="note-pack-amount">500 нот</div><div class="note-pack-price">3 599 ₽</div></div>
-                        <div class="note-pack" onclick="selectPack(this, 1000, 7999)"><div class="note-pack-amount">1000 нот</div><div class="note-pack-price">7 999 ₽</div></div>
+                        <div class="note-pack" onclick="selectPack(this, 250, 2299)">
+                            <div class="note-pack-amount">250 нот</div>
+                            <div class="note-pack-price">2 299 ₽</div>
+                        </div>
+                        <div class="note-pack" onclick="selectPack(this, 500, 3599)">
+                            <div class="note-pack-amount">500 нот</div>
+                            <div class="note-pack-price">3 599 ₽</div>
+                        </div>
+                        <div class="note-pack" onclick="selectPack(this, 1000, 7999)">
+                            <div class="note-pack-amount">1000 нот</div>
+                            <div class="note-pack-price">7 999 ₽</div>
+                        </div>
                     </div>
                 </div>
                 <div class="custom-section">
                     <div class="custom-fields">
                         <div class="custom-field">
                             <div class="custom-field-label">Количество нот</div>
-                            <input type="number" class="custom-field-input" id="customNotesInput" value="100" min="1" oninput="onCustomNotesInput()">
+                            <input type="number" class="custom-field-input" id="customNotesInput" value="100" min="1"
+                                oninput="onCustomNotesInput()">
                         </div>
                         <div class="custom-field">
                             <div class="custom-field-label">Сумма</div>
-                            <input type="number" class="custom-field-input" id="customPriceInput" value="1000" min="10" oninput="onCustomPriceInput()">
+                            <input type="number" class="custom-field-input" id="customPriceInput" value="1000" min="10"
+                                oninput="onCustomPriceInput()">
                         </div>
                     </div>
                     <div class="slider-container">
-                        <input type="range" class="slider" id="notesSlider" min="1" max="1000" value="100" oninput="onSliderInput()">
+                        <input type="range" class="slider" id="notesSlider" min="1" max="1000" value="100"
+                            oninput="onSliderInput()">
                     </div>
                     <div class="price-per-note">1 нота — 10 ₽</div>
                 </div>
@@ -212,7 +245,8 @@
             <div class="shop-tab-content hidden" id="subsContent">
                 <div class="subs-row">
                     <div class="sub-pack bronze" onclick="selectSub(this, 'bronze')">
-                        <div class="sub-pack-title"><span class="bronze-text">Бронзовый</span> <span class="white-text">минимум</span></div>
+                        <div class="sub-pack-title"><span class="bronze-text">Бронзовый</span> <span
+                                class="white-text">минимум</span></div>
                         <ul class="sub-features">
                             <li class="sub-feature">🎵 25 нот каждый месяц</li>
                             <li class="sub-feature">🥉 Бронзовая аура</li>
@@ -221,7 +255,8 @@
                     </div>
                     <div class="sub-pack gold" onclick="selectSub(this, 'gold')">
                         <div class="sub-badge">Популярный</div>
-                        <div class="sub-pack-title"><span class="gold-text">Золотая</span> <span class="white-text">середина</span></div>
+                        <div class="sub-pack-title"><span class="gold-text">Золотая</span> <span
+                                class="white-text">середина</span></div>
                         <ul class="sub-features">
                             <li class="sub-feature">🎵 50 нот каждый месяц</li>
                             <li class="sub-feature">🥇 Золотая аура</li>
@@ -267,4 +302,5 @@
 
     <script src="dashboard.js"></script>
 </body>
+
 </html>

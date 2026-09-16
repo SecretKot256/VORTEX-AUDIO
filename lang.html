@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Язык — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="lang.css">
+    <link rel="stylesheet" href="toast.css">
+</head>
+<body>
+
+    <a href="dashboard.html" class="back-btn">← Назад</a>
+
+    <h1 class="lang-header" id="langHeader">🌐 Выберите язык</h1>
+    <p class="lang-subtitle">Choose your language</p>
+
+    <div class="lang-list">
+
+        <button class="lang-card active" data-lang="ru" onclick="selectLang('ru')">
+            <img class="lang-card-flag" src="flag-ru.png" alt="RU">
+            <div class="lang-card-info">
+                <div class="lang-card-title">Русский</div>
+                <div class="lang-card-sub">Russian</div>
+            </div>
+            <span class="lang-card-check">✓</span>
+        </button>
+
+        <button class="lang-card" data-lang="en" onclick="selectLang('en')">
+            <img class="lang-card-flag" src="flag-uk.png" alt="UK">
+            <div class="lang-card-info">
+                <div class="lang-card-title">English</div>
+                <div class="lang-card-sub">Английский</div>
+            </div>
+            <span class="lang-card-check">✓</span>
+        </button>
+
+        <button class="lang-card disabled" disabled>
+            <div class="lang-card-flag" style="background:#333;display:flex;align-items:center;justify-content:center;">🔒</div>
+            <div class="lang-card-info">
+                <div class="lang-card-title">Скоро...</div>
+                <div class="lang-card-sub">Ещё языки в разработке</div>
+            </div>
+        </button>
+
+    </div>
+
+    <script>
+        // Загружаем текущий язык
+        const currentLang = localStorage.getItem('vortex_lang') || 'ru';
+        updateActive(currentLang);
+
+        function updateActive(lang) {
+            document.querySelectorAll('.lang-card').forEach(card => {
+                card.classList.remove('active');
+                if (card.dataset.lang === lang) {
+                    card.classList.add('active');
+                }
+            });
+        }
+
+        function selectLang(lang) {
+            localStorage.setItem('vortex_lang', lang);
+            updateActive(lang);
+            
+            const names = { ru: 'Русский', en: 'English' };
+            showToast('Язык изменён: ' + names[lang], 'success');
+
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 800);
+        }
+
+        // Тосты
+        function showToast(message, type = 'info') {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span class="toast-icon">${icons[type]}</span><span class="toast-text">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 600);
+            }, 2500);
+        }
+
+        // Анимация
+        setTimeout(() => {
+            document.getElementById('langHeader').classList.add('visible');
+        }, 100);
+    </script>
+</body>
+</html>

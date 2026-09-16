@@ -1,7 +1,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: 'Geogrotesque Cyr', 'Segoe UI', Arial, sans-serif;
     background: linear-gradient(135deg, #0b0f1a, #1a0b2e);
     color: #fff;
     min-height: 100vh;
@@ -46,32 +46,18 @@ body {
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
-/* Лого */
 .auth-logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
     margin-bottom: 28px;
 }
 
-.logo-v {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #6C5CE7, #a78bfa);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.logo-text {
+    font-family: 'Ciutadella', 'Geogrotesque Cyr', sans-serif;
     font-size: 24px;
     font-weight: 900;
-    color: #fff;
-}
-
-.logo-text {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     color: #fff;
 }
 
@@ -171,44 +157,6 @@ body {
 .auth-switch a:hover {
     text-decoration: underline;
 }
-
-/* Тосты */
-.toast-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.toast {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 18px;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 14px;
-    min-width: 240px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-    transform: translateX(400px);
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.toast.show {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-.toast.success { border-color: #4CAF50; }
-.toast.error { border-color: #e74c3c; }
-.toast.warning { border-color: #ffa500; }
-.toast.info { border-color: #6C5CE7; }
 
 /* Адаптив */
 @media (max-width: 480px) {
