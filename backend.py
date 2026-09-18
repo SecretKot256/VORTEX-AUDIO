@@ -7,9 +7,6 @@ import json
 import os
 from datetime import datetime
 
-# ===== АДМИН =====
-ADMIN_USERNAME = "Admin Vortex Audio"
-
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
@@ -91,9 +88,6 @@ def analyze_lyrics(lyrics):
         return {"status": "clean", "verdict": "Чисто", "is_clean": True, "bad_words": []}
     return {"status": "dirty", "verdict": "Грязь", "is_clean": False, "bad_words": bad}
 
-def check_admin(username):
-    return username == ADMIN_USERNAME
-
 # ===== API АУТЕНТИФИКАЦИИ =====
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -120,7 +114,6 @@ def register():
         "free_checks": 1,
         "songs_checked": 0,
         "subscription": "none",
-        "is_admin": username == ADMIN_USERNAME,
         "created_at": datetime.now().isoformat()
     }
     save_users(users)
@@ -145,8 +138,7 @@ def login():
             "notes_balance": u.get('notes_balance', 0),
             "free_checks": u.get('free_checks', 1),
             "songs_checked": u.get('songs_checked', 0),
-            "subscription": u.get('subscription', 'none'),
-            "is_admin": u.get('is_admin', username == ADMIN_USERNAME)
+            "subscription": u.get('subscription', 'none')
         }})
     return jsonify({"success": False, "message": "Неверный логин или пароль!"})
 
@@ -197,97 +189,12 @@ def check_track():
         "overall": {"score": overall, "verdict": overall_verdict, "mood": "🎵"}
     })
 
-# ===== API НОВОСТЕЙ =====
+# ===== API НОВОСТЕЙ (только чтение) =====
 @app.route('/api/news', methods=['GET'])
 def get_news():
     data = load_news()
     news = sorted(data['news'], key=lambda x: x.get('id', 0), reverse=True)
     return jsonify({"success": True, "news": news})
-
-# ===== API АДМИНКИ =====
-@app.route('/api/admin/news', methods=['POST'])
-def create_news():
-    data = request.json
-    username = data.get('username', '').strip()
-    
-    if not check_admin(username):
-        return jsonify({"success": False, "message": "Нет доступа"}), 403
-    
-    title = data.get('title', '').strip()
-    content = data.get('content', '').strip()
-    tag = data.get('tag', 'Новое').strip()
-    
-    if not title or not content:
-        return jsonify({"success": False, "message": "Заполните все поля!"})
-    
-    news_data = load_news()
-    new_news = {
-        "id": news_data['next_id'],
-        "title": title,
-        "content": content,
-        "tag": tag,
-        "date": datetime.now().strftime("%d.%m.%Y"),
-        "created_at": datetime.now().isoformat()
-    }
-    news_data['news'].append(new_news)
-    news_data['next_id'] += 1
-    save_news(news_data)
-    return jsonify({"success": True, "news": new_news})
-
-@app.route('/api/admin/news/<int:news_id>', methods=['DELETE'])
-def delete_news(news_id):
-    data = request.json or {}
-    username = data.get('username', '').strip()
-    
-    if not check_admin(username):
-        return jsonify({"success": False, "message": "Нет доступа"}), 403
-    
-    news_data = load_news()
-    news_data['news'] = [n for n in news_data['news'] if n['id'] != news_id]
-    save_news(news_data)
-    return jsonify({"success": True})
-
-@app.route('/api/admin/users', methods=['GET'])
-def admin_get_users():
-    username = request.args.get('username', '').strip()
-    
-    if not check_admin(username):
-        return jsonify({"success": False, "message": "Нет доступа"}), 403
-    
-    users = load_users()
-    user_list = []
-    for name, data in users.items():
-        user_list.append({
-            "username": name,
-            "email": data.get('email', ''),
-            "notes_balance": data.get('notes_balance', 0),
-            "free_checks": data.get('free_checks', 0),
-            "songs_checked": data.get('songs_checked', 0),
-            "subscription": data.get('subscription', 'none'),
-            "created_at": data.get('created_at', '')
-        })
-    return jsonify({"success": True, "users": user_list})
-
-@app.route('/api/admin/stats', methods=['GET'])
-def admin_get_stats():
-    username = request.args.get('username', '').strip()
-    
-    if not check_admin(username):
-        return jsonify({"success": False, "message": "Нет доступа"}), 403
-    
-    users = load_users()
-    news_data = load_news()
-    total_checks = sum(u.get('songs_checked', 0) for u in users.values())
-    total_users = len(users)
-    
-    return jsonify({
-        "success": True,
-        "stats": {
-            "total_users": total_users,
-            "total_checks": total_checks,
-            "total_news": len(news_data['news'])
-        }
-    })
 
 # ===== ЗАПУСК =====
 if __name__ == '__main__':
