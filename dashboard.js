@@ -242,7 +242,7 @@ async function tryCheckTrack() {
     localStorage.setItem('vortex_free_checks', userData.freeChecks);
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/api/check', {
+        const response = await fetch('https://vortex-audio-2ea62.containers.snapdeploy.app/api/check', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ track_name: trackName, artist: artistName })

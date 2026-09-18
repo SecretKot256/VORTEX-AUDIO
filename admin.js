@@ -8,7 +8,7 @@ if (!adminUser) {
 // Проверка на бэке (если не админ — редирект)
 async function checkAdminAccess() {
     try {
-        const res = await fetch(`http://127.0.0.1:5000/api/admin/stats?username=${adminUser}`);
+        const res = await fetch(`https://vortex-audio-2ea62.containers.snapdeploy.app/api/admin/stats?username=${adminUser}`);
         const data = await res.json();
         if (!data.success) {
             showToast('Нет доступа к админке', 'error');
@@ -40,7 +40,7 @@ function switchTab(tab) {
 // ========== СТАТИСТИКА ==========
 async function loadStats() {
     try {
-        const res = await fetch(`http://127.0.0.1:5000/api/admin/stats?username=${adminUser}`);
+        const res = await fetch(`https://vortex-audio-2ea62.containers.snapdeploy.app/api/admin/stats?username=${adminUser}`);
         const data = await res.json();
         if (data.success) {
             document.getElementById('statUsers').textContent = data.stats.total_users;
@@ -55,7 +55,7 @@ async function loadStats() {
 // ========== НОВОСТИ ==========
 async function loadNews() {
     try {
-        const res = await fetch('http://127.0.0.1:5000/api/news');
+        const res = await fetch('https://vortex-audio-2ea62.containers.snapdeploy.app/api/news');
         const data = await res.json();
         const container = document.getElementById('newsContainer');
 
@@ -90,7 +90,7 @@ async function createNews() {
     }
 
     try {
-        const res = await fetch('http://127.0.0.1:5000/api/admin/news', {
+        const res = await fetch('https://vortex-audio-2ea62.containers.snapdeploy.app/api/admin/news', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: adminUser, title, content, tag })
@@ -115,7 +115,7 @@ async function deleteNews(id) {
     if (!confirm('Удалить новость?')) return;
 
     try {
-        const res = await fetch(`http://127.0.0.1:5000/api/admin/news/${id}`, {
+        const res = await fetch(`https://vortex-audio-2ea62.containers.snapdeploy.app/api/admin/news/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: adminUser })
@@ -133,7 +133,7 @@ async function deleteNews(id) {
 // ========== ПОЛЬЗОВАТЕЛИ ==========
 async function loadUsers() {
     try {
-        const res = await fetch(`http://127.0.0.1:5000/api/admin/users?username=${adminUser}`);
+        const res = await fetch(`https://vortex-audio-2ea62.containers.snapdeploy.app/api/admin/users?username=${adminUser}`);
         const data = await res.json();
         const container = document.getElementById('usersContainer');
 
