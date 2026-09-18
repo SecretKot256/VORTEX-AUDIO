@@ -195,15 +195,8 @@ def check_track():
         "overall": {"score": overall, "verdict": overall_verdict, "mood": "🎵"}
     })
 
-# ===== API НОВОСТЕЙ (публичное) =====
+# ===== API НОВОСТЕЙ =====
 @app.route('/api/news', methods=['GET'])
-def get_news():
-    data = load_news()
-    # Сортируем: новые сверху
-    news = sorted(data['news'], key=lambda x: x.get('id', 0), reverse=True)
-    return jsonify({"success": True, "news": news})
-
-    @app.route('/api/news', methods=['GET'])
 def get_news():
     data = load_news()
     news = sorted(data['news'], key=lambda x: x.get('id', 0), reverse=True)
@@ -217,17 +210,13 @@ def check_admin(username):
 def create_news():
     data = request.json
     username = data.get('username', '').strip()
-    
     if not check_admin(username):
         return jsonify({"success": False, "message": "Нет доступа"}), 403
-    
     title = data.get('title', '').strip()
     content = data.get('content', '').strip()
     tag = data.get('tag', 'Новое').strip()
-    
     if not title or not content:
         return jsonify({"success": False, "message": "Заполните все поля!"})
-    
     news_data = load_news()
     new_news = {
         "id": news_data['next_id'],
@@ -240,30 +229,24 @@ def create_news():
     news_data['news'].append(new_news)
     news_data['next_id'] += 1
     save_news(news_data)
-    
     return jsonify({"success": True, "news": new_news})
 
 @app.route('/api/admin/news/<int:news_id>', methods=['DELETE'])
 def delete_news(news_id):
     data = request.json or {}
     username = data.get('username', '').strip()
-    
     if not check_admin(username):
         return jsonify({"success": False, "message": "Нет доступа"}), 403
-    
     news_data = load_news()
     news_data['news'] = [n for n in news_data['news'] if n['id'] != news_id]
     save_news(news_data)
-    
     return jsonify({"success": True})
 
 @app.route('/api/admin/users', methods=['GET'])
 def admin_get_users():
     username = request.args.get('username', '').strip()
-    
     if not check_admin(username):
         return jsonify({"success": False, "message": "Нет доступа"}), 403
-    
     users = load_users()
     user_list = []
     for name, data in users.items():
@@ -276,22 +259,17 @@ def admin_get_users():
             "subscription": data.get('subscription', 'none'),
             "created_at": data.get('created_at', '')
         })
-    
     return jsonify({"success": True, "users": user_list})
 
 @app.route('/api/admin/stats', methods=['GET'])
 def admin_get_stats():
     username = request.args.get('username', '').strip()
-    
     if not check_admin(username):
         return jsonify({"success": False, "message": "Нет доступа"}), 403
-    
     users = load_users()
     news_data = load_news()
-    
     total_checks = sum(u.get('songs_checked', 0) for u in users.values())
     total_users = len(users)
-    
     return jsonify({
         "success": True,
         "stats": {
@@ -301,38 +279,28 @@ def admin_get_stats():
         }
     })
 
-# ===== АВТОСОЗДАНИЕ АДМИНА =====
-def ensure_admin_exists():
-    users = load_users()
-    changed = False
-    if 'Secret' not in users:
-        hashed = hashlib.sha256(ADMIN_PASSWORD.encode()).hexdigest()
-        users['Secret'] = {
-            "password": hashed,
-            "email": "admin@vortexaudio.com",
-            "avatar": "default-avatar.png",
-            "phone": None,
-            "notes_balance": 9999,
-            "free_checks": 999,
-            "songs_checked": 0,
-            "subscription": "diamond",
-            "is_admin": True,
-            "created_at": datetime.now().isoformat()
-        }
-        changed = True
-        print("✅ Админ Secret создан")
-    else:
-        if not users['Secret'].get('is_admin'):
-            users['Secret']['is_admin'] = True
-            changed = True
-            print("✅ Права админа обновлены")
-    if changed:
-        save_users(users)
+# Админ
+ADMIN_USERNAME = "Admin Vortex Audio"
 
-ensure_admin_exists()
+# Функции загрузки новостей (если нет)
+def load_news():
+    if not os.path.exists(NEWS_FILE):
+        return {"news": [], "next_id": 1}
+    try:
+        with open(NEWS_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except:
+        return {"news": [], "next_id": 1}
 
-import os
+def save_news(data):
+    with open(NEWS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
+# Путь к файлу новостей
+NEWS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'news.json')
+
+# ===== ЗАПУСК =====
 if __name__ == '__main__':
+    import os
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
