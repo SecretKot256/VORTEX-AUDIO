@@ -3,309 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Результат проверки — VORTEX AUDIO</title>
+    <title>Результат — VORTEX AUDIO</title>
     <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="result.css">
     <link rel="stylesheet" href="toast.css">
 </head>
 <body>
 
-    <button class="back-btn" onclick="goBackToApp()">← Назад к проверке</button>
+    <a href="dashboard.html" class="back-btn">← Назад</a>
 
-    <h1 class="result-header" id="resultHeader">Результат проверки</h1>
-
-    <!-- Попап выбора варианта -->
-    <div class="variant-overlay" id="variantOverlay">
-        <div class="variant-popup">
-            <div class="variant-search">
-                <input type="text" class="variant-search-input" id="variantSearchInput" 
-                       placeholder="Поиск..." oninput="filterVariants()">
-            </div>
-            <div class="variant-list" id="variantList"></div>
-            <div class="variant-nav" id="variantNav"></div>
-            <button class="variant-confirm-btn" id="variantConfirmBtn" onclick="confirmVariant()">
-                Проверить выбранное
-            </button>
-        </div>
+    <!-- Чёрный загрузочный экран -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
     </div>
 
-    <!-- Карточка трека -->
-    <div class="track-card" id="trackCard">
-        <div class="track-card-left">
-            <div class="track-cover" id="trackCover"></div>
+    <!-- Результат -->
+    <div class="result-wrapper" id="resultWrapper">
+
+        <!-- 1. ПЕСНЯ -->
+        <div class="card card-track" onclick="openPopup('track')">
+            <div class="card-fill"></div>
+            <div class="card-spinner"></div>
+            <div class="card-content">
+                <div class="track-cover" id="trackCover"></div>
+                <div class="track-info">
+                    <div class="track-title" id="trackTitle">—</div>
+                    <div class="track-artists" id="trackArtists">—</div>
+                    <span class="track-badge" id="trackBadge">—</span>
+                </div>
+            </div>
         </div>
-        <div class="track-card-right">
-            <div class="track-title" id="trackTitle">—</div>
-            <div class="track-artists" id="trackArtists">—</div>
-            <span class="track-badge" id="trackBadge">—</span>
+
+        <!-- 2. ТЕКСТ -->
+        <div class="card card-score" onclick="openPopup('lyrics')">
+            <div class="card-fill"></div>
+            <div class="card-spinner"></div>
+            <div class="card-content">
+                <div class="score-label">📝 Оценка текста</div>
+                <div class="score-circle" id="lyricsCircle">
+                    <span id="lyricsScore">0</span>
+                </div>
+                <div class="score-verdict" id="lyricsVerdict">—</div>
+            </div>
         </div>
+
+        <!-- 3. БИТ -->
+        <div class="card card-score" onclick="openPopup('beat')">
+            <div class="card-fill"></div>
+            <div class="card-spinner"></div>
+            <div class="card-content">
+                <div class="score-label">🎵 Оценка бита</div>
+                <div class="score-circle" id="beatCircle">
+                    <span id="beatScore">0</span>
+                </div>
+                <div class="score-verdict" id="beatVerdict">—</div>
+            </div>
+        </div>
+
+        <!-- 4. ОБЩАЯ -->
+        <div class="card card-overall" onclick="openPopup('overall')">
+            <div class="card-fill"></div>
+            <div class="card-spinner"></div>
+            <div class="card-content">
+                <div class="score-label">🌟 Общая оценка</div>
+                <div class="score-circle big" id="overallCircle">
+                    <span id="overallScore">0</span>
+                </div>
+                <div class="score-verdict" id="overallVerdict">—</div>
+                <div class="score-mood" id="overallMood"></div>
+            </div>
+        </div>
+
+        <button class="share-btn" onclick="shareResult()">📤 Поделиться</button>
     </div>
 
-    <!-- Оценки -->
-    <div class="scores-grid">
-        <div class="score-card">
-            <div class="score-label">📝 Оценка текста</div>
-            <div class="score-circle" id="lyricsScoreCircle">
-                <span id="lyricsScore">—</span>/10
-            </div>
-            <div class="score-verdict" id="lyricsVerdict">—</div>
-            <div class="score-details" id="lyricsDetails"></div>
-        </div>
-
-        <div class="score-card">
-            <div class="score-label">🎵 Оценка бита</div>
-            <div class="score-circle" id="beatScoreCircle">
-                <span id="beatScore">—</span>/10
-            </div>
-            <div class="score-verdict" id="beatVerdict">—</div>
-        </div>
-
-        <div class="score-card overall">
-            <div class="score-label">🌟 Общая оценка</div>
-            <div class="score-circle big" id="overallScoreCircle">
-                <span id="overallScore">—</span>/10
-            </div>
-            <div class="score-verdict" id="overallVerdict">—</div>
-            <div class="score-mood" id="overallMood"></div>
-        </div>
-    </div>
-
-    <div class="show-lyrics-btn" onclick="showLyricsPopup()">
-        <span>Показать текст песни</span>
-        <span class="blur-hint">(нажмите, чтобы раскрыть)</span>
-    </div>
-
-    <button class="translate-btn" onclick="translateLyrics()">🌐 Перевести текст</button>
-    <button class="share-btn" onclick="shareResult()">📤 Поделиться результатом</button>
-
-    <!-- Попап с текстом -->
-    <div class="lyrics-overlay" id="lyricsOverlay">
-        <div class="lyrics-popup">
-            <button class="lyrics-close" onclick="closeLyricsPopup()">✕</button>
-            <h2>📄 Текст песни</h2>
-            <div class="lyrics-text" id="lyricsText">—</div>
-            <div class="lyrics-warning" id="lyricsWarning"></div>
+    <!-- Попап -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup">
+            <button class="popup-close" onclick="closePopup()">✕</button>
+            <h2 class="popup-title" id="popupTitle">—</h2>
+            <div class="popup-body" id="popupBody">—</div>
         </div>
     </div>
 
     <script>
-        // ===== ДАННЫЕ =====
-        const covers = {
-            "FUNK MI CAMINO": "cover-funk.jpg",
-            "MONTAGEM TOMADA": "cover-tomada.jpg",
-            "MATADORA": "cover-matadora.jpg"
-        };
-
+        // ===== ДАННЫЕ ИЗ URL =====
         const params = new URLSearchParams(window.location.search);
-        const resultData = JSON.parse(decodeURIComponent(params.get('data') || '{}'));
+        const data = JSON.parse(decodeURIComponent(params.get('data') || '{}'));
 
-        let selectedVariantIndex = 0;
+        // ===== СТАРТ =====
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hide');
+                document.getElementById('resultWrapper').classList.add('show');
+                animateCards();
+            }, 1200);
+        });
 
-        // ===== ИНИЦИАЛИЗАЦИЯ =====
-        if (resultData.success) {
-            if (resultData.variants && resultData.variants.length > 1) {
-                showVariantPopup(resultData.variants);
-            } else {
-                renderResult(resultData);
-            }
-        } else {
-            document.getElementById('resultHeader').textContent = 'Песня не найдена';
-            document.getElementById('trackTitle').textContent = 'Попробуйте другое название';
-        }
+        // ===== АНИМАЦИЯ КАРТОЧЕК =====
+function animateCards() {
+    const cards = document.querySelectorAll('.card');
+    
+    // Заполняем данные СРАЗУ (но контент скрыт CSS-ом)
+    fillData();
 
-        // ===== ПОПАП ВЫБОРА ВАРИАНТА =====
-        function showVariantPopup(variants) {
-            document.getElementById('variantOverlay').style.display = 'flex';
-            renderVariants(variants);
-        }
+    cards.forEach((card, i) => {
+        // Случайное время загрузки (800-2000 мс)
+        const loadTime = 800 + Math.random() * 1200;
 
-        function renderVariants(variants) {
-            const list = document.getElementById('variantList');
-            const nav = document.getElementById('variantNav');
-            
-            list.innerHTML = variants.map((v, i) => `
-                <div class="variant-item ${i === selectedVariantIndex ? 'selected' : ''}" 
-                     onclick="selectVariant(${i})">
-                    <img class="variant-cover" src="${v.cover_url || 'cover.jpg'}" 
-                         onerror="this.src='cover.jpg'">
-                    <div class="variant-info">
-                        <div class="variant-title">${v.title}</div>
-                        <div class="variant-artist">${v.artist}</div>
-                    </div>
-                </div>
-            `).join('');
+        setTimeout(() => {
+            // 1. Фиолетовая заливка
+            card.classList.add('filled');
 
-            nav.innerHTML = variants.length > 1 ? `
-                <button class="nav-arrow" onclick="prevVariant()" ${selectedVariantIndex === 0 ? 'disabled' : ''}>◀</button>
-                <span>${selectedVariantIndex + 1} / ${variants.length}</span>
-                <button class="nav-arrow" onclick="nextVariant()" ${selectedVariantIndex === variants.length - 1 ? 'disabled' : ''}>▶</button>
-            ` : '';
-        }
+            // 2. Через 0.6 сек — фиолетовый убирается + показываем результат
+            setTimeout(() => {
+                card.classList.add('reveal');
+                card.classList.add('loaded');
 
-        function selectVariant(index) {
-            selectedVariantIndex = index;
-            renderVariants(resultData.variants);
-        }
+                // 3. Убираем временные классы
+                setTimeout(() => {
+                    card.classList.remove('filled', 'reveal');
+                }, 1200);
+            }, 600);
+        }, loadTime + i * 200);
+    });
+}
 
-        function prevVariant() {
-            if (selectedVariantIndex > 0) {
-                selectVariant(selectedVariantIndex - 1);
-            }
-        }
-
-        function nextVariant() {
-            if (selectedVariantIndex < resultData.variants.length - 1) {
-                selectVariant(selectedVariantIndex + 1);
-            }
-        }
-
-        function filterVariants() {
-            const query = document.getElementById('variantSearchInput').value.toLowerCase();
-            const filtered = resultData.variants.filter(v => 
-                v.title.toLowerCase().includes(query) || 
-                v.artist.toLowerCase().includes(query)
-            );
-            selectedVariantIndex = 0;
-            renderVariants(filtered);
-        }
-
-        function confirmVariant() {
-            document.getElementById('variantOverlay').style.display = 'none';
-            
-            // Отправляем запрос с выбранным вариантом
-            const variant = resultData.variants[selectedVariantIndex];
-            fetch('http://127.0.0.1:5000/api/check', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    track_name: variant.title,
-                    artist: variant.artist
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) renderResult(data);
-            });
-        }
-
-        // ===== РЕНДЕР РЕЗУЛЬТАТА =====
-        function renderResult(data) {
+        // ===== ЗАПОЛНЕНИЕ =====
+        function fillData() {
+            // 1. Песня
             document.getElementById('trackTitle').textContent = data.title || '—';
             document.getElementById('trackArtists').textContent = (data.artists || []).join(', ');
-            document.getElementById('trackBadge').textContent = data.source === 'genius' ? 'Genius' : 'VORTEX DB';
+            document.getElementById('trackBadge').textContent = data.source === 'genius' ? 'Genius' : 'VORTEX';
+            document.getElementById('trackCover').style.backgroundImage = `url('${data.cover_url || 'cover.jpg'}')`;
 
-            const coverUrl = data.cover_url || covers[data.title] || 'cover.jpg';
-            document.getElementById('trackCover').style.backgroundImage = `url('${coverUrl}')`;
-
+            // 2. Текст
             const lyricsScore = data.lyrics_analysis?.score || 0;
             document.getElementById('lyricsScore').textContent = lyricsScore;
             document.getElementById('lyricsVerdict').textContent = data.lyrics_analysis?.verdict || '—';
-            document.getElementById('lyricsDetails').innerHTML = 
-                (data.lyrics_analysis?.bad_words?.length > 0 
-                    ? '⚠️ Найдены слова: <strong>' + data.lyrics_analysis.bad_words.join(', ') + '</strong>' 
-                    : '✅ Нецензурных слов не найдено');
-            updateCircleColor('lyricsScoreCircle', lyricsScore);
+            colorCircle('lyricsCircle', lyricsScore);
 
+            // 3. Бит
             const beatScore = data.beat_analysis?.score || 0;
             document.getElementById('beatScore').textContent = beatScore;
             document.getElementById('beatVerdict').textContent = data.beat_analysis?.description || '—';
-            updateCircleColor('beatScoreCircle', beatScore);
+            colorCircle('beatCircle', beatScore);
 
+            // 4. Общая
             const overallScore = data.overall?.score || 0;
             document.getElementById('overallScore').textContent = overallScore;
             document.getElementById('overallVerdict').textContent = data.overall?.verdict || '—';
             document.getElementById('overallMood').textContent = data.overall?.mood || '';
-            updateCircleColor('overallScoreCircle', overallScore);
+            colorCircle('overallCircle', overallScore);
+        }
 
-            document.getElementById('lyricsText').innerHTML = 
-                (data.lyrics_analysis?.highlighted_text || data.lyrics || '').replace(/\n/g, '<br>');
+        function colorCircle(id, score) {
+            const c = document.getElementById(id);
+            if (score >= 8) c.style.borderColor = '#4CAF50';
+            else if (score >= 5) c.style.borderColor = '#ffa500';
+            else c.style.borderColor = '#e74c3c';
+        }
 
-            if (data.lyrics_analysis?.status === 'instrumental') {
-                document.getElementById('lyricsWarning').innerHTML = '🎵 Инструментальный трек';
-                document.getElementById('lyricsWarning').style.color = '#ffa500';
-            } else if (data.lyrics_analysis?.is_clean) {
-                document.getElementById('lyricsWarning').innerHTML = '✅ Текст полностью чистый';
-                document.getElementById('lyricsWarning').style.color = '#4CAF50';
-            } else {
-                document.getElementById('lyricsWarning').innerHTML = '⚠️ Найдена нецензурная лексика';
-                document.getElementById('lyricsWarning').style.color = '#e74c3c';
+        // ===== ПОПАПЫ =====
+        function openPopup(type) {
+            const title = document.getElementById('popupTitle');
+            const body = document.getElementById('popupBody');
+
+            if (type === 'track') {
+                title.textContent = '🎵 О песне';
+                body.innerHTML = `
+                    <div class="popup-track">
+                        <div class="popup-cover" style="background-image: url('${data.cover_url || 'cover.jpg'}')"></div>
+                        <div>
+                            <div class="popup-track-title">${data.title || '—'}</div>
+                            <div class="popup-track-artists">${(data.artists || []).join(', ')}</div>
+                            <span class="track-badge">${data.source === 'genius' ? 'Genius' : 'VORTEX'}</span>
+                        </div>
+                    </div>
+                `;
             }
 
-            if (data.lyrics_analysis?.age_18_plus) {
-                document.getElementById('lyricsWarning').innerHTML += '<br>🔞 Только 18+';
+            if (type === 'lyrics') {
+                title.textContent = '📝 Анализ текста';
+                const bad = data.lyrics_analysis?.bad_words || [];
+                body.innerHTML = `
+                    <div class="popup-score">${data.lyrics_analysis?.score || 0}/10</div>
+                    <p class="popup-text">${data.lyrics_analysis?.verdict || '—'}</p>
+                    ${bad.length > 0
+                        ? `<div class="popup-bad">⚠️ Найдено: <strong>${bad.join(', ')}</strong></div>`
+                        : `<div class="popup-clean">✅ Нецензурных слов нет</div>`}
+                    <button class="popup-btn" onclick="showFullLyrics()">📄 Показать текст</button>
+                    <button class="popup-btn blue" onclick="translateLyrics()">🌐 Перевести</button>
+                `;
             }
 
-            setTimeout(() => {
-                document.getElementById('resultHeader').classList.add('visible');
-            }, 100);
+            if (type === 'beat') {
+                title.textContent = '🎵 Анализ бита';
+                body.innerHTML = `
+                    <div class="popup-score">${data.beat_analysis?.score || 0}/10</div>
+                    <p class="popup-text">${data.beat_analysis?.description || '—'}</p>
+                    <div class="popup-details">
+                        <div>BPM: <strong>${data.beat_analysis?.bpm || '—'}</strong></div>
+                        <div>Стиль: <strong>${data.beat_analysis?.style || '—'}</strong></div>
+                    </div>
+                `;
+            }
+
+            if (type === 'overall') {
+                title.textContent = '🌟 Общая оценка';
+                body.innerHTML = `
+                    <div class="popup-score">${data.overall?.score || 0}/10</div>
+                    <p class="popup-text">${data.overall?.verdict || '—'}</p>
+                    <p class="popup-text">${data.overall?.mood || ''}</p>
+                `;
+            }
+
+            document.getElementById('popupOverlay').classList.add('show');
         }
 
-        // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
-        function updateCircleColor(id, score) {
-            const circle = document.getElementById(id);
-            if (score >= 8) circle.style.borderColor = '#4CAF50';
-            else if (score >= 5) circle.style.borderColor = '#ffa500';
-            else circle.style.borderColor = '#e74c3c';
+        function closePopup() {
+            document.getElementById('popupOverlay').classList.remove('show');
         }
 
-        function goBackToApp() {
-            sessionStorage.setItem('vortex_returning', 'true');
-            window.location.href = 'index.html';
-        }
-
-        function showLyricsPopup() {
-            document.getElementById('lyricsOverlay').classList.add('show');
-        }
-
-        function closeLyricsPopup() {
-            document.getElementById('lyricsOverlay').classList.remove('show');
-        }
-
-        document.getElementById('lyricsOverlay').addEventListener('click', function(e) {
-            if (e.target === this) closeLyricsPopup();
+        document.getElementById('popupOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closePopup();
         });
 
+        // ===== ПОКАЗ ТЕКСТА =====
+        function showFullLyrics() {
+            const lyrics = data.lyrics || 'Текст не найден';
+            const bad = data.lyrics_analysis?.bad_words || [];
+            let html = lyrics;
+            bad.forEach(w => {
+                html = html.replace(new RegExp(`(${w})`, 'gi'), '<span class="bad-word">$1</span>');
+            });
+
+            document.getElementById('popupTitle').textContent = '📄 Текст песни';
+            document.getElementById('popupBody').innerHTML = 
+                `<div class="popup-lyrics">${html.replace(/\n/g, '<br>')}</div>`;
+        }
+
+        // ===== ПЕРЕВОД =====
+        function translateLyrics() {
+            const lyrics = data.lyrics || '';
+            const lang = /[а-яё]/i.test(lyrics) ? 'ru' : /[áàâãéêíóôõúç]/i.test(lyrics) ? 'pt' : /[áéíóúñü]/i.test(lyrics) ? 'es' : 'en';
+
+            fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${lang}&tl=ru&dt=t&q=${encodeURIComponent(lyrics)}`)
+                .then(r => r.json())
+                .then(res => {
+                    let text = '';
+                    res[0].forEach(p => text += p[0]);
+                    document.getElementById('popupTitle').textContent = `🌐 Перевод (${lang.toUpperCase()} → RU)`;
+                    document.getElementById('popupBody').innerHTML = 
+                        `<div class="popup-lyrics">${text.replace(/\n/g, '<br>')}</div>`;
+                });
+        }
+
+        // ===== ПОДЕЛИТЬСЯ =====
         function shareResult() {
-            const text = 'Проверил песню в VORTEX AUDIO! Общая оценка: ' + 
-                         (resultData.overall?.score || '—') + '/10';
+            const text = `Проверил песню в VORTEX AUDIO! Оценка: ${data.overall?.score || '—'}/10`;
             if (navigator.share) {
                 navigator.share({ title: 'VORTEX AUDIO', text: text });
             } else {
                 navigator.clipboard.writeText(text);
-                alert('Ссылка скопирована!');
+                showToast('Скопировано!', 'success');
             }
         }
 
-        function translateLyrics() {
-            const lyrics = resultData.lyrics || '';
-            const lang = detectLanguage(lyrics);
-            
-            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${lang}&tl=ru&dt=t&q=${encodeURIComponent(lyrics)}`;
-            
-            fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    let translated = '';
-                    data[0].forEach(part => translated += part[0]);
-                    
-                    const popup = document.createElement('div');
-                    popup.className = 'translate-popup';
-                    popup.innerHTML = `
-                        <div class="translate-content">
-                            <button onclick="this.parentElement.parentElement.remove()">✕</button>
-                            <h3>🌐 Перевод (${lang.toUpperCase()} → Русский)</h3>
-                            <div class="translate-text">${translated.replace(/\n/g, '<br>')}</div>
-                        </div>
-                    `;
-                    document.body.appendChild(popup);
-                });
-        }
-
-        function detectLanguage(text) {
-            if (/[а-яё]/i.test(text)) return 'ru';
-            if (/[áàâãéêíóôõúç]/i.test(text)) return 'pt';
-            if (/[áéíóúñü]/i.test(text)) return 'es';
-            return 'en';
+        // ===== ТОСТЫ =====
+        function showToast(message, type = 'info') {
+            let c = document.querySelector('.toast-container');
+            if (!c) {
+                c = document.createElement('div');
+                c.className = 'toast-container';
+                document.body.appendChild(c);
+            }
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            t.innerHTML = `<span class="toast-icon">${icons[type]}</span><span class="toast-text">${message}</span>`;
+            c.appendChild(t);
+            setTimeout(() => t.classList.add('show'), 10);
+            setTimeout(() => {
+                t.classList.remove('show');
+                t.classList.add('hide');
+                setTimeout(() => t.remove(), 600);
+            }, 3000);
         }
     </script>
 </body>

@@ -111,8 +111,47 @@
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progressFill"></div>
             </div>
-            <div class="progress-text">1 000 000 песен — промокод на скидку 25%</div>
+            <div class="progress-text">100 000 песен — промокод на скидку ВСЕХ наборов 25%</div>
         </div>
+
+        <!-- Кнопка выбора метода -->
+<div class="method-wrapper">
+    <button class="method-btn" id="methodBtn" onclick="toggleMethodPopup()">
+        <img src="genius-icon.png" class="method-icon" id="methodIcon" alt="Genius">
+        <span id="methodName">Genius</span>
+        <span class="method-arrow">▾</span>
+    </button>
+
+    <!-- Попап выбора -->
+    <div class="method-popup" id="methodPopup">
+        <button class="method-option active" data-method="genius" onclick="selectMethod('genius')">
+            <img src="genius-icon.png" class="method-option-icon" alt="Genius">
+            <div>
+                <div class="method-option-title">Genius</div>
+                <div class="method-option-sub">Поиск текста по названию</div>
+            </div>
+            <span class="method-check">✓</span>
+        </button>
+
+        <button class="method-option" data-method="mp3" onclick="selectMethod('mp3')">
+            <span class="method-option-icon" style="font-size:22px;">📁</span>
+            <div>
+                <div class="method-option-title">MP3</div>
+                <div class="method-option-sub">Загрузите файл</div>
+            </div>
+            <span class="method-check">✓</span>
+        </button>
+
+        <button class="method-option" data-method="streaming" onclick="selectMethod('streaming')">
+            <span class="method-option-icon" style="font-size:22px;">🎵</span>
+            <div>
+                <div class="method-option-title">Стриминговые сервисы</div>
+                <div class="method-option-sub">Spotify, YouTube Music, Яндекс Музыка</div>
+            </div>
+            <span class="method-check">✓</span>
+        </button>
+    </div>
+</div>
 
         <!-- Форма -->
         <div class="input-group">

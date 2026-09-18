@@ -1,7 +1,3 @@
-// ========== СЕКРЕТНЫЙ ВХОД АДМИНА ==========
-const ADMIN_USERNAME = "Admin Vortex Audio";
-const ADMIN_PASSWORD = "AdminVA2105";
-
 // ========== ПЕРЕКЛЮЧАТЕЛЬ ВХОД/РЕГИСТРАЦИЯ ==========
 let isLoginMode = true;
 
@@ -44,16 +40,7 @@ async function submitAuth(e) {
     if (!username || !password) {
         showToast('Заполните все поля!', 'warning');
         return;
-    }
-
-    // === ПРОВЕРКА НА АДМИНА ===
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        localStorage.setItem('vortex_logged_user', 'Secret');
-        localStorage.setItem('vortex_is_admin', 'true');
-        showToast('Добро пожаловать, админ!', 'success');
-        setTimeout(() => window.location.href = 'admin.html', 800);
-        return;
-    }
+    }   
 
     const btn = document.getElementById('authBtn');
     const originalText = btn.textContent;
@@ -75,7 +62,6 @@ async function submitAuth(e) {
         const result = await response.json();
 
         if (result.success) {
-            // Сохраняем сессию
             localStorage.setItem('vortex_logged_user', username);
             localStorage.setItem('vortex_logged_email', email || '');
             
@@ -94,7 +80,6 @@ async function submitAuth(e) {
             showToast(isLoginMode ? 'Добро пожаловать!' : 'Аккаунт создан!', 'success');
 
             setTimeout(() => {
-                // Если админ — в админку, иначе — в dashboard
                 if (localStorage.getItem('vortex_is_admin') === 'true') {
                     window.location.href = 'admin.html';
                 } else {

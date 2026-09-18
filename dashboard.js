@@ -431,6 +431,77 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// ========== ВЫБОР МЕТОДА ПРОВЕРКИ ==========
+let currentMethod = localStorage.getItem('vortex_method') || 'genius';
+
+function toggleMethodPopup() {
+    const popup = document.getElementById('methodPopup');
+    const btn = document.getElementById('methodBtn');
+    popup.classList.toggle('show');
+    btn.classList.toggle('open');
+}
+
+function selectMethod(method) {
+    currentMethod = method;
+    localStorage.setItem('vortex_method', method);
+
+    const btn = document.getElementById('methodBtn');
+    const methodName = document.getElementById('methodName');
+    let methodIcon = document.getElementById('methodIcon');
+    let emojiIcon = btn.querySelector('.method-emoji-icon');
+
+    // Убираем активные
+    document.querySelectorAll('.method-option').forEach(o => o.classList.remove('active'));
+    document.querySelector(`.method-option[data-method="${method}"]`).classList.add('active');
+
+    // Скрываем все иконки
+    if (methodIcon) methodIcon.style.display = 'none';
+    if (emojiIcon) emojiIcon.style.display = 'none';
+
+    // Показываем нужную
+    if (method === 'genius') {
+        methodName.textContent = 'Genius';
+        if (methodIcon) methodIcon.style.display = 'block';
+    } else {
+        // Создаём emoji, если нет
+        if (!emojiIcon) {
+            emojiIcon = document.createElement('span');
+            emojiIcon.className = 'method-emoji-icon';
+            emojiIcon.style.fontSize = '20px';
+            btn.insertBefore(emojiIcon, btn.firstChild);
+        }
+        emojiIcon.textContent = method === 'mp3' ? '📁' : '🎵';
+        emojiIcon.style.display = 'block';
+        methodName.textContent = method === 'mp3' ? 'MP3' : 'Стриминговые';
+    }
+
+    // Закрываем попап
+    document.getElementById('methodPopup').classList.remove('show');
+    btn.classList.remove('open');
+
+    const names = { genius: 'Genius', mp3: 'MP3', streaming: 'Стриминговые' };
+    showToast('Метод проверки песни: ' + names[method], 'success');
+}
+
+// Закрытие попапа при клике вне
+document.addEventListener('click', (e) => {
+    const popup = document.getElementById('methodPopup');
+    const btn = document.getElementById('methodBtn');
+    if (popup && !e.target.closest('.method-wrapper')) {
+        popup.classList.remove('show');
+        btn.classList.remove('open');
+    }
+});
+
+// Восстановить выбранный метод
+(function restoreMethod() {
+    const method = localStorage.getItem('vortex_method') || 'genius';
+    const option = document.querySelector(`.method-option[data-method="${method}"]`);
+    if (option) {
+        option.classList.add('active');
+    }
+})();
+
 // ========== ЗАПУСК ==========
 loadUser();
 updateCheckButton();

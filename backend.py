@@ -33,8 +33,7 @@ BAD_WORDS = {
 }
 
 # ===== АДМИН =====
-ADMIN_USERNAME = "Admin Vortex Audio"
-ADMIN_PASSWORD = "AdminVA2105"  # для проверки
+
 
 # ===== ФАЙЛЫ =====
 DB_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'users.json')
@@ -296,6 +295,35 @@ def admin_get_stats():
         }
     })
 
+# ===== АВТОСОЗДАНИЕ АДМИНА =====
+def ensure_admin_exists():
+    users = load_users()
+    changed = False
+    if 'Secret' not in users:
+        hashed = hashlib.sha256(ADMIN_PASSWORD.encode()).hexdigest()
+        users['Secret'] = {
+            "password": hashed,
+            "email": "admin@vortexaudio.com",
+            "avatar": "default-avatar.png",
+            "phone": None,
+            "notes_balance": 9999,
+            "free_checks": 999,
+            "songs_checked": 0,
+            "subscription": "diamond",
+            "is_admin": True,
+            "created_at": datetime.now().isoformat()
+        }
+        changed = True
+        print("✅ Админ Secret создан")
+    else:
+        if not users['Secret'].get('is_admin'):
+            users['Secret']['is_admin'] = True
+            changed = True
+            print("✅ Права админа обновлены")
+    if changed:
+        save_users(users)
+
+ensure_admin_exists()
+
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(debug=False, port=5000)
