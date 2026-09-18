@@ -204,7 +204,7 @@ def get_news():
 
 # ===== API АДМИНКИ =====
 def check_admin(username):
-    return username == ADMIN_USERNAME
+return username == ADMIN_USERNAME
 
 @app.route('/api/admin/news', methods=['POST'])
 def create_news():
