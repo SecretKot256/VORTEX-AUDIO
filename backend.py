@@ -203,6 +203,12 @@ def get_news():
     news = sorted(data['news'], key=lambda x: x.get('id', 0), reverse=True)
     return jsonify({"success": True, "news": news})
 
+    @app.route('/api/news', methods=['GET'])
+def get_news():
+    data = load_news()
+    news = sorted(data['news'], key=lambda x: x.get('id', 0), reverse=True)
+    return jsonify({"success": True, "news": news})
+
 # ===== API АДМИНКИ =====
 def check_admin(username):
     return username == ADMIN_USERNAME
