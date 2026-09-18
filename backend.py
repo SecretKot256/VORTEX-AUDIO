@@ -7,6 +7,9 @@ import json
 import os
 from datetime import datetime
 
+# ===== АДМИН =====
+ADMIN_USERNAME = "Admin Vortex Audio"
+
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
@@ -31,9 +34,6 @@ BAD_WORDS = {
     "puta", "puto", "mierda", "cabron", "joder", "coño", "pendejo", "verga", "pinche",
     "caralho", "porra", "merda", "foder", "foda", "buceta", "viado", "bicha"
 }
-
-# ===== АДМИН =====
-
 
 # ===== ФАЙЛЫ =====
 DB_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'users.json')
@@ -90,6 +90,9 @@ def analyze_lyrics(lyrics):
     if not bad:
         return {"status": "clean", "verdict": "Чисто", "is_clean": True, "bad_words": []}
     return {"status": "dirty", "verdict": "Грязь", "is_clean": False, "bad_words": bad}
+
+def check_admin(username):
+    return username == ADMIN_USERNAME
 
 # ===== API АУТЕНТИФИКАЦИИ =====
 @app.route('/api/register', methods=['POST'])
@@ -176,7 +179,6 @@ def check_track():
     overall = round((lscore + 7) / 2, 1)
     overall_verdict = f"🌟 Отлично! ({overall}/10)" if overall >= 8 else f"👍 Хорошо ({overall}/10)" if overall >= 5 else f"🚫 Плохо ({overall}/10)"
     
-    # Обновляем статистику юзера
     if username:
         users = load_users()
         if username in users:
@@ -203,20 +205,21 @@ def get_news():
     return jsonify({"success": True, "news": news})
 
 # ===== API АДМИНКИ =====
-def check_admin(username):
-return username == ADMIN_USERNAME
-
 @app.route('/api/admin/news', methods=['POST'])
 def create_news():
     data = request.json
     username = data.get('username', '').strip()
+    
     if not check_admin(username):
         return jsonify({"success": False, "message": "Нет доступа"}), 403
+    
     title = data.get('title', '').strip()
     content = data.get('content', '').strip()
     tag = data.get('tag', 'Новое').strip()
+    
     if not title or not content:
         return jsonify({"success": False, "message": "Заполните все поля!"})
+    
     news_data = load_news()
     new_news = {
         "id": news_data['next_id'],
@@ -235,8 +238,10 @@ def create_news():
 def delete_news(news_id):
     data = request.json or {}
     username = data.get('username', '').strip()
+    
     if not check_admin(username):
         return jsonify({"success": False, "message": "Нет доступа"}), 403
+    
     news_data = load_news()
     news_data['news'] = [n for n in news_data['news'] if n['id'] != news_id]
     save_news(news_data)
@@ -245,8 +250,10 @@ def delete_news(news_id):
 @app.route('/api/admin/users', methods=['GET'])
 def admin_get_users():
     username = request.args.get('username', '').strip()
+    
     if not check_admin(username):
         return jsonify({"success": False, "message": "Нет доступа"}), 403
+    
     users = load_users()
     user_list = []
     for name, data in users.items():
@@ -264,12 +271,15 @@ def admin_get_users():
 @app.route('/api/admin/stats', methods=['GET'])
 def admin_get_stats():
     username = request.args.get('username', '').strip()
+    
     if not check_admin(username):
         return jsonify({"success": False, "message": "Нет доступа"}), 403
+    
     users = load_users()
     news_data = load_news()
     total_checks = sum(u.get('songs_checked', 0) for u in users.values())
     total_users = len(users)
+    
     return jsonify({
         "success": True,
         "stats": {
@@ -279,28 +289,7 @@ def admin_get_stats():
         }
     })
 
-# Админ
-ADMIN_USERNAME = "Admin Vortex Audio"
-
-# Функции загрузки новостей (если нет)
-def load_news():
-    if not os.path.exists(NEWS_FILE):
-        return {"news": [], "next_id": 1}
-    try:
-        with open(NEWS_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except:
-        return {"news": [], "next_id": 1}
-
-def save_news(data):
-    with open(NEWS_FILE, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-
-# Путь к файлу новостей
-NEWS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'news.json')
-
 # ===== ЗАПУСК =====
 if __name__ == '__main__':
-    import os
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
