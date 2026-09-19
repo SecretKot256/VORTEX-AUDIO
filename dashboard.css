@@ -1491,3 +1491,99 @@ body.light .method-option-sub {
         height: 18px;
     }
 }
+
+/* ===== ДОСТИЖЕНИЯ ===== */
+.achievements-block {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #2a2a2a;
+}
+
+.achievements-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.achievement {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 4px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.achievement.unlocked {
+    border-color: #6C5CE7;
+    background: rgba(108, 92, 231, 0.1);
+    box-shadow: 0 0 12px rgba(108, 92, 231, 0.25);
+}
+
+.achievement.locked {
+    opacity: 0.35;
+}
+
+.achievement.unlocked:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(108, 92, 231, 0.4);
+}
+
+.achievement-icon {
+    font-size: 26px;
+    line-height: 1;
+}
+
+.achievement-name {
+    font-size: 9px;
+    color: #aaa;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.achievement.unlocked .achievement-name {
+    color: #fff;
+}
+
+/* Светлая тема */
+body.light .achievement {
+    background: #f0f0f0;
+    border-color: #ddd;
+}
+
+body.light .achievement.unlocked {
+    background: rgba(108, 92, 231, 0.15);
+    border-color: #6C5CE7;
+}
+
+body.light .achievement-name {
+    color: #666;
+}
+
+body.light .achievement.unlocked .achievement-name {
+    color: #222;
+}
+
+body.light .achievements-title {
+    color: #222;
+}
+
+body.light .achievements-block {
+    border-top-color: #ddd;
+}

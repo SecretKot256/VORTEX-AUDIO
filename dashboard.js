@@ -97,7 +97,7 @@ function openProfile() {
         document.getElementById('phoneText').textContent = 'Номер не подключён';
         document.getElementById('connectPhoneBtn').style.display = 'inline-block';
     }
-
+    renderAchievements();
     document.getElementById('profileOverlay').classList.add('show');
 }
 
@@ -248,6 +248,15 @@ async function tryCheckTrack() {
             body: JSON.stringify({ track_name: trackName, artist: artistName })
         });
         const result = await response.json();
+
+        // Обновляем счётчики достижений
+if (result.lyrics_analysis?.is_clean) {
+    userData.cleanCount = (userData.cleanCount || 0) + 1;
+} else if (result.lyrics_analysis?.status === 'dirty') {
+    userData.dirtyCount = (userData.dirtyCount || 0) + 1;
+}
+localStorage.setItem('vortex_clean', userData.cleanCount || 0);
+localStorage.setItem('vortex_dirty', userData.dirtyCount || 0);
 
         if (result.success) {
             window.location.href = 'result.html?data=' + encodeURIComponent(JSON.stringify(result));
@@ -502,6 +511,52 @@ document.addEventListener('click', (e) => {
     }
 })();
 
+// ===== ДОСТИЖЕНИЯ =====
+const ACHIEVEMENTS = [
+    { id: 'first',   icon: '🥉', name: 'Первый шаг',  need: 1,   type: 'checks' },
+    { id: 'ten',     icon: '🥈', name: 'Мелодист',    need: 10,  type: 'checks' },
+    { id: 'fifty',   icon: '🥇', name: 'Меломан',     need: 50,  type: 'checks' },
+    { id: 'hundred', icon: '💎', name: 'Легенда',     need: 100, type: 'checks' },
+    { id: 'dirty',   icon: '🔥', name: 'Детектив',    need: 5,   type: 'dirty'  },
+    { id: 'clean',   icon: '✨', name: 'Чистюля',     need: 10,  type: 'clean'  }
+];
+
+function renderAchievements() {
+    const grid = document.getElementById('achievementsGrid');
+    if (!grid) return;
+
+    const checks = userData.songsTranslated || 0;
+
+    grid.innerHTML = ACHIEVEMENTS.map(a => {
+        let unlocked = false;
+        let progress = 0;
+
+        if (a.type === 'checks') {
+            progress = checks;
+            unlocked = checks >= a.need;
+        } else if (a.type === 'dirty') {
+            progress = userData.dirtyCount || 0;
+            unlocked = progress >= a.need;
+        } else if (a.type === 'clean') {
+            progress = userData.cleanCount || 0;
+            unlocked = progress >= a.need;
+        }
+
+        const tooltip = unlocked 
+            ? `✅ ${a.name} — открыто!`
+            : `${a.name}: ${progress}/${a.need}`;
+
+        return `
+            <div class="achievement ${unlocked ? 'unlocked' : 'locked'}" title="${tooltip}">
+                <div class="achievement-icon">${a.icon}</div>
+                <div class="achievement-name">${a.name}</div>
+            </div>
+        `;
+    }).join('');
+}
+
 // ========== ЗАПУСК ==========
+userData.cleanCount = parseInt(localStorage.getItem('vortex_clean') || '0');
+userData.dirtyCount = parseInt(localStorage.getItem('vortex_dirty') || '0');
 loadUser();
 updateCheckButton();
