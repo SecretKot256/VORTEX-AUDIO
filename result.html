@@ -76,6 +76,28 @@
 
         <button class="share-btn" onclick="shareResult()">📤 Поделиться</button>
     </div>
+    <!-- Партнёрские кнопки -->
+<div class="partners-block">
+    <div class="partners-title">🎧 Слушать песню:</div>
+    <div class="partners-buttons">
+        <a id="partner-yandex" href="#" target="_blank" class="partner-btn yandex">
+            <span class="partner-icon">🎵</span>
+            <span>Яндекс.Музыка</span>
+        </a>
+        <a id="partner-spotify" href="#" target="_blank" class="partner-btn spotify">
+            <span class="partner-icon">🎧</span>
+            <span>Spotify</span>
+        </a>
+        <a id="partner-youtube" href="#" target="_blank" class="partner-btn youtube">
+            <span class="partner-icon">▶️</span>
+            <span>YouTube Music</span>
+        </a>
+        <a id="partner-vk" href="#" target="_blank" class="partner-btn vk">
+            <span class="partner-icon">💬</span>
+            <span>VK Музыка</span>
+        </a>
+    </div>
+</div>
 
     <!-- Попап -->
     <div class="popup-overlay" id="popupOverlay">
@@ -163,6 +185,21 @@ function animateCards() {
             else if (score >= 5) c.style.borderColor = '#ffa500';
             else c.style.borderColor = '#e74c3c';
         }
+        
+        // === ПАРТНЁРСКИЕ КНОПКИ ===
+const searchQuery = encodeURIComponent(`${data.title || ''} ${(data.artists || []).join(' ')}`.trim());
+
+const partners = {
+    yandex: `https://music.yandex.ru/search?text=${searchQuery}`,
+    spotify: `https://open.spotify.com/search/${searchQuery}`,
+    youtube: `https://music.youtube.com/search?q=${searchQuery}`,
+    vk: `https://vk.com/audio?q=${searchQuery}`
+};
+
+Object.keys(partners).forEach(key => {
+    const el = document.getElementById('partner-' + key);
+    if (el) el.href = partners[key];
+});
 
         // ===== ПОПАПЫ =====
         function openPopup(type) {
