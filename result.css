@@ -489,6 +489,95 @@ body {
         height: 80px;
     }
 
+    /* ===== ПАРТНЁРСКИЕ КНОПКИ ===== */
+.partners-block {
+    grid-column: 1 / -1;
+    background: rgba(20,20,20,0.6);
+    border: 1px solid #2a2a2a;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 16px;
+}
+
+.partners-title {
+    font-size: 14px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.partners-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.partner-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.partner-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+.partner-icon {
+    font-size: 18px;
+}
+
+.partner-btn.yandex {
+    background: linear-gradient(135deg, #FF0000, #FF3333);
+    border-color: #FF0000;
+}
+
+.partner-btn.spotify {
+    background: linear-gradient(135deg, #1DB954, #1ED760);
+    border-color: #1DB954;
+}
+
+.partner-btn.youtube {
+    background: linear-gradient(135deg, #FF0000, #CC0000);
+    border-color: #FF0000;
+}
+
+.partner-btn.vk {
+    background: linear-gradient(135deg, #0077FF, #4C75A3);
+    border-color: #0077FF;
+}
+
+/* Светлая тема */
+body.light .partners-block {
+    background: #f0f0f0;
+    border-color: #ddd;
+}
+
+body.light .partners-title {
+    color: #666;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .partners-buttons {
+        grid-template-columns: 1fr;
+    }
+    .partners-block {
+        padding: 18px;
+    }
+}
+
     .track-title {
         font-size: 18px;
     }
