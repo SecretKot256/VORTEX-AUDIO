@@ -93,7 +93,7 @@ async function submitAuth(e) {
         }
     } catch (error) {
         console.error(error);
-        showToast('Сервер недоступен. Запустите backend.py', 'error');
+        showToast('Сервер запускается, подождите 30-60 секунд...', 'warning');
         btn.textContent = originalText;
         btn.disabled = false;
     }
