@@ -91,12 +91,17 @@ async function submitAuth(e) {
             btn.textContent = originalText;
             btn.disabled = false;
         }
-    } catch (error) {
-        console.error(error);
-        showToast('Сервер запускается, подождите 30-60 секунд...', 'warning');
+} catch (error) {
+    console.error(error);
+    showToast('Сервер просыпается, подождите 30 секунд...', 'warning');
+    btn.textContent = '⏳ Сервер просыпается...';
+    
+    // Автоповтор через 30 секунд
+    setTimeout(() => {
+        showToast('Попробуйте ещё раз', 'info');
         btn.textContent = originalText;
         btn.disabled = false;
-    }
+    }, 30000);
 }
 
 // ========== ТОСТЫ ==========
