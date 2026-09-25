@@ -21,18 +21,20 @@
     <div class="result-wrapper" id="resultWrapper">
 
         <!-- 1. ПЕСНЯ -->
-        <div class="card card-track" onclick="openPopup('track')">
-            <div class="card-fill"></div>
-            <div class="card-spinner"></div>
-            <div class="card-content">
-                <div class="track-cover" id="trackCover"></div>
-                <div class="track-info">
-                    <div class="track-title" id="trackTitle">—</div>
-                    <div class="track-artists" id="trackArtists">—</div>
-                    <span class="track-badge" id="trackBadge">—</span>
-                </div>
-            </div>
+        <div class="card card-track">
+    <div class="card-spinner"></div>
+    <div class="card-content">
+        <div class="track-cover" id="trackCover"></div>
+        <div class="track-info">
+            <div class="track-title" id="trackTitle">—</div>
+            <div class="track-artists" id="trackArtists">—</div>
+            <span class="track-badge" id="trackBadge">—</span>
+            <button class="listen-btn" onclick="openListenPopup(event)">
+                🎧 Слушать песню
+            </button>
         </div>
+    </div>
+</div>
 
         <!-- 2. ТЕКСТ -->
         <div class="card card-score" onclick="openPopup('lyrics')">
@@ -76,28 +78,6 @@
 
         <button class="share-btn" onclick="shareResult()">📤 Поделиться</button>
     </div>
-    <!-- Партнёрские кнопки -->
-<div class="partners-block">
-    <div class="partners-title">🎧 Слушать песню:</div>
-    <div class="partners-buttons">
-        <a id="partner-yandex" href="#" target="_blank" class="partner-btn yandex">
-            <span class="partner-icon">🎵</span>
-            <span>Яндекс.Музыка</span>
-        </a>
-        <a id="partner-spotify" href="#" target="_blank" class="partner-btn spotify">
-            <span class="partner-icon">🎧</span>
-            <span>Spotify</span>
-        </a>
-        <a id="partner-youtube" href="#" target="_blank" class="partner-btn youtube">
-            <span class="partner-icon">▶️</span>
-            <span>YouTube Music</span>
-        </a>
-        <a id="partner-vk" href="#" target="_blank" class="partner-btn vk">
-            <span class="partner-icon">💬</span>
-            <span>VK Музыка</span>
-        </a>
-    </div>
-</div>
 
     <!-- Попап -->
     <div class="popup-overlay" id="popupOverlay">
@@ -107,6 +87,44 @@
             <div class="popup-body" id="popupBody">—</div>
         </div>
     </div>
+
+    <!-- Попап выбора сервиса -->
+<div class="listen-popup-overlay" id="listenPopup" onclick="closeListenPopup(event)">
+    <div class="listen-popup" onclick="event.stopPropagation()">
+        <button class="listen-close" onclick="closeListenPopup(event)">✕</button>
+        <h3 class="listen-title">🎧 Слушать в:</h3>
+        <div class="listen-options">
+            <a id="listen-yandex" href="#" target="_blank" class="listen-option yandex">
+                <span class="listen-icon">🎵</span>
+                <div>
+                    <div class="listen-name">Яндекс.Музыка</div>
+                    <div class="listen-sub">Поиск песни в сервисе</div>
+                </div>
+            </a>
+            <a id="listen-spotify" href="#" target="_blank" class="listen-option spotify">
+                <span class="listen-icon">🎧</span>
+                <div>
+                    <div class="listen-name">Spotify</div>
+                    <div class="listen-sub">Поиск песни в сервисе</div>
+                </div>
+            </a>
+            <a id="listen-youtube" href="#" target="_blank" class="listen-option youtube">
+                <span class="listen-icon">▶️</span>
+                <div>
+                    <div class="listen-name">YouTube Music</div>
+                    <div class="listen-sub">Поиск песни в сервисе</div>
+                </div>
+            </a>
+            <a id="listen-vk" href="#" target="_blank" class="listen-option vk">
+                <span class="listen-icon">💬</span>
+                <div>
+                    <div class="listen-name">VK Музыка</div>
+                    <div class="listen-sub">Поиск песни в сервисе</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
 
     <script>
         // ===== ДАННЫЕ ИЗ URL =====
@@ -185,21 +203,6 @@ function animateCards() {
             else if (score >= 5) c.style.borderColor = '#ffa500';
             else c.style.borderColor = '#e74c3c';
         }
-        
-        // === ПАРТНЁРСКИЕ КНОПКИ ===
-const searchQuery = encodeURIComponent(`${data.title || ''} ${(data.artists || []).join(' ')}`.trim());
-
-const partners = {
-    yandex: `https://music.yandex.ru/search?text=${searchQuery}`,
-    spotify: `https://open.spotify.com/search/${searchQuery}`,
-    youtube: `https://music.youtube.com/search?q=${searchQuery}`,
-    vk: `https://vk.com/audio?q=${searchQuery}`
-};
-
-Object.keys(partners).forEach(key => {
-    const el = document.getElementById('partner-' + key);
-    if (el) el.href = partners[key];
-});
 
         // ===== ПОПАПЫ =====
         function openPopup(type) {
@@ -327,6 +330,27 @@ Object.keys(partners).forEach(key => {
                 setTimeout(() => t.remove(), 600);
             }, 3000);
         }
+
+        // ===== ПОПАП «СЛУШАТЬ» =====
+function openListenPopup(event) {
+    event.stopPropagation();
+    
+    const searchQuery = encodeURIComponent(
+        `${data.title || ''} ${(data.artists || []).join(' ')}`.trim()
+    );
+
+    document.getElementById('listen-yandex').href = `https://music.yandex.ru/search?text=${searchQuery}`;
+    document.getElementById('listen-spotify').href = `https://open.spotify.com/search/${searchQuery}`;
+    document.getElementById('listen-youtube').href = `https://music.youtube.com/search?q=${searchQuery}`;
+    document.getElementById('listen-vk').href = `https://vk.com/audio?q=${searchQuery}`;
+
+    document.getElementById('listenPopup').classList.add('show');
+}
+
+function closeListenPopup(event) {
+    if (event) event.stopPropagation();
+    document.getElementById('listenPopup').classList.remove('show');
+}
     </script>
 </body>
 </html>
