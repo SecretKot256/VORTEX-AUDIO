@@ -110,6 +110,33 @@ document.getElementById('profileOverlay').addEventListener('click', function(e) 
     if (e.target === this) closeProfile();
 });
 
+// ===== ТУТОРИАЛ =====
+function checkTutorial() {
+    const done = localStorage.getItem('vortex_tutorial_done');
+        if (done) {
+                document.getElementById('welcomeOverlay').style.display = 'none';
+                    }
+                    }
+
+                    function skipTutorial() {
+                        localStorage.setItem('vortex_tutorial_done', 'true');
+                            const overlay = document.getElementById('welcomeOverlay');
+                                overlay.style.opacity = '0';
+                                    setTimeout(() => overlay.style.display = 'none', 500);
+                                    }
+
+                                    function startTutorial() {
+                                        const overlay = document.getElementById('welcomeOverlay');
+                                            overlay.style.opacity = '0';
+                                                setTimeout(() => {
+                                                        overlay.style.display = 'none';
+                                                                window.location.href = 'tutorial.html';
+                                                                    }, 500);
+                                                                    }
+
+                                                                    // Вызвать при загрузке
+                                                                    checkTutorial();
+
 // ========== АВАТАР ==========
 function toggleAvatarMenu() {
     document.getElementById('avatarEditMenu').classList.toggle('show');
