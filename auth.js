@@ -103,6 +103,7 @@ async function submitAuth(e) {
         btn.disabled = false;
     }, 30000);
 }
+}
 
 // ========== ТОСТЫ ==========
 function showToast(message, type = 'info') {
