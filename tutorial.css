@@ -1,0 +1,171 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Geogrotesque Cyr', 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #0b0f1a, #1a0b2e);
+            color: #fff;
+                min-height: 100vh;
+                    overflow: hidden;
+                    }
+
+                    /* ===== ЗАГРУЗКА ===== */
+                    .tut-loading {
+                        position: fixed;
+                            inset: 0;
+                                background: #000;
+                                    z-index: 9999;
+                                        display: flex;
+                                            align-items: center;
+                                                justify-content: center;
+                                                    transition: opacity 0.6s ease;
+                                                    }
+
+                                                    .tut-loading.hide {
+                                                        opacity: 0;
+                                                            pointer-events: none;
+                                                            }
+
+                                                            .tut-spinner {
+                                                                width: 60px;
+                                                                    height: 60px;
+                                                                        border: 4px solid rgba(108,92,231,0.2);
+                                                                            border-top-color: #6C5CE7;
+                                                                                border-radius: 50%;
+                                                                                    animation: spin 0.9s linear infinite;
+                                                                                    }
+
+                                                                                    @keyframes spin {
+                                                                                        to { transform: rotate(360deg); }
+                                                                                        }
+
+                                                                                        /* ===== ОБЁРТКА ===== */
+                                                                                        .tut-wrapper {
+                                                                                            min-height: 100vh;
+                                                                                                padding: 80px 20px;
+                                                                                                    display: flex;
+                                                                                                        flex-direction: column;
+                                                                                                            align-items: center;
+                                                                                                                justify-content: center;
+                                                                                                                    opacity: 0;
+                                                                                                                        transition: opacity 0.5s ease;
+                                                                                                                        }
+
+                                                                                                                        .tut-wrapper.show {
+                                                                                                                            opacity: 1;
+                                                                                                                            }
+
+                                                                                                                            /* ===== ШАГ ===== */
+                                                                                                                            .tut-step {
+                                                                                                                                width: 100%;
+                                                                                                                                    max-width: 500px;
+                                                                                                                                        animation: fadeIn 0.5s ease;
+                                                                                                                                        }
+
+                                                                                                                                        @keyframes fadeIn {
+                                                                                                                                            from { opacity: 0; transform: translateY(20px); }
+                                                                                                                                                to { opacity: 1; transform: translateY(0); }
+                                                                                                                                                }
+
+                                                                                                                                                /* Подсветка (можно настроить под элементы) */
+                                                                                                                                                .tut-highlight {
+                                                                                                                                                    position: relative;
+                                                                                                                                                        margin-bottom: 20px;
+                                                                                                                                                        }
+
+                                                                                                                                                        /* ===== ПОПАП ===== */
+                                                                                                                                                        .tut-popup {
+                                                                                                                                                            background: rgba(20,20,20,0.95);
+                                                                                                                                                                border: 1px solid #333;
+                                                                                                                                                                    border-radius: 20px;
+                                                                                                                                                                        padding: 30px;
+                                                                                                                                                                            text-align: center;
+                                                                                                                                                                                box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+                                                                                                                                                                                    position: relative;
+                                                                                                                                                                                    }
+
+                                                                                                                                                                                    .tut-popup::before {
+                                                                                                                                                                                        content: "";
+                                                                                                                                                                                            position: absolute;
+                                                                                                                                                                                                top: -10px;
+                                                                                                                                                                                                    left: 50%;
+                                                                                                                                                                                                        transform: translateX(-50%);
+                                                                                                                                                                                                            width: 20px;
+                                                                                                                                                                                                                height: 20px;
+                                                                                                                                                                                                                    background: rgba(20,20,20,0.95);
+                                                                                                                                                                                                                        border-top: 1px solid #333;
+                                                                                                                                                                                                                            border-left: 1px solid #333;
+                                                                                                                                                                                                                                transform: translateX(-50%) rotate(45deg);
+                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                .tut-counter {
+                                                                                                                                                                                                                                    font-size: 12px;
+                                                                                                                                                                                                                                        color: #6C5CE7;
+                                                                                                                                                                                                                                            text-transform: uppercase;
+                                                                                                                                                                                                                                                letter-spacing: 2px;
+                                                                                                                                                                                                                                                    margin-bottom: 12px;
+                                                                                                                                                                                                                                                        font-weight: 700;
+                                                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                                                        .tut-popup h3 {
+                                                                                                                                                                                                                                                            font-size: 22px;
+                                                                                                                                                                                                                                                                margin-bottom: 12px;
+                                                                                                                                                                                                                                                                    color: #fff;
+                                                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                                                    .tut-popup p {
+                                                                                                                                                                                                                                                                        font-size: 15px;
+                                                                                                                                                                                                                                                                            color: #bbb;
+                                                                                                                                                                                                                                                                                line-height: 1.6;
+                                                                                                                                                                                                                                                                                    margin-bottom: 24px;
+                                                                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                                                                    .tut-popup strong {
+                                                                                                                                                                                                                                                                                        color: #a78bfa;
+                                                                                                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                                                                                                        /* ===== КНОПКА ===== */
+                                                                                                                                                                                                                                                                                        .tut-next {
+                                                                                                                                                                                                                                                                                            padding: 14px 40px;
+                                                                                                                                                                                                                                                                                                background: #6C5CE7;
+                                                                                                                                                                                                                                                                                                    color: #fff;
+                                                                                                                                                                                                                                                                                                        border: none;
+                                                                                                                                                                                                                                                                                                            border-radius: 25px;
+                                                                                                                                                                                                                                                                                                                font-size: 16px;
+                                                                                                                                                                                                                                                                                                                    font-weight: 700;
+                                                                                                                                                                                                                                                                                                                        cursor: pointer;
+                                                                                                                                                                                                                                                                                                                            transition: all 0.3s ease;
+                                                                                                                                                                                                                                                                                                                                font-family: inherit;
+                                                                                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                                                                                .tut-next:hover {
+                                                                                                                                                                                                                                                                                                                                    background: #7C6CF7;
+                                                                                                                                                                                                                                                                                                                                        transform: translateY(-2px);
+                                                                                                                                                                                                                                                                                                                                            box-shadow: 0 10px 25px rgba(108,92,231,0.4);
+                                                                                                                                                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                                                                                                                                                            .tut-next.finish {
+                                                                                                                                                                                                                                                                                                                                                background: #4CAF50;
+                                                                                                                                                                                                                                                                                                                                                }
+
+                                                                                                                                                                                                                                                                                                                                                .tut-next.finish:hover {
+                                                                                                                                                                                                                                                                                                                                                    background: #5CBF60;
+                                                                                                                                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                                                                                                                                    /* ===== АДАПТИВ ===== */
+                                                                                                                                                                                                                                                                                                                                                    @media (max-width: 768px) {
+                                                                                                                                                                                                                                                                                                                                                        .tut-wrapper {
+                                                                                                                                                                                                                                                                                                                                                                padding: 60px 16px;
+                                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                                                            .tut-popup {
+                                                                                                                                                                                                                                                                                                                                                                                    padding: 24px 20px;
+                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                .tut-popup h3 {
+                                                                                                                                                                                                                                                                                                                                                                                                        font-size: 18px;
+                                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                    .tut-popup p {
+                                                                                                                                                                                                                                                                                                                                                                                                                            font-size: 13px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                                                                                                }
