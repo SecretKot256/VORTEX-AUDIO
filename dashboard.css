@@ -12,6 +12,116 @@ body {
     overflow-x: hidden;
 }
 
+/* ===== ПРИВЕТСТВЕННЫЙ ПОПАП ===== */
+.welcome-overlay {
+    position: fixed;
+        inset: 0;
+            background: rgba(0,0,0,0.85);
+                backdrop-filter: blur(10px);
+                    z-index: 9999;
+                        display: flex;
+                            align-items: center;
+                                justify-content: center;
+                                    padding: 20px;
+                                        transition: opacity 0.5s ease;
+                                        }
+
+                                        .welcome-popup {
+                                            background: #1a1a1a;
+                                                border: 1px solid #333;
+                                                    border-radius: 24px;
+                                                        padding: 40px;
+                                                            max-width: 550px;
+                                                                width: 100%;
+                                                                    text-align: center;
+                                                                        animation: popupIn 0.5s ease;
+                                                                        }
+
+                                                                        @keyframes popupIn {
+                                                                            from { opacity: 0; transform: scale(0.9); }
+                                                                                to { opacity: 1; transform: scale(1); }
+                                                                                }
+
+                                                                                .welcome-title {
+                                                                                    font-size: 26px;
+                                                                                        font-weight: 800;
+                                                                                            margin-bottom: 20px;
+                                                                                                background: linear-gradient(90deg, #fff, #a78bfa);
+                                                                                                    -webkit-background-clip: text;
+                                                                                                        -webkit-text-fill-color: transparent;
+                                                                                                            background-clip: text;
+                                                                                                            }
+
+                                                                                                            .welcome-text {
+                                                                                                                font-size: 15px;
+                                                                                                                    color: #bbb;
+                                                                                                                        line-height: 1.7;
+                                                                                                                            margin-bottom: 30px;
+                                                                                                                            }
+
+                                                                                                                            .welcome-buttons {
+                                                                                                                                display: flex;
+                                                                                                                                    gap: 12px;
+                                                                                                                                        justify-content: center;
+                                                                                                                                            flex-wrap: wrap;
+                                                                                                                                            }
+
+                                                                                                                                            .welcome-btn {
+                                                                                                                                                padding: 14px 28px;
+                                                                                                                                                    border-radius: 25px;
+                                                                                                                                                        font-size: 15px;
+                                                                                                                                                            font-weight: 700;
+                                                                                                                                                                cursor: pointer;
+                                                                                                                                                                    font-family: inherit;
+                                                                                                                                                                        transition: all 0.3s ease;
+                                                                                                                                                                        }
+
+                                                                                                                                                                        .welcome-btn.start {
+                                                                                                                                                                            background: #6C5CE7;
+                                                                                                                                                                                color: #fff;
+                                                                                                                                                                                    border: none;
+                                                                                                                                                                                    }
+
+                                                                                                                                                                                    .welcome-btn.start:hover {
+                                                                                                                                                                                        background: #7C6CF7;
+                                                                                                                                                                                            transform: translateY(-2px);
+                                                                                                                                                                                                box-shadow: 0 10px 25px rgba(108,92,231,0.4);
+                                                                                                                                                                                                }
+
+                                                                                                                                                                                                .welcome-btn.skip {
+                                                                                                                                                                                                    background: transparent;
+                                                                                                                                                                                                        color: #888;
+                                                                                                                                                                                                            border: 1px solid #333;
+                                                                                                                                                                                                            }
+
+                                                                                                                                                                                                            .welcome-btn.skip:hover {
+                                                                                                                                                                                                                color: #fff;
+                                                                                                                                                                                                                    border-color: #555;
+                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                    /* Адаптив */
+                                                                                                                                                                                                                    @media (max-width: 600px) {
+                                                                                                                                                                                                                        .welcome-popup {
+                                                                                                                                                                                                                                padding: 28px 20px;
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                            .welcome-title {
+                                                                                                                                                                                                                                                    font-size: 20px;
+                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                .welcome-text {
+                                                                                                                                                                                                                                                                        font-size: 13px;
+                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                    .welcome-buttons {
+                                                                                                                                                                                                                                                                                            flex-direction: column;
+                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                        .welcome-btn {
+                                                                                                                                                                                                                                                                                                                width: 100%;
+                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                    }
+
 /* ========== ШАПКА ========== */
 .top-icons {
     position: fixed;
