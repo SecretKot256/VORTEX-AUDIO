@@ -64,24 +64,24 @@ def save_news(data):
 
 # ===== ФУНКЦИИ =====
 def search_genius(track_name, artist_name=""):
-        print(f"🔍 Ищу: '{track_name}' | Автор: '{artist_name}'")
-        try:
-                    song = genius.search_song(track_name, artist_name if artist_name else None)
-                            print(f"📥 Результат: {song}")
-                                    if song:
-                                                lyrics = song.lyrics
-                                                            print(f"📝 Текст (первые 100): {lyrics[:100]}")
-                                                                        lines = lyrics.split('\n')
-                                                                                    if lines and 'lyrics' in lines[0].lower():
-                                                                                                    lines = lines[1:]
-                                                                                                                lyrics = '\n'.join(lines).strip()
-                                                                                                                            print(f"✅ Найдено: {song.title} - {song.artist}")
-                                                                                                                                        return song.title, song.artist, lyrics, song.song_art_image_url
-                                                                                                                                                print(f"❌ Песня не найдена")
-                                                                                                                                                        return None, None, None, None
-                                                                                                                                                            except Exception as e:
-                                                                                                                                                                    print(f"❌ Ошибка: {type(e).__name__}: {e}")
-                                                                                                                                                                            return None, None, None, None
+    print(f"🔍 Ищу: '{track_name}' | Автор: '{artist_name}'")
+    try:
+    song = genius.search_song(track_name, artist_name if artist_name else None)
+    print(f"📥 Результат: {song}")
+    if song:
+    lyrics = song.lyrics
+    print(f"📝 Текст (первые 100): {lyrics[:100]}")
+    lines = lyrics.split('\n')
+    if lines and 'lyrics' in lines[0].lower():
+        lines = lines[1:]
+        lyrics = '\n'.join(lines).strip()
+        print(f"✅ Найдено: {song.title} - {song.artist}")
+        return song.title, song.artist, lyrics, song.song_art_image_url
+        print(f"❌ Песня не найдена")
+        return None, None, None, None.
+        except Exception as e:
+            print(f"❌ Ошибка: {type(e).__name__}: {e}")
+            return None, None, None, None
 
 def analyze_lyrics(lyrics):
     if not lyrics:
