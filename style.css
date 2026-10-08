@@ -264,7 +264,7 @@ body, html {
 .footer-column {
     display: flex;
     flex-direction: column;
-    gap: 0px;
+    gap: 30px;
 }
 
 .footer-brand {
