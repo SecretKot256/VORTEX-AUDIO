@@ -295,8 +295,8 @@ body, html {
 }
 
 .social-icon img {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
     object-fit: contain;
     transition: transform 0.3s ease;
 }
@@ -318,12 +318,12 @@ body, html {
                                                                                         /* Адаптив */
                                                                                         @media (max-width: 480px) {
                                                                                             .social-icon {
-                                                                                                    width: 36px;
-                                                                                                            height: 36px;
+                                                                                                    width: 64px;
+                                                                                                            height: 64px;
                                                                                                                 }
                                                                                                                     .social-icon img {
-                                                                                                                            width: 20px;
-                                                                                                                                    height: 20px;
+                                                                                                                            width: 40px;
+                                                                                                                                    height: 40px;
                                                                                                                                         }
                                                                                                                                             .footer-socials {
                                                                                                                                                     gap: 8px;
