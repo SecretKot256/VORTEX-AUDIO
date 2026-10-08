@@ -65,7 +65,7 @@ def save_news(data):
 # ===== ФУНКЦИИ =====
 def search_genius(track_name, artist_name=""):
     print(f"🔍 Ищу: '{track_name}' | Автор: '{artist_name}'")
-    try:
+try:
     song = genius.search_song(track_name, artist_name if artist_name else None)
     print(f"📥 Результат: {song}")
     if song:
