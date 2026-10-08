@@ -273,21 +273,62 @@ body, html {
     color: #ccc;
 }
 
-.footer-socials { display: flex; gap: 10px; }
+/* ===== СОЦСЕТИ В ФУТЕРЕ ===== */
+.footer-socials {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
 
 .social-icon {
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 12px;
     background: #252525;
-    transition: all 0.2s ease;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
 }
 
-.social-icon:hover { background: #333; }
-.social-icon img { width: 22px; height: 22px; object-fit: contain; }
+                                                        .social-icon img {
+                                                            width: 24px;
+                                                                height: 24px;
+                                                                    object-fit: contain;
+                                                                        transition: transform 0.3s ease;
+                                                                        }
+
+                                                                        .social-icon:hover {
+                                                                            transform: translateY(-3px);
+                                                                                box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+                                                                                }
+
+                                                                                .social-icon:hover img {
+                                                                                    transform: scale(1.15);
+                                                                                    }
+
+                                                                                    /* Светлая тема */
+                                                                                    body.light .social-icon {
+                                                                                        background: #e5e5e5;
+                                                                                        }
+
+                                                                                        /* Адаптив */
+                                                                                        @media (max-width: 480px) {
+                                                                                            .social-icon {
+                                                                                                    width: 36px;
+                                                                                                            height: 36px;
+                                                                                                                }
+                                                                                                                    .social-icon img {
+                                                                                                                            width: 20px;
+                                                                                                                                    height: 20px;
+                                                                                                                                        }
+                                                                                                                                            .footer-socials {
+                                                                                                                                                    gap: 8px;
+                                                                                                                                                        }
+}
 
 .footer-copyright { font-size: 12px; color: #555; margin-top: 6px; }
 
