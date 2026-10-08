@@ -282,8 +282,8 @@ body, html {
 }
 
 .social-icon {
-    width: 56px;
-    height: 56px;
+    width: 150px;
+    height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -295,8 +295,8 @@ body, html {
 }
 
                                                         .social-icon img {
-                                                            width: 34px;
-                                                                height: 34px;
+                                                            width: 100px;
+                                                                height: 100px;
                                                                     object-fit: contain;
                                                                         transition: transform 0.3s ease;
                                                                         }
