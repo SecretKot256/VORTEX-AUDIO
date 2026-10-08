@@ -318,12 +318,12 @@ body, html {
                                                                                         /* Адаптив */
                                                                                         @media (max-width: 480px) {
                                                                                             .social-icon {
-                                                                                                    width: 64px;
-                                                                                                            height: 64px;
+                                                                                                    width: 100px;
+                                                                                                            height: 50px;
                                                                                                                 }
                                                                                                                     .social-icon img {
-                                                                                                                            width: 40px;
-                                                                                                                                    height: 40px;
+                                                                                                                            width: 100px;
+                                                                                                                                    height: 50px;
                                                                                                                                         }
                                                                                                                                             .footer-socials {
                                                                                                                                                     gap: 8px;
