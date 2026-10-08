@@ -296,6 +296,66 @@ body {
     opacity: 1;
 }
 
+/* ===== СОЦСЕТИ В БУРГЕРЕ ===== */
+.burger-socials {
+    display: flex;
+        gap: 8px;
+            padding: 12px 16px;
+                justify-content: center;
+                    flex-wrap: wrap;
+                        margin-top: 8px;
+                            margin-bottom: 8px;
+                            }
+
+                            .burger-social {
+                                width: 38px;
+                                    height: 38px;
+                                        display: flex;
+                                            align-items: center;
+                                                justify-content: center;
+                                                    border-radius: 10px;
+                                                        background: #1f1f1f;
+                                                            text-decoration: none;
+                                                                transition: all 0.3s ease;
+                                                                    overflow: hidden;
+                                                                    }
+
+                                                                    .burger-social img {
+                                                                        width: 22px;
+                                                                            height: 22px;
+                                                                                object-fit: contain;
+                                                                                    transition: transform 0.3s ease;
+                                                                                    }
+
+                                                                                    .burger-social:hover {
+                                                                                        transform: translateY(-2px);
+                                                                                        }
+
+                                                                                        .burger-social:hover img {
+                                                                                            transform: scale(1.15);
+                                                                                            }
+
+                                                                                            /* Светлая тема */
+                                                                                            body.light .burger-social {
+                                                                                                background: #e5e5e5;
+                                                                                                }
+
+                                                                                                /* Адаптив */
+                                                                                                @media (max-width: 480px) {
+                                                                                                    .burger-social {
+                                                                                                            width: 34px;
+                                                                                                                    height: 34px;
+                                                                                                                        }
+                                                                                                                            .burger-social img {
+                                                                                                                                    width: 18px;
+                                                                                                                                            height: 18px;
+                                                                                                                                                }
+                                                                                                                                                    .burger-socials {
+                                                                                                                                                            gap: 6px;
+                                                                                                                                                                    padding: 10px 12px;
+                                                                                                                                                                        }
+}
+
 /* ========== ТЕМА ========== */
 .theme-switch {
     width: 50px;
