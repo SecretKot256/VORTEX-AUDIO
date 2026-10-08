@@ -264,7 +264,7 @@ body, html {
 .footer-column {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 30px;
 }
 
 .footer-brand {
@@ -276,7 +276,7 @@ body, html {
 /* ===== СОЦСЕТИ В ФУТЕРЕ ===== */
 .footer-socials {
     display: flex;
-    gap: 10px;
+    gap: 30px;
     flex-wrap: wrap;
     margin-bottom: 12px;
 }
