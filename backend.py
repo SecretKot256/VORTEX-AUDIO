@@ -69,7 +69,7 @@ def search_genius(track_name, artist_name=""):
         song = genius.search_song(track_name, artist_name if artist_name else None)
     print(f"📥 Результат: {song}")
     if song:
-    lyrics = song.lyrics
+        lyrics = song.lyrics
     print(f"📝 Текст (первые 100): {lyrics[:100]}")
     lines = lyrics.split('\n')
     if lines and 'lyrics' in lines[0].lower():
@@ -80,8 +80,8 @@ def search_genius(track_name, artist_name=""):
         print(f"❌ Песня не найдена")
         return None, None, None, None.
         except Exception as e:
-            print(f"❌ Ошибка: {type(e).__name__}: {e}")
-            return None, None, None, None
+        print(f"❌ Ошибка: {type(e).__name__}: {e}")
+        return None, None, None, None
 
 def analyze_lyrics(lyrics):
     if not lyrics:
