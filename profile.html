@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+
+    <a href="dashboard.html" class="back-btn">← Назад</a>
+
+    <div class="profile-wrapper">
+        <!-- Шапка профиля -->
+        <div class="profile-header-card">
+            <img class="profile-avatar-big" id="profileAvatar" src="default-avatar.png" alt="Avatar">
+            <div class="profile-info">
+                <h1 class="profile-nickname" id="profileNickname">User</h1>
+                <div class="profile-badge" id="profileBadge">Без подписки</div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="statChecks">0</div>
+                        <div class="stat-label">Проверок</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statNotes">0</div>
+                        <div class="stat-label">Нот</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statAch">0</div>
+                        <div class="stat-label">Достижений</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Избранные достижения -->
+        <div class="profile-section">
+            <h2 class="section-title">Избранные достижения</h2>
+            <div class="favorites-grid" id="favoritesGrid"></div>
+        </div>
+    </div>
+
+    <script src="profile.js"></script>
+</body>
+</html>

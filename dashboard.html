@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Проверка — VORTEX AUDIO</title>
+    <title>Дашборд — VORTEX AUDIO</title>
     <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="toast.css">
@@ -49,33 +49,37 @@
 
         <!-- Профиль (только на телефоне) -->
         <div class="burger-item mobile-only" onclick="openProfile()">
-            <span>👤 Профиль</span>
+            <span> Профиль</span>
         </div>
 
+        <a class="burger-item" href="achievements.html">
+            <span> Достижения</span>
+        </a>
+
         <a class="burger-item" href="leaderboard.html" target="_blank">
-            <span>🏆 Таблица лидеров</span>
+            <span> Таблица лидеров</span>
         </a>
         <a class="burger-item" href="news.html">
-            <span>📰 Новости</span>
+            <span> Новости</span>
         </a>
         <a class="burger-item" href="faq.html">
-            <span>❓ FAQ</span>
+            <span> FAQ</span>
         </a>
         <a class="burger-item" href="about.html">
-            <span>📄 О нас</span>
+            <span> О нас</span>
         </a>
         <a class="burger-item" href="privacy.html">
-            <span>📋 Политика</span>
+            <span> Политика конфиденциальности</span>
         </a>
 
         <!-- Язык -->
         <a class="burger-item" href="lang.html">
-            <span>🌐 Язык</span>
+            <span> Язык</span>
         </a>
 
         <!-- Тема -->
         <label class="burger-item theme-item">
-            <span>🌙 Тема</span>
+            <span> Тема</span>
             <label class="theme-switch" onclick="event.stopPropagation()">
                 <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
                 <span class="theme-slider"></span>
@@ -107,7 +111,7 @@
         <div class="burger-divider"></div>
 
         <div class="burger-item logout-item" onclick="logout()">
-            <span>🚪 Выйти</span>
+            <span> Выйти</span>
         </div>
     </div>
 
@@ -116,7 +120,7 @@
 
     <!-- Попап языка -->
     <div class="lang-popup" id="langPopup">
-        <h3>🌐 Выберите язык</h3>
+        <h3> Выберите язык</h3>
         <button class="lang-option" onclick="setLang('ru')">
             <img class="lang-option-flag" src="flag-ru.png" alt="RU">
             <div>
@@ -169,7 +173,7 @@
         </button>
 
         <button class="method-option" data-method="mp3" onclick="selectMethod('mp3')">
-            <span class="method-option-icon" style="font-size:22px;">📁</span>
+            <span class="method-option-icon" style="font-size:22px;"></span>
             <div>
                 <div class="method-option-title">MP3</div>
                 <div class="method-option-sub">Загрузите файл</div>
@@ -178,7 +182,7 @@
         </button>
 
         <button class="method-option" data-method="streaming" onclick="selectMethod('streaming')">
-            <span class="method-option-icon" style="font-size:22px;">🎵</span>
+            <span class="method-option-icon" style="font-size:22px;"></span>
             <div>
                 <div class="method-option-title">Стриминговые сервисы</div>
                 <div class="method-option-sub">Spotify, YouTube Music, Яндекс Музыка</div>
@@ -204,7 +208,7 @@
         <button class="submit-btn" id="checkTrackBtn">Проверить</button>
 
         <!-- Кнопка таблицы лидеров -->
-        <button class="leaderboard-btn" onclick="openLeaderboard()">🏆 Таблица лидеров</button>
+        <button class="leaderboard-btn" onclick="openLeaderboard()"> Таблица лидеров</button>
     </div>
 
     <!-- ========== ПРОФИЛЬ ========== -->
@@ -249,12 +253,9 @@
                 </div>
             </div>
 
-            <button class="buy-notes-btn" onclick="openShop()">💰 Купить ноты</button>
-            <div class="achievements-block">
-    <div class="achievements-title">🏆 Достижения</div>
-    <div class="achievements-grid" id="achievementsGrid"></div>
+            <button class="buy-notes-btn" onclick="openShop()"> Купить ноты</button>
 </div>
-            <button class="buy-notes-btn logout-btn" onclick="logout()">🚪 Выйти</button>
+            <button class="buy-notes-btn logout-btn" onclick="logout()"> Выйти</button>
         </div>
     </div>
 
@@ -371,7 +372,7 @@
 
     <!-- Инфо попап -->
     <div class="info-popup" id="infoPopup" onclick="hideInfoPopup()">
-        🔍 Найдите автора(ов) по обложке трека<br>
+         Найдите автора(ов) по обложке трека<br>
         <small style="color:#777;">(кликните чтобы закрыть)</small>
     </div>
 

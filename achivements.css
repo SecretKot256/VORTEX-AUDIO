@@ -1,0 +1,197 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Geogrotesque Cyr', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0b0f1a, #1a0b2e);
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background: rgba(26,26,26,0.9);
+    border: 1px solid #333;
+    border-radius: 25px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 14px;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #252525;
+    color: #fff;
+}
+
+.achievements-wrapper {
+    max-width: 900px;
+    margin: 80px auto 40px;
+    padding: 0 20px;
+}
+
+.achievements-header {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.achievements-subtitle {
+    font-size: 15px;
+    color: #888;
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.section-hint {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.favorites-section {
+    margin-bottom: 50px;
+}
+
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.favorites-grid .achievement {
+    border-width: 2px;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.achievement {
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.achievement:hover {
+    border-color: #555;
+    transform: translateY(-3px);
+}
+
+.achievement.unlocked {
+    border-color: #6C5CE7;
+    background: rgba(108, 92, 231, 0.08);
+    box-shadow: 0 0 20px rgba(108, 92, 231, 0.2);
+}
+
+.achievement.locked {
+    opacity: 0.45;
+}
+
+.achievement-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #1a1a1a;
+    font-size: 22px;
+    font-weight: 800;
+    color: #6C5CE7;
+    border: 2px solid #333;
+}
+
+.achievement.unlocked .achievement-icon {
+    background: linear-gradient(135deg, #6C5CE7, #a78bfa);
+    color: #fff;
+    border-color: #6C5CE7;
+}
+
+.achievement-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ccc;
+    margin-bottom: 6px;
+}
+
+.achievement.unlocked .achievement-name {
+    color: #fff;
+}
+
+.achievement-desc {
+    font-size: 11px;
+    color: #777;
+    line-height: 1.4;
+}
+
+.achievement-progress {
+    font-size: 11px;
+    color: #6C5CE7;
+    margin-top: 8px;
+    font-weight: 700;
+}
+
+/* Кнопка выбора избранного */
+.achievement.pinned::before {
+    content: "★";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #ffd700;
+    font-size: 16px;
+}
+
+/* Кнопка действия */
+.achievement-action {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #888;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.achievement-action:hover {
+    border-color: #6C5CE7;
+    color: #fff;
+}
+
+.achievement-action.active {
+    background: #6C5CE7;
+    border-color: #6C5CE7;
+    color: #fff;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .achievements-header { font-size: 26px; }
+    .achievements-grid, .favorites-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .achievement { padding: 16px 12px; }
+    .achievement-icon { width: 40px; height: 40px; font-size: 18px; }
+    .achievement-name { font-size: 13px; }
+    .achievement-desc { font-size: 10px; }
+}
