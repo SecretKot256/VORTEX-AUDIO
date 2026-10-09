@@ -165,7 +165,7 @@ body, html {
 }
 
 .info-title {
-    font-size: 28px;
+    font-size: 36px;
     font-weight: 800;
     margin-bottom: 20px;
     background: linear-gradient(90deg, #fff, #a78bfa);
@@ -174,7 +174,7 @@ body, html {
     background-clip: text;
 }
 
-.info-text { font-size: 15px; color: #bbb; line-height: 1.7; margin-bottom: 14px; }
+.info-text { font-size: 17px; color: #bbb; line-height: 1.7; margin-bottom: 14px; }
 .info-text strong { color: #fff; }
 
 .info-list {
@@ -186,7 +186,7 @@ body, html {
 }
 
 .info-list li {
-    font-size: 14px;
+    font-size: 16px;
     color: #bbb;
     padding: 10px 14px;
     background: rgba(108, 92, 207, 0.08);
@@ -225,19 +225,19 @@ body, html {
 }
 
 .step-num {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: linear-gradient(135deg, #6C5CE7, #a78bfa);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 800;
     flex-shrink: 0;
 }
 
-.step-text { font-size: 14px; color: #bbb; line-height: 1.4; }
+.step-text { font-size: 16px; color: #bbb; line-height: 1.4; }
 .step-text strong { color: #fff; }
 
 /* Мини-FAQ */
@@ -360,8 +360,8 @@ body.light .social-icon { background: #e5e5e5; }
     .more-btn { padding: 14px 28px; font-size: 14px; }
     .brands-track { gap: 30px; animation-duration: 30s; }
     .brand-item { font-size: 13px; }
-
-    .info-content { padding: 30px 22px; max-height: 80vh; }
+    
+    .info-content { padding: 30px 22px; max-height: 85vh; width: 95%; }
     .info-title { font-size: 22px; }
     .info-text { font-size: 14px; }
     .info-list li { font-size: 13px; }
