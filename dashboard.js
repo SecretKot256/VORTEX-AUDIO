@@ -98,7 +98,6 @@ function openProfile() {
         document.getElementById('connectPhoneBtn').style.display = 'inline-block';
     }
     renderAchievementsPreview();
-    document.getElementById('myProfileLink').href = 'profile.html?user=' + userData.nickname;
 }
 
 function closeProfile() {
