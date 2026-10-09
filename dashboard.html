@@ -113,6 +113,13 @@
         <div class="burger-item logout-item" onclick="logout()">
             <span> Выйти</span>
         </div>
+
+        <a class="burger-item" href="achievements.html">
+    <span> Достижения</span>
+</a>
+<a class="burger-item" id="myProfileLink" href="profile.html">
+    <span> Мой профиль</span>
+</a>
     </div>
 
     <!-- Оверлей -->
@@ -252,6 +259,15 @@
                     <div class="stat-value" id="songsTranslated">0</div>
                 </div>
             </div>
+
+            <div class="achievements-block">
+    <div class="achievements-title">Избранные достижения</div>
+    <div class="achievements-preview" id="achievementsPreview"></div>
+    <div class="achievements-buttons">
+        <a href="achievements.html" class="btn-small">Все достижения →</a>
+        <button class="btn-small" onclick="shareProfile()">Поделиться профилем</button>
+    </div>
+</div>
 
             <button class="buy-notes-btn" onclick="openShop()"> Купить ноты</button>
 </div>
