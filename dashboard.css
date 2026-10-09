@@ -12,6 +12,49 @@ body {
     overflow-x: hidden;
 }
 
+.server-status {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    padding: 8px 16px;
+    background: rgba(20, 20, 20, 0.9);
+    border: 1px solid #333;
+    border-radius: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffa500;
+    animation: pulse 1.5s infinite;
+}
+
+.server-status.online .status-dot {
+    background: #4CAF50;
+    animation: none;
+}
+
+.server-status.online {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.server-status.sleeping .status-dot {
+    background: #ffa500;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
 /* ===== ПРИВЕТСТВЕННЫЙ ПОПАП ===== */
 .welcome-overlay {
     position: fixed;

@@ -12,6 +12,43 @@ let userData = {
     subscription: null
 };
 
+// ========== «PING» СЕРВЕРА ПРИ ЗАГРУЗКЕ ==========
+const API_URL = 'https://vortex-audio-2ea62.containers.snapdeploy.app';
+
+async function wakeUpServer() {
+    const status = document.getElementById('serverStatus');
+    const statusText = status?.querySelector('.status-text');
+    
+    try {
+        const response = await fetch(API_URL + '/api/news', {
+            method: 'GET',
+            cache: 'no-store'
+        });
+        
+        if (response.ok) {
+            console.log('✅ Сервер проснулся');
+            if (status) {
+                status.classList.add('online');
+                status.classList.remove('sleeping');
+            }
+        } else {
+            if (status && statusText) {
+                status.classList.add('sleeping');
+                statusText.textContent = 'Сервер просыпается...';
+            }
+            setTimeout(wakeUpServer, 3000);
+        }
+    } catch (e) {
+        if (status && statusText) {
+            status.classList.add('sleeping');
+            statusText.textContent = 'Сервер просыпается...';
+        }
+        setTimeout(wakeUpServer, 3000);
+    }
+}
+
+wakeUpServer();
+
 // Загружаем из localStorage
 function loadUser() {
     const savedUser = localStorage.getItem('vortex_logged_user');
