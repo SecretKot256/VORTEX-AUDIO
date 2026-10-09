@@ -307,7 +307,7 @@ body {
 .burger-divider {
     height: 1px;
     background: #2a2a2a;
-    margin: 10px 0;
+    margin: 4px 0;
 }
 
 .burger-item.logout-item {
