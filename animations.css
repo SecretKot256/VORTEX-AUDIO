@@ -1,0 +1,63 @@
+/* ========== АНИМАЦИЯ КНОПОК ПРИ НАЖАТИИ ========== */
+button:active,
+.btn:active,
+.submit-btn:active,
+.check-btn:active,
+.start-btn:active,
+.cta-btn:active,
+.more-btn:active,
+.buy-notes-btn:active,
+.buy-btn:active,
+.shop-tab:active,
+.burger-item:active,
+.leaderboard-btn:active,
+.check-track-btn:active,
+.achievement-action:active,
+.btn-small:active {
+    transform: scale(0.95) !important;
+        transition: transform 0.1s ease !important;
+        }
+
+        /* ========== ПЛАВНОЕ ПОЯВЛЕНИЕ ПОПАПОВ ========== */
+        .popup-overlay,
+        .profile-overlay,
+        .shop-popup-overlay,
+        .detail-overlay,
+        .variant-overlay,
+        .info-popup,
+        .player-demo-overlay,
+        .listen-popup-overlay,
+        .register-popup {
+            opacity: 0;
+                transition: opacity 0.3s ease !important;
+                    pointer-events: none;
+                    }
+
+                    .popup-overlay.show,
+                    .profile-overlay.show,
+                    .shop-popup-overlay.show,
+                    .detail-overlay.show,
+                    .variant-overlay.show,
+                    .info-popup.show,
+                    .player-demo-overlay.show,
+                    .listen-popup-overlay.show,
+                    .register-popup.show {
+                        opacity: 1;
+                            pointer-events: auto;
+                            }
+
+                            /* ========== ПЛАВНОЕ ПОЯВЛЕНИЕ СТРАНИЦ ========== */
+                            .info-content {
+                                animation: fadeInUp 0.6s ease;
+                                }
+
+                                @keyframes fadeInUp {
+                                    from {
+                                            opacity: 0;
+                                                    transform: translateY(20px);
+                                                        }
+                                                            to {
+                                                                    opacity: 1;
+                                                                            transform: translateY(0);
+                                                                                }
+                                                                                }
