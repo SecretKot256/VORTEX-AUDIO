@@ -1731,6 +1731,65 @@ body.light .method-option-sub {
     color: #fff;
 }
 
+/* ===== ПРЕВЬЮ ДОСТИЖЕНИЙ В ПРОФИЛЕ ===== */
+.achievements-preview {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.achievement-preview-item {
+    flex: 1;
+    min-width: 70px;
+    background: rgba(108, 92, 231, 0.1);
+    border: 1px solid rgba(108, 92, 231, 0.3);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+}
+
+.achievement-preview-icon {
+    font-size: 18px;
+    font-weight: 800;
+    color: #6C5CE7;
+    margin-bottom: 4px;
+}
+
+.achievement-preview-name {
+    font-size: 10px;
+    color: #ccc;
+    font-weight: 600;
+}
+
+.achievements-buttons {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+}
+
+.btn-small {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid #333;
+    border-radius: 20px;
+    color: #ccc;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.btn-small:hover {
+    border-color: #6C5CE7;
+    color: #fff;
+    background: rgba(108, 92, 231, 0.1);
+}
+
 /* Светлая тема */
 body.light .achievement {
     background: #f0f0f0;

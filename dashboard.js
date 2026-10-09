@@ -97,8 +97,8 @@ function openProfile() {
         document.getElementById('phoneText').textContent = 'Номер не подключён';
         document.getElementById('connectPhoneBtn').style.display = 'inline-block';
     }
-    renderAchievements();
-    document.getElementById('profileOverlay').classList.add('show');
+    renderAchievementsPreview();
+    document.getElementById('myProfileLink').href = 'profile.html?user=' + userData.nickname;
 }
 
 function closeProfile() {
@@ -580,6 +580,49 @@ function renderAchievements() {
             </div>
         `;
     }).join('');
+}
+
+// ========== ПРЕВЬЮ ДОСТИЖЕНИЙ ==========
+const ACHIEVEMENTS_LIST = {
+    'first': { icon: '1', name: 'Первый шаг' },
+    'ten': { icon: '10', name: 'Мелодист' },
+    'fifty': { icon: '50', name: 'Меломан' },
+    'hundred': { icon: '100', name: 'Легенда' },
+    'dirty': { icon: '5', name: 'Детектив' },
+    'clean': { icon: '10', name: 'Чистюля' }
+};
+
+function renderAchievementsPreview() {
+    const preview = document.getElementById('achievementsPreview');
+    if (!preview) return;
+
+    const favorites = JSON.parse(localStorage.getItem('vortex_favorites') || '[]');
+
+    if (favorites.length === 0) {
+        preview.innerHTML = '<p style="color: #666; font-size: 13px;">Не выбрано ни одного достижения</p>';
+        return;
+    }
+
+    preview.innerHTML = favorites.map(id => {
+        const a = ACHIEVEMENTS_LIST[id];
+        if (!a) return '';
+        return `
+            <div class="achievement-preview-item">
+                <div class="achievement-preview-icon">${a.icon}</div>
+                <div class="achievement-preview-name">${a.name}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function shareProfile() {
+    const url = window.location.origin + '/profile.html?user=' + encodeURIComponent(userData.nickname);
+    if (navigator.share) {
+        navigator.share({ title: 'VORTEX AUDIO', text: 'Мой профиль в VORTEX AUDIO', url: url });
+    } else {
+        navigator.clipboard.writeText(url);
+        showToast('Ссылка на профиль скопирована', 'success');
+    }
 }
 
 // ========== ЗАПУСК ==========
