@@ -66,17 +66,17 @@ def save_news(data):
 def search_genius(track_name, artist_name=""):
     try:
         song = genius.search_song(track_name, artist_name if artist_name else None) 
-    if song:
-        lyrics = song.lyrics
-        lines = lyrics.split('\n')
-    if lines and 'lyrics' in lines[0].lower():
-        lines = lines[1:]
-        lyrics = '\n'.join(lines).strip()
-        return song.title, song.artist, lyrics, song.song_art_image_url
+        if song:
+            lyrics = song.lyrics
+            lines = lyrics.split('\n')
+            if lines and 'lyrics' in lines[0].lower():
+                lines = lines[1:]
+                lyrics = '\n'.join(lines).strip()
+            return song.title, song.artist, lyrics, song.song_art_image_url
         return None, None, None, None
     except Exception as e:
-    print(f"Ошибка Genius: {e}")
-    return None, None, None, None
+        print(f"Ошибка Genius: {e}")
+        return None, None, None, None
 
 def analyze_lyrics(lyrics):
     if not lyrics:
