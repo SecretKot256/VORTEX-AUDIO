@@ -51,7 +51,7 @@ function checkPremium() {
 
 // ========== НАВИГАЦИЯ ==========
 let currentPage = 0;
-let totalPages = 4;
+let totalPages = 7;
 let scrollAccumulator = 0;
 const scrollThreshold = window.innerHeight / 3;
 let isScrolling = false; // Блокировка во время анимации
