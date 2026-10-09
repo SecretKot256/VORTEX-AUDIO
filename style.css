@@ -673,4 +673,4 @@ body, html {
     #footer { height: auto; min-height: 33.33vh; padding: 20px; }
     .footer-content { flex-direction: column; gap: 20px; text-align: center; padding: 20px; }
     .footer-column { align-items: center; }
-}
+} 
