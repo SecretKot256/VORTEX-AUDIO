@@ -65,7 +65,7 @@ def save_news(data):
 # ===== ФУНКЦИИ =====
 def search_genius(track_name, artist_name=""):
     try:
-        song = genius.search_song(track_name, artist_name if artist_name else None) 
+        song = genius.search_song(track_name, artist_name if artist_name else None)
         if song:
             lyrics = song.lyrics
             lines = lyrics.split('\n')
