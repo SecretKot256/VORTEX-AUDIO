@@ -159,5 +159,46 @@ function showToast(message, type = 'info', duration = 3000) {
     }, duration);
 }
 
+// ========== УВЕДОМЛЕНИЯ ==========
+function toggleNotif(key, value) {
+    localStorage.setItem('vortex_notif_' + key, value ? '1' : '0');
+    showToast(value ? 'Уведомления включены' : 'Уведомления выключены', 'info');
+}
+
+// ========== ПРИВАТНОСТЬ ==========
+function togglePrivacy(key, value) {
+    localStorage.setItem('vortex_priv_' + key, value ? '1' : '0');
+    showToast(value ? 'Настройка включена' : 'Настройка выключена', 'info');
+}
+
+// ========== ЗВУК ==========
+function toggleAudio(value) {
+    localStorage.setItem('vortex_audio_enabled', value ? '1' : '0');
+    showToast(value ? 'Звук включён' : 'Звук выключен', 'info');
+}
+
+function toggleAutoplay(value) {
+    localStorage.setItem('vortex_audio_autoplay', value ? '1' : '0');
+    showToast(value ? 'Автовоспроизведение включено' : 'Автовоспроизведение выключено', 'info');
+}
+
+// Восстановление чекбоксов при загрузке
+(function restoreCheckboxes() {
+    const checks = [
+        ['notifNews', 'vortex_notif_news'],
+        ['notifAchievements', 'vortex_notif_achievements'],
+        ['notifPromo', 'vortex_notif_promo'],
+        ['privLeaderboard', 'vortex_priv_leaderboard'],
+        ['privHistory', 'vortex_priv_history'],
+        ['audioEnabled', 'vortex_audio_enabled'],
+        ['audioAutoplay', 'vortex_audio_autoplay'],
+    ];
+    checks.forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        if (el) el.checked = localStorage.getItem(key) === '1';
+    });
+})();
+
 // ========== ЗАПУСК ==========
 loadSettingsUser();
+restoreCheckboxes();
