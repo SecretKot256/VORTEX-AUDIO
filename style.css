@@ -376,3 +376,74 @@ body.light .social-icon { background: #e5e5e5; }
     .social-icon { width: 48px; height: 48px; }
     .social-icon img { width: 28px; height: 28px; }
 }
+
+/* ===== СВЕТЛАЯ ТЕМА — УНИВЕРСАЛЬНО ===== */
+
+/* Фоны попапов */
+body.light .profile-popup,
+body.light .shop-popup,
+body.light .welcome-popup,
+body.light .popup-content,
+body.light .info-popup,
+body.light .avatar-edit-menu,
+body.light .lang-popup {
+    background: #fff !important;
+    border-color: #e0e0e0 !important;
+    color: #222 !important;
+}
+
+/* Текст внутри попапов */
+body.light .profile-nickname-big,
+body.light .stat-value,
+body.light .note-pack-amount,
+body.light .sub-pack-title,
+body.light .shop-balance span,
+body.light .achievements-title,
+body.light .method-option-title {
+    color: #222 !important;
+}
+
+body.light .profile-email,
+body.light .stat-label,
+body.light .sub-feature,
+body.light .method-option-sub,
+body.light .panel-desc,
+body.light .setting-hint {
+    color: #666 !important;
+}
+
+/* Карточки и блоки */
+body.light .stat-card,
+body.light .note-pack,
+body.light .custom-section,
+body.light .sub-pack,
+body.light .achievement,
+body.light .setting-row,
+body.light .settings-content,
+body.light .settings-sidebar .settings-tab {
+    background: #f8f8f8 !important;
+    border-color: #e5e5e5 !important;
+}
+
+/* Кнопки */
+body.light .logout-btn,
+body.light .settings-tab.danger {
+    background: #e74c3c !important;
+    color: #fff !important;
+}
+
+/* Оверлеи — затемнение */
+body.light .profile-overlay,
+body.light .shop-popup-overlay,
+body.light .popup-overlay,
+body.light .welcome-overlay,
+body.light .burger-overlay {
+    background: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Плашка статуса */
+body.light .server-status {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: #ddd !important;
+    color: #222 !important;
+}
