@@ -136,6 +136,7 @@ function openProfile() {
         document.getElementById('connectPhoneBtn').style.display = 'inline-block';
     }
     renderAchievementsPreview();
+    document.getElementById('profileOverlay').classList.add('show');
 }
 
 function closeProfile() {
@@ -146,9 +147,6 @@ function closeProfile() {
 document.getElementById('profileOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeProfile();
 });
-
-document.getElementById('profileOverlay').classList.add('show');
-
 
 // ===== ТУТОРИАЛ =====
 function checkTutorial() {
