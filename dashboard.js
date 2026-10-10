@@ -651,16 +651,6 @@ function renderAchievementsPreview() {
     }).join('');
 }
 
-function shareProfile() {
-    const url = window.location.origin + '/profile.html?user=' + encodeURIComponent(userData.nickname);
-    if (navigator.share) {
-        navigator.share({ title: 'VORTEX AUDIO', text: 'Мой профиль в VORTEX AUDIO', url: url });
-    } else {
-        navigator.clipboard.writeText(url);
-        showToast('Ссылка на профиль скопирована', 'success');
-    }
-}
-
 // ========== ЗАПУСК ==========
 userData.cleanCount = parseInt(localStorage.getItem('vortex_clean') || '0');
 userData.dirtyCount = parseInt(localStorage.getItem('vortex_dirty') || '0');

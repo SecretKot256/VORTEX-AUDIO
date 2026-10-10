@@ -177,13 +177,13 @@ body {
     z-index: 50;
 }
 
-/* Профиль (ПК) */
+/* ========== КНОПКА ПРОФИЛЯ ========== */
 .profile-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    background: rgba(26, 26, 26, 0.85);
+    gap: 10px;
+    padding: 6px 16px;
+    background: rgba(26,26,26,0.85);
     border: 1px solid #333;
     border-radius: 30px;
     cursor: pointer;
@@ -192,12 +192,12 @@ body {
 
 .profile-btn:hover {
     border-color: #6C5CE7;
-    background: rgba(108, 92, 231, 0.15);
+    background: rgba(108,92,231,0.15);
 }
 
 .profile-avatar {
-    width: 30px !important;
-    height: 30px !important;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -206,6 +206,21 @@ body {
     font-size: 14px;
     font-weight: 600;
     color: #ddd;
+}
+
+/* ========== АДАПТИВ ========== */
+@media (max-width: 768px) {
+    .profile-btn {
+        padding: 6px;
+        gap: 0;
+    }
+    .profile-nickname {
+        display: none;
+    }
+    .profile-avatar {
+        width: 32px;
+        height: 32px;
+    }
 }
 
 /* Бургер */
