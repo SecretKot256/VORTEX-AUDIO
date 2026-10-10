@@ -13,10 +13,11 @@
 <body>
 
     <!-- Хедер -->
-    <div class="settings-header">
-        <button class="back-btn" onclick="window.location.href='dashboard.html'">← Назад</button>
-        <h1 class="settings-title">Настройки</h1>
-    </div>
+<div class="settings-header">
+    <button class="back-btn" onclick="window.location.href='dashboard.html'">←</button>
+    <h1 class="settings-title">Настройки</h1>
+    <div class="header-spacer"></div>
+</div>  
 
     <!-- Контейнер с вкладками -->
     <div class="settings-container">
@@ -37,6 +38,18 @@
             </button>
             <button class="settings-tab danger" data-tab="danger" onclick="switchSettingsTab('danger')">
                 🗑️ Удаление аккаунта
+            </button>
+            <button class="settings-tab" data-tab="notifications" onclick="switchSettingsTab('notifications')">
+                🔔 Уведомления
+            </button>
+            <button class="settings-tab" data-tab="privacy" onclick="switchSettingsTab('privacy')">
+                🔒 Приватность
+            </button>
+            <button class="settings-tab" data-tab="audio" onclick="switchSettingsTab('audio')">
+                🎧 Звук
+            </button>
+            <button class="settings-tab" data-tab="about" onclick="switchSettingsTab('about')">
+                ℹ️ О программе
             </button>
         </div>
 
