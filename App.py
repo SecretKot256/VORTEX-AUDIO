@@ -17,10 +17,6 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE')
     return response
 
-@app.route('/health', methods=['GET'])
-def health():
-    return jsonify({"status": "ok"}), 200
-
 GENIUS_TOKEN = ('xOTPqcMbn0IrFZhLrBUVcDQkFAM6Mo_1u7Bb2uztucPKMcKhkcIuPqgHIYUUMTTB')
 genius = lyricsgenius.Genius(GENIUS_TOKEN)
 genius.verbose = False
