@@ -230,7 +230,7 @@
 .danger-row {
     border-bottom: none;
 }
-
+    
 /* Обычный нейтральный тумблер */
 .toggle-switch {
     position: relative;
@@ -268,30 +268,6 @@
 }
 .toggle-switch input:checked + .toggle-slider::before {
     transform: translateX(22px);
-}
-
-.toggle-switch .toggle-slider {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 48px !important;
-    height: 26px !important;
-    left: 0 !important;
-    top: 0 !important;
-    right: auto !important;
-    bottom: auto !important;
-    background: #444;
-    border-radius: 26px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 48px !important;
-    height: 26px !important;
-    flex-shrink: 0;
-    max-width: 48px !important;
 }
 
 /* ===== АДАПТИВ ===== */

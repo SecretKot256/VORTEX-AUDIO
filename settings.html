@@ -13,11 +13,11 @@
 <body>
 
     <!-- Хедер -->
-<div class="settings-header">
-    <button class="back-btn" onclick="window.location.href='dashboard.html'">←</button>
-    <h1 class="settings-title">Настройки</h1>
-    <div class="header-spacer"></div>
-</div>  
+    <div class="settings-header">
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">←</button>
+        <h1 class="settings-title">Настройки</h1>
+        <div class="header-spacer"></div>
+    </div>
 
     <!-- Контейнер с вкладками -->
     <div class="settings-container">
@@ -130,6 +130,73 @@
                 </div>
             </div>
 
+            <!-- 🔔 Уведомления -->
+            <div class="settings-panel" id="panel-notifications">
+                <h2 class="panel-title">Уведомления</h2>
+                <p class="panel-desc">Настройте, какие оповещения вы хотите получать.</p>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Новости сервиса</div>
+                        <div class="setting-hint">Узнавайте об обновлениях Vortex Audio</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notifNews" onchange="toggleNotif('news', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Достижения</div>
+                        <div class="setting-hint">Оповещения о новых достижениях</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notifAchievements" onchange="toggleNotif('achievements', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Скидки и акции</div>
+                        <div class="setting-hint">Уведомления о распродажах нот и подписок</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notifPromo" onchange="toggleNotif('promo', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 🔒 Приватность -->
+            <div class="settings-panel" id="panel-privacy">
+                <h2 class="panel-title">Приватность</h2>
+                <p class="panel-desc">Управляйте видимостью вашего профиля.</p>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Показывать в таблице лидеров</div>
+                        <div class="setting-hint">Другие смогут увидеть ваш ник</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="privLeaderboard" onchange="togglePrivacy('leaderboard', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Показывать историю проверок</div>
+                        <div class="setting-hint">Что вы искали, увидят другие</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="privHistory" onchange="togglePrivacy('history', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
             <!-- 🗑️ Удаление аккаунта -->
             <div class="settings-panel" id="panel-danger">
                 <h2 class="panel-title danger-title">Удаление аккаунта</h2>
@@ -144,99 +211,32 @@
                 </div>
             </div>
 
-            <!-- 🔔 Уведомления -->
-<div class="settings-panel" id="panel-notifications">
-    <h2 class="panel-title">Уведомления</h2>
-    <p class="panel-desc">Настройте, какие оповещения вы хотите получать.</p>
+            <!-- ℹ️ О программе -->
+            <div class="settings-panel" id="panel-about">
+                <h2 class="panel-title">О программе</h2>
+                <p class="panel-desc">Информация о Vortex Audio.</p>
 
-    <div class="setting-row">
-        <div class="setting-info">
-            <div class="setting-name">Новости сервиса</div>
-            <div class="setting-hint">Узнавайте об обновлениях Vortex Audio</div>
-        </div>
-        <label class="theme-slide">
-            <input type="checkbox" id="notifNews" onchange="toggleNotif('news', this.checked)">
-            <span class="theme-slider"></span>
-        </label>
-    </div>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Версия</div>
+                        <div class="setting-hint">1.0.0 beta</div>
+                    </div>
+                </div>
 
-    <div class="setting-row">
-        <div class="setting-info">
-            <div class="setting-name">Достижения</div>
-            <div class="setting-hint">Оповещения о новых достижениях</div>
-        </div>
-        <label class="theme-slide">
-            <input type="checkbox" id="notifAchievements" onchange="toggleNotif('achievements', this.checked)">
-            <span class="theme-slider"></span>
-        </label>
-    </div>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Разработчик</div>
+                        <div class="setting-hint">Савелий — Team Vortex</div>
+                    </div>
+                </div>
 
-    <div class="setting-row">
-        <div class="setting-info">
-            <div class="setting-name">Скидки и акции</div>
-            <div class="setting-hint">Уведомления о распродажах нот и подписок</div>
-        </div>
-        <label class="theme-slide">
-            <input type="checkbox" id="notifPromo" onchange="toggleNotif('promo', this.checked)">
-            <span class="theme-slider"></span>
-        </label>
-    </div>
-</div>
-
-<!-- 🔒 Приватность -->
-<div class="settings-panel" id="panel-privacy">
-    <h2 class="panel-title">Приватность</h2>
-    <p class="panel-desc">Управляйте видимостью вашего профиля.</p>
-
-    <div class="setting-row">
-        <div class="setting-info">
-            <div class="setting-name">Показывать в таблице лидеров</div>
-            <div class="setting-hint">Другие смогут увидеть ваш ник</div>
-        </div>
-        <label class="theme-slide">
-            <input type="checkbox" id="privLeaderboard" onchange="togglePrivacy('leaderboard', this.checked)">
-            <span class="theme-slider"></span>
-        </label>
-    </div>
-
-    <div class="setting-row">
-        <div class="setting-info">
-            <div class="setting-name">Показывать историю проверок</div>
-            <div class="setting-hint">Что вы искали, увидят другие</div>
-        </div>
-        <label class="theme-slide">
-            <input type="checkbox" id="privHistory" onchange="togglePrivacy('history', this.checked)">
-            <span class="theme-slider"></span>
-        </label>
-    </div>
-</div>
-
-<!-- ℹ️ О программе -->
-<div class="settings-panel" id="panel-about">
-    <h2 class="panel-title">О программе</h2>
-    <p class="panel-desc">Информация о Vortex Audio.</p>
-
-    <div class="setting-row">
-        <div class="setting-info">
-            <div class="setting-name">Версия</div>
-            <div class="setting-hint">1.0.0 beta</div>
-        </div>
-    </div>
-
-    <div class="setting-row">
-        <div class="setting-info">
-            <div class="setting-name">Разработчик</div>
-            <div class="setting-hint">Савелий — Team Vortex</div>
-        </div>
-    </div>
-
-    <div class="setting-row">
-        <div class="setting-info">
-            <div class="setting-name">Год основания</div>
-            <div class="setting-hint">2026</div>
-        </div>
-    </div>
-</div>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Год основания</div>
+                        <div class="setting-hint">2026</div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
