@@ -17,7 +17,7 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE')
     return response
 
-    @app.route('/health', methods=['GET'])
+@app.route('/health', methods=['GET'])
 def health():
     return jsonify({"status": "ok"}), 200
 
