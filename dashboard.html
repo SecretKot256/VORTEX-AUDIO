@@ -32,14 +32,30 @@
                                                                                                                 </div>
                                                                                                                 </div>
 
-    <!-- Верхняя панель -->
-    <div class="top-icons">
-        <!-- Профиль (только на ПК) -->
-        <div class="profile-btn" onclick="openProfile()" id="profileButton">
-            <img class="profile-avatar" id="headerAvatar" src="default-avatar.png" alt="Avatar">
-            <span class="profile-nickname" id="headerNickname">User</span>
-        </div>
+<div class="top-icons" id="topIcons" style="display: none;">
+    <!-- Кнопка языка -->
+    <div class="lang-btn" onclick="toggleLangPopup()">
+        <img class="lang-flag" id="currentFlag" src="flag-ru.png" alt="RU">
     </div>
+
+    <!-- Попап языка -->
+    <div class="lang-popup" id="langPopup">
+        <button class="lang-option" onclick="setLang('ru')">
+            <img class="lang-option-flag" src="flag-ru.png" alt="RU">
+            Русский
+        </button>
+        <button class="lang-option" onclick="setLang('en')">
+            <img class="lang-option-flag" src="flag-uk.png" alt="UK">
+            English
+        </button>
+    </div>
+
+    <!-- Кнопка профиля (ПК, планшет, телефон) -->
+    <div class="profile-btn" onclick="openProfile()" id="profileButton">
+        <img class="profile-avatar" id="headerAvatar" src="default-avatar.png" alt="Avatar">
+        <span class="profile-nickname" id="headerNickname">User</span>
+    </div>
+</div>
 
         <!-- Бургер -->
         <button class="burger-btn" id="burgerBtn" onclick="toggleBurger()">
@@ -118,27 +134,6 @@
 
     <!-- Оверлей -->
     <div class="burger-overlay" id="burgerOverlay" onclick="closeBurger()"></div>
-
-    <!-- Попап языка -->
-    <div class="lang-popup" id="langPopup">
-        <h3> Выберите язык</h3>
-        <button class="lang-option" onclick="setLang('ru')">
-            <img class="lang-option-flag" src="flag-ru.png" alt="RU">
-            <div>
-                <div>Русский</div>
-                <div class="lang-sub">Russian</div>
-            </div>
-            <span class="lang-check">✓</span>
-        </button>
-        <button class="lang-option" onclick="setLang('en')">
-            <img class="lang-option-flag" src="flag-uk.png" alt="UK">
-            <div>
-                <div>English</div>
-                <div class="lang-sub">Английский</div>
-            </div>
-            <span class="lang-check">✓</span>
-        </button>
-    </div>
 
     <!-- Основной контент -->
     <div class="dashboard-content">
@@ -250,15 +245,6 @@
                     <div class="stat-value" id="songsTranslated">0</div>
                 </div>
             </div>
-
-            <div class="achievements-block">
-    <div class="achievements-title">Избранные достижения</div>
-    <div class="achievements-preview" id="achievementsPreview"></div>
-    <div class="achievements-buttons">
-        <a href="achievements.html" class="btn-small">Все достижения →</a>
-        <button class="btn-small" onclick="shareProfile()">Поделиться профилем</button>
-    </div>
-</div>
 
             <button class="buy-notes-btn" onclick="openShop()"> Купить ноты</button>
 </div>
