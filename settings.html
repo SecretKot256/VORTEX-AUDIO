@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="settings.css">
+    <link rel="stylesheet" href="toast.css">
+    <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+
+    <!-- Хедер -->
+    <div class="settings-header">
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">← Назад</button>
+        <h1 class="settings-title">Настройки</h1>
+    </div>
+
+    <!-- Контейнер с вкладками -->
+    <div class="settings-container">
+
+        <!-- Боковое меню -->
+        <div class="settings-sidebar">
+            <button class="settings-tab active" data-tab="appearance" onclick="switchSettingsTab('appearance')">
+                🎨 Внешний вид
+            </button>
+            <button class="settings-tab" data-tab="language" onclick="switchSettingsTab('language')">
+                🌐 Язык
+            </button>
+            <button class="settings-tab" data-tab="profile" onclick="switchSettingsTab('profile')">
+                👤 Профиль
+            </button>
+            <button class="settings-tab" data-tab="phone" onclick="switchSettingsTab('phone')">
+                📱 Телефон
+            </button>
+            <button class="settings-tab danger" data-tab="danger" onclick="switchSettingsTab('danger')">
+                🗑️ Удаление аккаунта
+            </button>
+        </div>
+
+        <!-- Контент вкладок -->
+        <div class="settings-content">
+
+            <!-- 🎨 Внешний вид -->
+            <div class="settings-panel active" id="panel-appearance">
+                <h2 class="panel-title">Внешний вид</h2>
+                <p class="panel-desc">Настройте, как выглядит Vortex Audio.</p>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Тёмная тема</div>
+                        <div class="setting-hint">Включите светлую тему, если вам так удобнее</div>
+                    </div>
+                    <label class="theme-switch">
+                        <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+                        <span class="theme-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 🌐 Язык -->
+            <div class="settings-panel" id="panel-language">
+                <h2 class="panel-title">Язык</h2>
+                <p class="panel-desc">Выберите язык интерфейса.</p>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Русский</div>
+                        <div class="setting-hint">Основной язык сайта</div>
+                    </div>
+                    <button class="lang-select-btn active" id="langRuBtn" onclick="setSettingsLang('ru')">Выбран</button>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">English</div>
+                        <div class="setting-hint">English interface</div>
+                    </div>
+                    <button class="lang-select-btn" id="langEnBtn" onclick="setSettingsLang('en')">Выбрать</button>
+                </div>
+            </div>
+
+            <!-- 👤 Профиль -->
+            <div class="settings-panel" id="panel-profile">
+                <h2 class="panel-title">Профиль</h2>
+                <p class="panel-desc">Измените данные вашего аккаунта.</p>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Никнейм</div>
+                        <div class="setting-hint">Как вас видят другие</div>
+                    </div>
+                    <input class="settings-input" type="text" id="settingsNickname" placeholder="Введите ник...">
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Email</div>
+                        <div class="setting-hint">Почта, привязанная к аккаунту</div>
+                    </div>
+                    <input class="settings-input" type="email" id="settingsEmail" placeholder="example@mail.com" disabled>
+                </div>
+
+                <button class="save-btn" onclick="saveProfileSettings()">Сохранить изменения</button>
+            </div>
+
+            <!-- 📱 Телефон -->
+            <div class="settings-panel" id="panel-phone">
+                <h2 class="panel-title">Телефон</h2>
+                <p class="panel-desc">Подключите номер для дополнительной защиты.</p>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Номер телефона</div>
+                        <div class="setting-hint" id="settingsPhoneText">Номер не подключён</div>
+                    </div>
+                    <button class="save-btn" id="phoneActionBtn" onclick="settingsPhoneAction()">Подключить</button>
+                </div>
+            </div>
+
+            <!-- 🗑️ Удаление аккаунта -->
+            <div class="settings-panel" id="panel-danger">
+                <h2 class="panel-title danger-title">Удаление аккаунта</h2>
+                <p class="panel-desc">Это действие <b>необратимо</b>. Все ваши данные, ноты и достижения будут удалены навсегда.</p>
+
+                <div class="setting-row danger-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Удалить аккаунт</div>
+                        <div class="setting-hint">Навсегда потерять доступ к Vortex Audio</div>
+                    </div>
+                    <button class="danger-btn" onclick="confirmDeleteAccount()">Удалить</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>

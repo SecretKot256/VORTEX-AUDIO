@@ -1,0 +1,249 @@
+/* ===== ХЕДЕР ===== */
+.settings-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.back-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.settings-title {
+    font-size: 22px;
+    color: #fff;
+    margin: 0;
+}
+
+/* ===== КОНТЕЙНЕР ===== */
+.settings-container {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ===== САЙДБАР ===== */
+.settings-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 220px;
+}
+
+.settings-tab {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    text-align: left;
+    padding: 12px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.settings-tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.settings-tab.active {
+    background: #6C5CE7;
+    color: #fff;
+}
+
+.settings-tab.danger {
+    color: #ff6b6b;
+}
+
+.settings-tab.danger.active {
+    background: #c0392b;
+    color: #fff;
+}
+
+/* ===== КОНТЕНТ ===== */
+.settings-content {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 28px;
+    min-height: 400px;
+}
+
+.settings-panel {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.settings-panel.active {
+    display: block;
+}
+
+.panel-title {
+    color: #fff;
+    font-size: 20px;
+    margin: 0 0 6px 0;
+}
+
+.panel-title.danger-title {
+    color: #ff6b6b;
+}
+
+.panel-desc {
+    color: #888;
+    font-size: 14px;
+    margin: 0 0 24px 0;
+}
+
+/* ===== СТРОКИ НАСТРОЕК ===== */
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.setting-row:last-of-type {
+    border-bottom: none;
+}
+
+.setting-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.setting-name {
+    color: #fff;
+    font-size: 15px;
+}
+
+.setting-hint {
+    color: #777;
+    font-size: 13px;
+}
+
+/* ===== ИНПУТЫ ===== */
+.settings-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #fff;
+    font-size: 14px;
+    min-width: 200px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.settings-input:focus {
+    border-color: #6C5CE7;
+}
+
+.settings-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ===== КНОПКИ ===== */
+.save-btn {
+    background: #6C5CE7;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.2s;
+}
+
+.save-btn:hover {
+    background: #5b4dd1;
+}
+
+.lang-select-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.lang-select-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.lang-select-btn.active {
+    background: #6C5CE7;
+    border-color: #6C5CE7;
+}
+
+.danger-btn {
+    background: transparent;
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.danger-btn:hover {
+    background: #ff6b6b;
+    color: #fff;
+}
+
+.danger-row {
+    border-bottom: none;
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 768px) {
+    .settings-container {
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .settings-sidebar {
+        flex-direction: row;
+        overflow-x: auto;
+        min-width: unset;
+        gap: 8px;
+    }
+
+    .settings-tab {
+        white-space: nowrap;
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+
+    .setting-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .settings-input {
+        width: 100%;
+    }
+}
