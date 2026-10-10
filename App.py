@@ -17,7 +17,7 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE')
     return response
 
-GENIUS_TOKEN = os.environ.get('iPPFIE3is28l-B_GZQxd_U9gd2zSuE9PO1ma7bAy3UOMmTQCZvuWZNEotK76_xjT', '')
+GENIUS_TOKEN = os.environ.get('Jil8S02L3eRMrF7AjiLvMfFXWyFNNLRAU32shb8InJGIiq5Iwqp8mATrYheCgO_Ok8_mJCwKDj12o4K-gci75Q', '')
 genius = lyricsgenius.Genius(GENIUS_TOKEN)
 genius.verbose = False
 genius.remove_section_headers = True
