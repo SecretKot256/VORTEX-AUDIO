@@ -71,6 +71,7 @@ function loadUser() {
 
     document.getElementById('headerNickname').textContent = savedUser;
     document.getElementById('headerAvatar').src = userData.avatar;
+    document.getElementById('topIcons').style.display = 'flex';
 }
 
 // ========== ТЕМА ==========
