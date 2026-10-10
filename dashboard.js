@@ -88,10 +88,6 @@ if (savedTheme === 'light') {
 }
 
 // ========== ЯЗЫК ==========
-function toggleLangPopup() {
-    document.getElementById('langPopup').classList.toggle('show');
-}
-
 function setLang(lang) {
     userData.lang = lang;
     localStorage.setItem('vortex_lang', lang);
@@ -489,11 +485,6 @@ function closeBurger() {
     document.getElementById('burgerMenu').classList.remove('open');
     document.getElementById('burgerOverlay').classList.remove('show');
     document.getElementById('burgerBtn').classList.remove('active');
-}
-
-function toggleLangPopup() {
-    closeBurger();
-    document.getElementById('langPopup').classList.toggle('show');
 }
 
 document.addEventListener('click', (e) => {
