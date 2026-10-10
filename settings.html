@@ -36,17 +36,14 @@
             <button class="settings-tab" data-tab="phone" onclick="switchSettingsTab('phone')">
                 📱 Телефон
             </button>
-            <button class="settings-tab danger" data-tab="danger" onclick="switchSettingsTab('danger')">
-                🗑️ Удаление аккаунта
-            </button>
             <button class="settings-tab" data-tab="notifications" onclick="switchSettingsTab('notifications')">
                 🔔 Уведомления
             </button>
             <button class="settings-tab" data-tab="privacy" onclick="switchSettingsTab('privacy')">
                 🔒 Приватность
             </button>
-            <button class="settings-tab" data-tab="audio" onclick="switchSettingsTab('audio')">
-                🎧 Звук
+            <button class="settings-tab danger" data-tab="danger" onclick="switchSettingsTab('danger')">
+                🗑️ Удаление аккаунта
             </button>
             <button class="settings-tab" data-tab="about" onclick="switchSettingsTab('about')">
                 ℹ️ О программе
@@ -209,34 +206,6 @@
         </div>
         <label class="theme-switch">
             <input type="checkbox" id="privHistory" onchange="togglePrivacy('history', this.checked)">
-            <span class="theme-slider"></span>
-        </label>
-    </div>
-</div>
-
-<!-- 🎧 Звук -->
-<div class="settings-panel" id="panel-audio">
-    <h2 class="panel-title">Звук</h2>
-    <p class="panel-desc">Настройки звукового оформления.</p>
-
-    <div class="setting-row">
-        <div class="setting-info">
-            <div class="setting-name">Звуковые уведомления</div>
-            <div class="setting-hint">Проигрывать звук при действиях</div>
-        </div>
-        <label class="theme-switch">
-            <input type="checkbox" id="audioEnabled" onchange="toggleAudio(this.checked)">
-            <span class="theme-slider"></span>
-        </label>
-    </div>
-
-    <div class="setting-row">
-        <div class="setting-info">
-            <div class="setting-name">Автовоспроизведение в плеере</div>
-            <div class="setting-hint">Включать музыку сразу после загрузки</div>
-        </div>
-        <label class="theme-switch">
-            <input type="checkbox" id="audioAutoplay" onchange="toggleAutoplay(this.checked)">
             <span class="theme-slider"></span>
         </label>
     </div>
