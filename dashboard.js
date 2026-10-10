@@ -147,6 +147,9 @@ document.getElementById('profileOverlay').addEventListener('click', function(e) 
     if (e.target === this) closeProfile();
 });
 
+document.getElementById('profileOverlay').classList.add('show');
+
+
 // ===== ТУТОРИАЛ =====
 function checkTutorial() {
     const done = localStorage.getItem('vortex_tutorial_done');
