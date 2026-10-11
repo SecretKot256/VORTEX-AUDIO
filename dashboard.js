@@ -507,9 +507,6 @@ function selectMethod(method) {
     // Закрываем попап
     document.getElementById('methodPopup').classList.remove('show');
     btn.classList.remove('open');
-
-    const names = { genius: 'Genius', mp3: 'MP3', streaming: 'Стриминговые' };
-    showToast('Метод проверки песни: ' + names[method], 'success');
 }
 
 // Закрытие попапа при клике вне
