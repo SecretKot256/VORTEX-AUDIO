@@ -440,10 +440,3 @@ body.light .welcome-overlay,
 body.light .burger-overlay {
     background: rgba(0, 0, 0, 0.4) !important;
 }
-
-/* Плашка статуса */
-body.light .server-status {
-    background: rgba(255, 255, 255, 0.95) !important;
-    border-color: #ddd !important;
-    color: #222 !important;
-}
