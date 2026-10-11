@@ -18,10 +18,6 @@ def after_request(response):
     return response
 
 GENIUS_TOKEN = ('xOTPqcMbn0IrFZhLrBUVcDQkFAM6Mo_1u7Bb2uztucPKMcKhkcIuPqgHIYUUMTTB')
-genius = lyricsgenius.Genius(GENIUS_TOKEN)
-genius.verbose = False
-genius.remove_section_headers = True
-genius.skip_non_songs = True
 
 BAD_WORDS = {
     "бля", "блять", "сука", "суки", "нахер", "нахуй", "хуй", "хуя", "хуе", "хую",
@@ -65,6 +61,10 @@ def save_news(data):
 # ===== ФУНКЦИИ =====
 def search_genius(track_name, artist_name=""):
     try:
+        genius = lyricsgenius.Genius(GENIUS_TOKEN)
+        genius.verbose = False
+        genius.remove_section_headers = True
+        genius.skip_non_songs = True
         song = genius.search_song(track_name, artist_name if artist_name else None)
         if song:
             lyrics = song.lyrics
