@@ -267,6 +267,11 @@ async function tryCheckTrack() {
     localStorage.setItem('vortex_free_checks', userData.freeChecks);
 
     try {
+    // Переходим на страницу выбора
+    const url = `select.html?track=${encodeURIComponent(trackName)}&artist=${encodeURIComponent(artistName)}`;
+    window.location.href = url;
+
+        /*
         const response = await fetch('https://vortex-audio-2ea62.containers.snapdeploy.app/api/check', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -290,6 +295,7 @@ localStorage.setItem('vortex_dirty', userData.dirtyCount || 0);
             userData.notesBalance++;
             userData.songsTranslated--;
         }
+            */
     } catch (error) {
         console.error(error);
         showToast('Сервер недоступен', 'error');
