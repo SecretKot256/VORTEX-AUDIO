@@ -78,7 +78,8 @@ function renderAchievement(a, checks, dirty, clean, isFavorite) {
     const favorites = getFavorites();
     const isPinned = favorites.includes(a.id);
 
-    return `
+const delay = Math.random() * 0.3; // небольшая случайная задержка
+return `
         <div class="achievement ${unlocked ? 'unlocked' : 'locked'} ${isPinned ? 'pinned' : ''}">
             <div class="achievement-icon">${a.icon}</div>
             <div class="achievement-name">${a.name}</div>
@@ -92,6 +93,20 @@ function renderAchievement(a, checks, dirty, clean, isFavorite) {
             ` : ''}
         </div>
     `;
+
+let unlockedCount = 0;
+ACHIEVEMENTS.forEach(a => {
+    let progress = 0;
+    if (a.type === 'checks') progress = checks;
+    if (a.type === 'dirty') progress = dirty;
+    if (a.type === 'clean') progress = clean;
+    if (progress >= a.need) unlockedCount++;
+});
+
+document.getElementById('unlockedCount').textContent = unlockedCount;
+document.getElementById('totalCount').textContent = ACHIEVEMENTS.length;
+document.getElementById('progressFill').style.width = 
+    (unlockedCount / ACHIEVEMENTS.length * 100) + '%';
 }
 
 // ========== ИЗБРАННОЕ ==========
@@ -116,6 +131,16 @@ function toggleFavorite(id, event) {
     renderAchievements();
 }
 
-// ========== ЗАПУСК ==========
+// Запуск
 loadUser();
 renderAchievements();
+
+// Анимация появления
+setTimeout(() => {
+    document.getElementById('achievementsHeader').classList.add('visible');
+    document.getElementById('achievementsSubtitle').classList.add('visible');
+}, 200);
+
+setTimeout(() => {
+    document.querySelector('.progress-box').classList.add('visible');
+}, 400);

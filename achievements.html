@@ -14,19 +14,30 @@
     <a href="dashboard.html" class="back-btn">← Назад</a>
 
     <div class="achievements-wrapper">
-        <h1 class="achievements-header">Достижения</h1>
-        <p class="achievements-subtitle">Открывай достижения, проверяя песни</p>
+        <h1 class="achievements-header" id="achievementsHeader">Достижения</h1>
+        <p class="achievements-subtitle" id="achievementsSubtitle">Открывай достижения, проверяя песни</p>
 
-        <!-- Избранные (3 штуки, выбирает юзер) -->
+        <!-- Счётчик прогресса -->
+        <div class="progress-box">
+            <div class="progress-info">
+                <span class="progress-label">Открыто</span>
+                <span class="progress-count"><span id="unlockedCount">0</span> / <span id="totalCount">0</span></span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- Избранные -->
         <div class="favorites-section">
-            <h2 class="section-title">Избранные</h2>
+            <h2 class="section-title">⭐ Избранные</h2>
             <p class="section-hint">Выбери 3 достижения, которые покажутся другим в профиле</p>
             <div class="favorites-grid" id="favoritesGrid"></div>
         </div>
 
         <!-- Все достижения -->
         <div class="all-section">
-            <h2 class="section-title">Все достижения</h2>
+            <h2 class="section-title">🏆 Все достижения</h2>
             <div class="achievements-grid" id="achievementsGrid"></div>
         </div>
     </div>
