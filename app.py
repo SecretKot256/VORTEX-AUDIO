@@ -63,7 +63,84 @@ def save_news(data):
     with open(NEWS_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-# ===== ПОИСК: GENIUS (основной) =====
+# ===== ОЧИСТКА ТЕКСТА ОТ ТАЙМКОДОВ =====
+def clean_lyrics(lyrics):
+    """Убирает таймкоды вида [00:12.15] из текста."""
+    if not lyrics:
+        return ""
+    # Убираем [MM:SS.xx] и [MM:SS]
+    cleaned = re.sub(r'\[\d{1,2}:\d{2}(?:\.\d{1,2})?\]', '', lyrics)
+    # Убираем пустые строки
+    lines = [line.strip() for line in cleaned.split('\n') if line.strip()]
+    return '\n'.join(lines)
+
+
+# ===== ПОИСК: LRCLIB (список песен) =====
+def search_lrclib(track_name, artist_name=""):
+    """Ищет список песен через LRCLIB. Возвращает список вариантов."""
+    try:
+        url = "https://lrclib.net/api/search"
+        params = {"track_name": track_name}
+        if artist_name:
+            params["artist_name"] = artist_name
+        
+        response = requests.get(url, params=params, timeout=10)
+        if response.status_code != 200:
+            print(f"LRCLIB search: {response.status_code}")
+            return []
+        
+        data = response.json()
+        if not isinstance(data, list):
+            return []
+        
+        results = []
+        for song in data[:10]:  # берём максимум 10 вариантов
+            results.append({
+                "id": song.get("id"),
+                "title": song.get("trackName", track_name),
+                "artist": song.get("artistName", artist_name),
+                "album": song.get("albumName", ""),
+                "duration": song.get("duration", 0),
+                "instrumental": song.get("instrumental", False),
+                "source": "LRCLIB"
+            })
+        
+        return results
+    except Exception as e:
+        print(f"LRCLIB search error: {e}")
+        return []
+
+
+# ===== ПОЛУЧЕНИЕ ТЕКСТА ПО ID =====
+def get_lyrics_by_id(song_id):
+    """Получает текст песни по ID из LRCLIB."""
+    try:
+        url = f"https://lrclib.net/api/get/{song_id}"
+        response = requests.get(url, timeout=10)
+        
+        if response.status_code != 200:
+            print(f"LRCLIB get: {response.status_code}")
+            return None
+        
+        data = response.json()
+        lyrics = data.get("plainLyrics") or data.get("syncedLyrics", "")
+        
+        if lyrics:
+            lyrics = clean_lyrics(lyrics)
+        
+        return {
+            "title": data.get("trackName", ""),
+            "artist": data.get("artistName", ""),
+            "album": data.get("albumName", ""),
+            "lyrics": lyrics or "",
+            "instrumental": data.get("instrumental", False)
+        }
+    except Exception as e:
+        print(f"LRCLIB get error: {e}")
+        return None
+
+
+# ===== СТАРЫЙ GENIUS (оставляем на случай, если Cloudflare отпустит) =====
 def try_genius(track_name, artist_name=""):
     """Ищет текст через Genius. Возвращает (title, artist, lyrics, cover) или (None, None, None, None)."""
     try:
@@ -85,61 +162,6 @@ def try_genius(track_name, artist_name=""):
     except Exception as e:
         print(f"Genius не сработал: {e}")
         return None, None, None, None
-
-
-# ===== ПОИСК: LRCLIB (запасной) =====
-def try_lrclib(track_name, artist_name=""):
-    """Ищет текст через LRCLIB. Возвращает (title, artist, lyrics, cover) или (None, None, None, None)."""
-    try:
-        url = "https://lrclib.net/api/search"
-        params = {"track_name": track_name}
-        if artist_name:
-            params["artist_name"] = artist_name
-        
-        response = requests.get(url, params=params, timeout=10)
-        if response.status_code != 200:
-            print(f"LRCLIB ответил: {response.status_code}")
-            return None, None, None, None
-        
-        data = response.json()
-        if not data:
-            print("LRCLIB: ничего не найдено")
-            return None, None, None, None
-        
-        song = data[0]
-        lyrics = song.get("plainLyrics") or song.get("syncedLyrics", "")
-        title = song.get("trackName", track_name)
-        artist = song.get("artistName", artist_name)
-        cover_url = ""
-        
-        if not lyrics:
-            print("LRCLIB: текст пустой")
-            return None, None, None, None
-        
-        return title, artist, lyrics, cover_url
-    except Exception as e:
-        print(f"LRCLIB не сработал: {e}")
-        return None, None, None, None
-
-# ===== ГЛАВНАЯ ФУНКЦИЯ: GENIUS + LRCLIB =====
-def search_genius(track_name, artist_name=""):
-    """Сначала Genius, если не смог — LRCLIB."""
-    # 1. Пробуем Genius
-    title, artist, lyrics, cover = try_genius(track_name, artist_name)
-    if lyrics:
-        print("✅ Источник: Genius")
-        return title, artist, lyrics, cover
-    
-    # 2. Genius не смог — пробуем LRCLIB
-    print("⚠️ Genius не смог, пробуем LRCLIB...")
-    title, artist, lyrics, cover = try_lrclib(track_name, artist_name)
-    if lyrics:
-        print("✅ Источник: LRCLIB")
-        return title, artist, lyrics, cover
-    
-    # 3. Оба не смогли
-    print("❌ Ни Genius, ни LRCLIB не нашли текст")
-    return None, None, None, None
 
 def analyze_lyrics(lyrics):
     if not lyrics:
