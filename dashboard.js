@@ -271,31 +271,6 @@ async function tryCheckTrack() {
     const url = `select.html?track=${encodeURIComponent(trackName)}&artist=${encodeURIComponent(artistName)}`;
     window.location.href = url;
 
-        /*
-        const response = await fetch('https://vortex-audio-2ea62.containers.snapdeploy.app/api/check', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ track_name: trackName, artist: artistName })
-        });
-        const result = await response.json();
-
-        // Обновляем счётчики достижений
-if (result.lyrics_analysis?.is_clean) {
-    userData.cleanCount = (userData.cleanCount || 0) + 1;
-} else if (result.lyrics_analysis?.status === 'dirty') {
-    userData.dirtyCount = (userData.dirtyCount || 0) + 1;
-}
-localStorage.setItem('vortex_clean', userData.cleanCount || 0);
-localStorage.setItem('vortex_dirty', userData.dirtyCount || 0);
-
-        if (result.success) {
-            window.location.href = 'result.html?data=' + encodeURIComponent(JSON.stringify(result));
-        } else {
-            showToast(result.message || 'Песня не найдена', 'error');
-            userData.notesBalance++;
-            userData.songsTranslated--;
-        }
-            */
     } catch (error) {
         console.error(error);
         showToast('Сервер недоступен', 'error');
