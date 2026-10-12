@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор песни — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="select.css">
+    <link rel="stylesheet" href="toast.css">
+    <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+
+    <a href="dashboard.html" class="back-btn">← Назад</a>
+
+    <!-- Чёрный загрузочный экран -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Ищем песни...</div>
+    </div>
+
+    <!-- Контент -->
+    <div class="select-wrapper" id="selectWrapper">
+
+        <h1 class="select-title" id="selectTitle">Выбери песню</h1>
+        <p class="select-subtitle" id="selectSubtitle">Мы нашли несколько вариантов — выбери нужный</p>
+
+        <!-- Список песен -->
+        <div class="songs-list" id="songsList"></div>
+
+        <!-- Если ничего не найдено -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">🔍</div>
+            <div class="empty-title">Ничего не найдено</div>
+            <div class="empty-text">Попробуй изменить название или автора</div>
+            <a href="dashboard.html" class="empty-btn">← Вернуться</a>
+        </div>
+
+    </div>
+
+    <script src="select.js"></script>
+</body>
+</html>
