@@ -1,18 +1,10 @@
+// ========== API ==========
+const API_URL = 'https://vortex-audio-2ea62.containers.snapdeploy.app';
+
 // ========== ПОЛУЧАЕМ ДАННЫЕ ИЗ URL ==========
 const params = new URLSearchParams(window.location.search);
 const trackName = params.get('track') || '';
 const artistName = params.get('artist') || '';
-
-// ========== ЗАГЛУШКА (потом заменим на реальный API) ==========
-// Пока бэкенда нет — показываем тестовые данные
-function getMockSongs(track, artist) {
-    return [
-        { id: '1', title: track || 'Believer', artist: artist || 'Imagine Dragons', source: 'Genius' },
-        { id: '2', title: track || 'Believer', artist: 'Lil Wayne', source: 'Genius' },
-        { id: '3', title: (track || 'Believer') + ' (Remix)', artist: 'Various Artists', source: 'LRCLIB' },
-        { id: '4', title: (track || 'Believer') + ' (Live)', artist: artist || 'Imagine Dragons', source: 'Genius' }
-    ];
-}
 
 // ========== СКЕЛЕТОН ==========
 function renderSkeleton(count = 4) {
@@ -50,15 +42,18 @@ function renderSongs(songs) {
         card.style.animationDelay = (i * 0.08) + 's';
         card.onclick = () => selectSong(song);
 
+        const durationText = song.duration
+            ? `${Math.floor(song.duration / 60)}:${String(Math.floor(song.duration % 60)).padStart(2, '0')}`
+            : '';
+
         card.innerHTML = `
-            <div class="song-cover" ${song.cover ? `style="background-image: url('${song.cover}')"` : ''}>
-                ${song.cover ? '' : '🎵'}
-            </div>
+            <div class="song-cover">🎵</div>
             <div class="song-info">
                 <div class="song-title">${song.title}</div>
-                <div class="song-artist">${song.artist}</div>
+                <div class="song-artist">${song.artist}${song.album ? ' · ' + song.album : ''}</div>
                 <div class="song-meta">
-                    <span class="song-badge">${song.source || 'VORTEX'}</span>
+                    <span class="song-badge">${song.source || 'LRCLIB'}</span>
+                    ${durationText ? `<span class="song-badge">${durationText}</span>` : ''}
                 </div>
             </div>
             <div class="song-arrow">→</div>
@@ -68,35 +63,33 @@ function renderSongs(songs) {
 }
 
 // ========== ВЫБОР ПЕСНИ ==========
-function selectSong(song) {
-    // Пока — заглушка. Потом здесь будет запрос к /api/check-by-id
-    showToast('Выбрано: ' + song.title, 'success');
+async function selectSong(song) {
+    showToast('Загружаем текст...', 'info');
 
-    // TODO: заменить на реальный запрос
-    // fetch(API_URL + '/api/check-by-id', { method: 'POST', ... })
-    //     .then(r => r.json())
-    //     .then(data => {
-    //         window.location.href = 'result.html?data=' + encodeURIComponent(JSON.stringify(data));
-    //     });
+    try {
+        const response = await fetch(API_URL + '/api/check-by-id', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                song_id: song.id,
+                username: localStorage.getItem('vortex_logged_user') || ''
+            })
+        });
 
-    // Временная заглушка — переход на result с пустыми данными
-    setTimeout(() => {
-        const mockResult = {
-            success: true,
-            title: song.title,
-            artists: [song.artist],
-            lyrics: 'Текст песни будет здесь...',
-            cover_url: song.cover || '',
-            source: song.source?.toLowerCase() || 'vortex',
-            lyrics_analysis: { score: 8, verdict: 'Чисто', is_clean: true, bad_words: [] },
-            beat_analysis: { score: 7, description: 'Бит будет позже', bpm: 120, style: '' },
-            overall: { score: 7.5, verdict: '👍 Хорошо', mood: '🎵' }
-        };
-        window.location.href = 'result.html?data=' + encodeURIComponent(JSON.stringify(mockResult));
-    }, 400);
+        const result = await response.json();
+
+        if (result.success) {
+            window.location.href = 'result.html?data=' + encodeURIComponent(JSON.stringify(result));
+        } else {
+            showToast(result.message || 'Не удалось загрузить текст', 'error');
+        }
+    } catch (error) {
+        console.error(error);
+        showToast('Сервер недоступен', 'error');
+    }
 }
 
-// ========== ТОСТЫ (мини-копия) ==========
+// ========== ТОСТЫ ==========
 function showToast(message, type = 'info', duration = 2500) {
     let container = document.querySelector('.toast-container');
     if (!container) {
@@ -118,27 +111,40 @@ function showToast(message, type = 'info', duration = 2500) {
 }
 
 // ========== ЗАПУСК ==========
-window.addEventListener('load', () => {
-    // Показываем скелетон сразу
+window.addEventListener('load', async () => {
     renderSkeleton(4);
 
-    // Через 1.2 сек — «загружаем» данные (заглушка)
-    setTimeout(() => {
+    // Обновляем заголовок
+    if (trackName) {
+        document.getElementById('selectTitle').textContent = 'Выбери песню';
+        document.getElementById('selectSubtitle').textContent =
+            `Результаты по запросу: «${trackName}${artistName ? ' — ' + artistName : ''}»`;
+    }
+
+    // Запрос к бэкенду
+    try {
+        const response = await fetch(API_URL + '/api/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ track_name: trackName, artist: artistName })
+        });
+
+        const data = await response.json();
+
         // Прячем чёрный экран
         document.getElementById('loadingOverlay').classList.add('hide');
-
-        // Показываем контент
         document.getElementById('selectWrapper').classList.add('show');
 
-        // Обновляем заголовок
-        if (trackName) {
-            document.getElementById('selectTitle').textContent = 'Выбери песню';
-            document.getElementById('selectSubtitle').textContent =
-                `Результаты по запросу: «${trackName}${artistName ? ' — ' + artistName : ''}»`;
+        if (data.success && data.results && data.results.length > 0) {
+            renderSongs(data.results);
+        } else {
+            renderSongs([]);
         }
-
-        // Показываем «загруженные» песни
-        const songs = getMockSongs(trackName, artistName);
-        renderSongs(songs);
-    }, 1200);
+    } catch (error) {
+        console.error(error);
+        document.getElementById('loadingOverlay').classList.add('hide');
+        document.getElementById('selectWrapper').classList.add('show');
+        renderSongs([]);
+        showToast('Сервер недоступен', 'error');
+    }
 });
