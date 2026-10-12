@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 from datetime import datetime
+import requests
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
