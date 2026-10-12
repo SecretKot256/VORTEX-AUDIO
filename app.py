@@ -228,23 +228,43 @@ def login():
         }})
     return jsonify({"success": False, "message": "Неверный логин или пароль!"})
 
-# ===== API ПРОВЕРКИ =====
-@app.route('/api/check', methods=['POST'])
-def check_track():
+# ===== API ПОИСКА СПИСКА ПЕСЕН =====
+@app.route('/api/search', methods=['POST'])
+def search_songs():
     data = request.json
     track_name = data.get('track_name', '').strip()
     artist = data.get('artist', '').strip()
-    username = data.get('username', '').strip()
     
     if not track_name:
         return jsonify({"success": False, "message": "Введите название трека!"}), 400
     
-    title, artist_name, lyrics, cover_url = search_genius(track_name, artist)
-    if not title:
-        return jsonify({"success": False, "message": f"'{track_name}' не найдена"})
+    results = search_lrclib(track_name, artist)
     
-    analysis = analyze_lyrics(lyrics)
+    if not results:
+        return jsonify({"success": False, "message": "Ничего не найдено", "results": []})
     
+    return jsonify({"success": True, "results": results})
+
+
+# ===== API ПОЛУЧЕНИЯ ТЕКСТА ПО ID =====
+@app.route('/api/check-by-id', methods=['POST'])
+def check_by_id():
+    data = request.json
+    song_id = data.get('song_id')
+    username = data.get('username', '').strip()
+    
+    if not song_id:
+        return jsonify({"success": False, "message": "Не указан ID песни"}), 400
+    
+    song = get_lyrics_by_id(song_id)
+    
+    if not song:
+        return jsonify({"success": False, "message": "Не удалось получить текст"})
+    
+    # Анализируем текст
+    analysis = analyze_lyrics(song['lyrics'])
+    
+    # Оценки
     if analysis['status'] == 'instrumental':
         lscore = 10
     elif analysis['is_clean']:
@@ -257,6 +277,7 @@ def check_track():
     overall = round((lscore + 7) / 2, 1)
     overall_verdict = f"🌟 Отлично! ({overall}/10)" if overall >= 8 else f"👍 Хорошо ({overall}/10)" if overall >= 5 else f"🚫 Плохо ({overall}/10)"
     
+    # Обновляем счётчик пользователя
     if username:
         users = load_users()
         if username in users:
@@ -265,11 +286,11 @@ def check_track():
     
     return jsonify({
         "success": True,
-        "title": title,
-        "artists": [artist_name or artist or "Unknown"],
-        "lyrics": lyrics or "",
-        "cover_url": cover_url or "",
-        "source": "genius",
+        "title": song['title'],
+        "artists": [song['artist']],
+        "lyrics": song['lyrics'],
+        "cover_url": "",
+        "source": "lrclib",
         "lyrics_analysis": analysis,
         "beat_analysis": {"score": 7, "description": "Бит будет позже", "bpm": 120, "style": ""},
         "overall": {"score": overall, "verdict": overall_verdict, "mood": "🎵"}
