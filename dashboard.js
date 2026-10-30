@@ -470,7 +470,7 @@ function selectMethod(method) {
 
     // Показываем нужную
     if (method === 'genius') {
-        methodName.textContent = 'Genius';
+        methodName.textContent = 'Genius и LRCLIB';
         if (methodIcon) methodIcon.style.display = 'block';
     } else {
         // Создаём emoji, если нет
