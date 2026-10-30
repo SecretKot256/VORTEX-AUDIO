@@ -209,11 +209,7 @@ function updateCheckButton() {
     btn.style.color = '#fff';
 
     if (userData.notesBalance > 0) {
-        btn.innerHTML = '<img src="note-icon.png" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;">1 нота';
-        btn.onclick = tryCheckTrack;
-    } else if (userData.freeChecks > 0) {
-        btn.textContent = '🎁 Бесплатно (' + userData.freeChecks + ')';
-        btn.style.background = '#4CAF50';
+        btn.innerHTML = btn.textContent = 'Проверить'; 
         btn.onclick = tryCheckTrack;
     } else {
         btn.classList.add('disabled');
