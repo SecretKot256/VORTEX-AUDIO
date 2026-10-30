@@ -258,10 +258,6 @@ async function tryCheckTrack() {
     else if (userData.freeChecks > 0) userData.freeChecks--;
     else { updateCheckButton(); return; }
 
-    userData.songsTranslated++;
-    localStorage.setItem('vortex_notes', userData.notesBalance);
-    localStorage.setItem('vortex_free_checks', userData.freeChecks);
-
     try {
     // Переходим на страницу выбора
     const url = `select.html?track=${encodeURIComponent(trackName)}&artist=${encodeURIComponent(artistName)}`;
