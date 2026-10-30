@@ -319,7 +319,7 @@ def check_by_id():
         "title": song['title'],
         "artists": [song['artist']],
         "lyrics": song['lyrics'],
-        "cover_url": "",
+        "cover_url": get_cover_from_itunes(song['title'], song['artist']),
         "source": "lrclib",
         "lyrics_analysis": analysis,
         "beat_analysis": {"score": 7, "description": "Бит будет позже", "bpm": 120, "style": ""},
