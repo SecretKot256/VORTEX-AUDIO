@@ -164,7 +164,7 @@ def get_cover_from_itunes(track_name, artist_name=""):
         artwork = results[0].get("artworkUrl100", "")
         if artwork:
             artwork = artwork.replace("100x100", "600x600")
-                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                     
         return artwork
     except Exception as e:
         print(f"Ошибка iTunes (обложка): {e}")
