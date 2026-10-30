@@ -131,6 +131,22 @@
         const params = new URLSearchParams(window.location.search);
         const data = JSON.parse(decodeURIComponent(params.get('data') || '{}'));
 
+    // ===== ПОЧИНКА ДОСТИЖЕНИЙ =====
+if (data && data.lyrics_analysis) {
+    if (data.lyrics_analysis.is_clean) {
+        let clean = parseInt(localStorage.getItem('vortex_clean') || '0') + 1;
+        localStorage.setItem('vortex_clean', clean);
+    } else if (data.lyrics_analysis.status === 'dirty') {
+        let dirty = parseInt(localStorage.getItem('vortex_dirty') || '0') + 1;
+        localStorage.setItem('vortex_dirty', dirty);
+    }
+                                                        
+    // Счётчик поверенных песен
+    let songs = parseInt(localStorage.getItem('vortex_songs') || '0') + 1;
+    localStorage.setItem('vortex_songs', songs);
+}
+        // ==============================
+
         // ===== СТАРТ =====
         window.addEventListener('load', () => {
             setTimeout(() => {
