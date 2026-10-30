@@ -138,6 +138,34 @@ def get_lyrics_by_id(song_id):
         print(f"LRCLIB get error: {e}")
         return None
 
+# ===== ПОЛУЧЕНИЕ ОБЛОЖКИ ИЗ ITUNES =====
+def get_cover_from_itunes(track_name, artist_name=""):
+    try:
+    # Формируем поисковый запрос
+    query = f"{track_name} {artist_name}".strip()
+    url = "https://itunes.apple.com/search"
+    params = {
+    "term": query,
+    "media": "music",
+    "limit": 1
+            }
+                                                                                        
+    response = requests.get(url, params=params, timeout=10)
+    if response.status_code != 200:
+        return ""
+    data = response.json()
+    results = data.get("results", [])
+    if not results:
+    return ""
+                                                                                                                                                                                        
+    # iTunes отдает обложку 100x100, мы меняем на 600x600 (HD)
+    artwork = results[0].get("artworkUrl100", "")
+    if artwork:
+    artwork = artwork.replace("100x100", "600x600")
+                                                                                                                                                                                                                                        
+    return artwork
+    except Exception as e:
+    print(f"Ошибка iTunes (обложка): {return ""
 
 # ===== СТАРЫЙ GENIUS (оставляем на случай, если Cloudflare отпустит) =====
 def try_genius(track_name, artist_name=""):
