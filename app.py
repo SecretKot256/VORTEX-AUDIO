@@ -138,6 +138,21 @@ def get_lyrics_by_id(song_id):
         print(f"LRCLIB get error: {e}")
         return None
 
+
+def get_preview_from_itunes(track_name, artist_name=""):
+    try:
+        query = f"{track_name} {artist_name}".strip()
+        url = "https://itunes.apple.com/search"
+        params = {"term": query, "media": "music", "limit": 1}
+        response = requests.get(url, params=params, timeout=10)
+        if response.status_code == 200:
+            results = response.json().get("results", [])
+            if results:
+                return results[0].get("previewUrl", "")
+        return ""
+    except Exception:
+        return ""
+        
 # ===== ПОЛУЧЕНИЕ ОБЛОЖКИ ИЗ ITUNES =====
 def get_cover_from_itunes(track_name, artist_name=""):
     try:
