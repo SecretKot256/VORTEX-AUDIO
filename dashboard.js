@@ -263,7 +263,7 @@ async function tryCheckTrack() {
     const checkHealth = await fetch(API_URL + '/health', { method: 'GET', cache: 'no-store' });
     if (!checkHealth.ok) {
         showToast('Сервер просыпается, подожди 10-20 секунд...', 'warning');
-updateCheckButton();
+        updateCheckButton();
         return; // Останавливаем переход
     }
 
