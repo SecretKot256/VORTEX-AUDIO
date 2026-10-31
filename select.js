@@ -142,14 +142,14 @@ window.addEventListener('load', async () => {
                 document.querySelector('.empty-title').textContent = 'Сервер спит 😴';
                 document.querySelector('.empty-text').textContent = 'LRCLIB перегружен или сервер просыпается. Попробуй через минуту!';
                 return;
-                }
+            }
 
         if (data.success && data.results && data.results.length > 0) {
             renderSongs(data.results);
         } else {
             renderSongs([]);
         }
-        
+
     } catch (error) {
         console.error(error);
         document.getElementById('loadingOverlay').classList.add('hide');
