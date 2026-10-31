@@ -162,3 +162,91 @@ window.addEventListener('load', async () => {
         showToast('Сервер недоступен', 'error');
     }
 });
+
+// ===== ЛОГИКА ПОПАПА =====
+let currentSelectedSong = null;
+let audioPreview = null;
+
+// Эта функция вызывается вместо selectSong, когда ты кликаешь по карточке
+function openConfirm(song) {
+    currentSelectedSong = song;
+        
+            // Заполняем попап
+                document.getElementById('confirmTitle').textContent = song.title;
+                    document.getElementById('confirmArtist').textContent = song.artist;
+                        document.getElementById('confirmAlbum').textContent = song.album || 'Сингл';
+                            document.getElementById('confirmCover').style.backgroundImage = song.cover ? `url('${song.cover}')` : 'none';
+                                
+                                    // Сбрасываем кнопку аудио
+                                        const playBtn = document.getElementById('confirmPlayBtn');
+                                            playBtn.textContent = '▶ Слушать отрывок';
+                                                playBtn.style.background = '#2a2a2a';
+                                                    
+                                                        // Останавливаем предыдущее аудио
+                                                            if (audioPreview) {
+                                                                    audioPreview.pause();
+                                                                            audioPreview = null;
+                                                                                }
+                                                                                    
+                                                                                        // Вставляем текст (первые 4 строчки)
+                                                                                            const lyricsBox = document.getElementById('confirmLyrics');
+                                                                                                lyricsBox.textContent = 'Загрузка...';
+                                                                                                    
+                                                                                                        if (song.preview) {
+                                                                                                                playBtn.style.display = 'block';
+                                                                                                                    } else {
+                                                                                                                            playBtn.style.display = 'none'; // Если аудио нет
+                                                                                                                                }
+                                                                                                                                    
+                                                                                                                                        // Показываем попап
+                                                                                                                                            document.getElementById('confirmOverlay').classList.add('show');
+                                                                                                                                                
+                                                                                                                                                    // Ищем текст для превью через check-by-id (но пока просто заглушка)
+                                                                                                                                                        lyricsBox.textContent = "Нажми на 'Проверить эту песню', чтобы увидеть полный текст...";
+                                                                                                                                                        }
+
+                                                                                                                                                        function closeConfirm() {
+                                                                                                                                                            document.getElementById('confirmOverlay').classList.remove('show');
+                                                                                                                                                                if (audioPreview) {
+                                                                                                                                                                        audioPreview.pause();
+                                                                                                                                                                                audioPreview = null;
+                                                                                                                                                                                    }
+                                                                                                                                                                                    }
+
+                                                                                                                                                                                    function togglePreview() {
+                                                                                                                                                                                        const playBtn = document.getElementById('confirmPlayBtn');
+                                                                                                                                                                                            
+                                                                                                                                                                                                if (audioPreview && !audioPreview.paused) {
+                                                                                                                                                                                                        // Если играет - ставим на паузу
+                                                                                                                                                                                                                audioPreview.pause();
+                                                                                                                                                                                                                        playBtn.textContent = '▶ Слушать отрывок';
+                                                                                                                                                                                                                                playBtn.style.background = '#2a2a2a';
+                                                                                                                                                                                                                                    } else {
+                                                                                                                                                                                                                                            // Если не играет - включаем
+                                                                                                                                                                                                                                                    if (!audioPreview) {
+                                                                                                                                                                                                                                                                audioPreview = new Audio(currentSelectedSong.preview);
+                                                                                                                                                                                                                                                                            audioPreview.volume = 0.5;
+                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                            audioPreview.play();
+                                                                                                                                                                                                                                                                                                    playBtn.textContent = '⏸ Пауза';
+                                                                                                                                                                                                                                                                                                            playBtn.style.background = '#6C5CE7';
+                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                                            // Останавливаем через 10 секунд (или когда трек закончится)
+                                                                                                                                                                                                                                                                                                                                    setTimeout(() => {
+                                                                                                                                                                                                                                                                                                                                                if (audioPreview) audioPreview.pause();
+                                                                                                                                                                                                                                                                                                                                                            playBtn.textContent = '▶ Слушать отрывок';
+                                                                                                                                                                                                                                                                                                                                                                        playBtn.style.background = '#2a2a2a';
+                                                                                                                                                                                                                                                                                                                                                                                }, 10000); 
+                                                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                                                    }
+
+                                                                                                                                                                                                                                                                                                                                                                                    // Эта функция вызывается при нажатии на зелёную кнопку "Проверить эту песню"
+                                                                                                                                                                                                                                                                                                                                                                                    function proceedToCheck() {
+                                                                                                                                                                                                                                                                                                                                                                                        if (!currentSelectedSong) return;
+                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                // Закрываем попап
+                                                                                                                                                                                                                                                                                                                                                                                                    closeConfirm();
+                                                                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                                                                                            // Вызываем старую функцию selectSong, которая делает запрос
+                                                                                                                                                                                                                                                                                                                                                                                                                selectSong(currentSelectedSong);
+                                                                                                                                                                                                                                                                                                                                                                                                                }
