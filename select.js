@@ -40,7 +40,7 @@ function renderSongs(songs) {
         const card = document.createElement('div');
         card.className = 'song-card';
         card.style.animationDelay = (i * 0.08) + 's';
-        card.onclick = () => selectSong(song);
+        card.onclick = () => openConfirm(song);
 
         const durationText = song.duration
             ? `${Math.floor(song.duration / 60)}:${String(Math.floor(song.duration % 60)).padStart(2, '0')}`
