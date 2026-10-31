@@ -170,7 +170,7 @@ def get_cover_from_itunes(track_name, artist_name=""):
         print(f"Ошибка iTunes (обложка): {e}")
         return ""
 
-# ===== СТАРЫЙ GENIUS (оставляем на случай, если Cloudflare отпустит) =====
+# ===== СТАРЫЙ GENIUS (оставляем на случай, если Cloudflare отпустит) ======
 def try_genius(track_name, artist_name=""):
     """Ищет текст через Genius. Возвращает (title, artist, lyrics, cover) или (None, None, None, None)."""
     try:
