@@ -110,7 +110,7 @@ def search_lrclib(track_name, artist_name=""):
         print(f"LRCLIB search error: {e}")
         return []
 
-# ===== ПОЛУЧЕНИЕ ТЕКСТА ПО ID =====
+# ===== ПОЛУЧЕНИЕ ТЕКСТА ПО ID ======
 def get_lyrics_by_id(song_id):
     """Получает текст песни по ID из LRCLIB."""
     try:
