@@ -135,11 +135,21 @@ window.addEventListener('load', async () => {
         document.getElementById('loadingOverlay').classList.add('hide');
         document.getElementById('selectWrapper').classList.add('show');
 
+        if (response.status === 503) {
+                document.getElementById('loadingOverlay').classList.add('hide');
+                document.getElementById('selectWrapper').classList.add('show');
+                document.getElementById('emptyState').style.display = 'block';
+                document.querySelector('.empty-title').textContent = 'Сервер спит 😴';
+                document.querySelector('.empty-text').textContent = 'LRCLIB перегружен или сервер просыпается. Попробуй через минуту!';
+                return;
+                }
+
         if (data.success && data.results && data.results.length > 0) {
             renderSongs(data.results);
         } else {
             renderSongs([]);
         }
+        
     } catch (error) {
         console.error(error);
         document.getElementById('loadingOverlay').classList.add('hide');
