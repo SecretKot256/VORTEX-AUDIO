@@ -46,18 +46,22 @@ function renderSongs(songs) {
             ? `${Math.floor(song.duration / 60)}:${String(Math.floor(song.duration % 60)).padStart(2, '0')}`
             : '';
 
-        card.innerHTML = `
-            <div class="song-cover">🎵</div>
-            <div class="song-info">
-                <div class="song-title">${song.title}</div>
-                <div class="song-artist">${song.artist}${song.album ? ' · ' + song.album : ''}</div>
-                <div class="song-meta">
-                    <span class="song-badge">${song.source || 'LRCLIB'}</span>
-                    ${durationText ? `<span class="song-badge">${durationText}</span>` : ''}
-                </div>
-            </div>
-            <div class="song-arrow">→</div>
-        `;
+        const coverStyle = song.cover ? `style="background-image: url('${song.cover}')"` : '';
+
+card.innerHTML = `
+    <div class="song-cover" ${coverStyle}>
+        ${song.cover ? '' : '🎵'}
+    </div>
+    <div class="song-info">
+        <div class="song-title">${song.title}</div>
+        <div class="song-artist">${song.artist}${song.album ? ' · ' + song.album : ''}</div>
+        <div class="song-meta">
+            <span class="song-badge">${song.source || 'LRCLIB'}</span>
+            ${durationText ? `<span class="song-badge">${durationText}</span>` : ''}
+        </div>
+    </div>
+    <div class="song-arrow">→</div>
+`;
         list.appendChild(card);
     });
 }
