@@ -103,7 +103,8 @@ def search_lrclib(track_name, artist_name=""):
                 "duration": song.get("duration", 0),
                 "instrumental": song.get("instrumental", False),
                 "source": "LRCLIB",
-                "cover": get_cover_from_itunes(song.get("trackName", track_name), song.get("artistName", artist_name))
+                "cover": get_cover_from_itunes(song.get("trackName", track_name), song.get("artistName", artist_name)),
+                "preview": get_preview_from_itunes(song.get("trackName", track_name), song.get("artistName", artist_name))
             })
         return results
     except Exception as e:
@@ -152,7 +153,7 @@ def get_preview_from_itunes(track_name, artist_name=""):
         return ""
     except Exception:
         return ""
-        
+
 # ===== ПОЛУЧЕНИЕ ОБЛОЖКИ ИЗ ITUNES =====
 def get_cover_from_itunes(track_name, artist_name=""):
     try:
