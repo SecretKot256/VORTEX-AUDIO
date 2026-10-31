@@ -162,6 +162,7 @@ def get_cover_from_itunes(track_name, artist_name=""):
                                                                                                                                                                                         
         # iTunes отдает обложку 100x100, мы меняем на 600x600 (HD)
         artwork = results[0].get("artworkUrl100", "")
+        preview_url = results[0].get("previewUrl", "")
         if artwork:
             artwork = artwork.replace("100x100", "600x600")
                                                                                                                                                                                                                                      
