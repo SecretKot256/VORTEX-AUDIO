@@ -102,10 +102,9 @@ def search_lrclib(track_name, artist_name=""):
                 "album": song.get("albumName", ""),
                 "duration": song.get("duration", 0),
                 "instrumental": song.get("instrumental", False),
-                "source": "LRCLIB"
-                "cover": get_cover_from_itunes(song.get("trackName", track_name), song.get("artistName", artist_name)) # <-- ВОТ ЭТА СТРОЧКА
+                "source": "LRCLIB",
+                "cover": get_cover_from_itunes(song.get("trackName", track_name), song.get("artistName", artist_name))
             })
-        
         return results
     except Exception as e:
         print(f"LRCLIB search error: {e}")
