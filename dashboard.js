@@ -259,7 +259,15 @@ async function tryCheckTrack() {
     else { updateCheckButton(); return; }
 
     try {
-    // Переходим на страницу выбора
+    // Проверяем, жив ли сервер перед переходом
+    const checkHealth = await fetch(API_URL + '/health', { method: 'GET', cache: 'no-store' });
+    if (!checkHealth.ok) {
+        showToast('Сервер просыпается, подожди 10-20 секунд...', 'warning');
+updateCheckButton();
+        return; // Останавливаем переход
+    }
+
+    // Если сервер жив, переходим на страницу выбора
     const url = `select.html?track=${encodeURIComponent(trackName)}&artist=${encodeURIComponent(artistName)}`;
     window.location.href = url;
 
