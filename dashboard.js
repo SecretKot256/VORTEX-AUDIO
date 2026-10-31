@@ -259,13 +259,19 @@ async function tryCheckTrack() {
     else { updateCheckButton(); return; }
 
     try {
-    // Проверяем, жив ли сервер перед переходом
-    const checkHealth = await fetch(API_URL + '/health', { method: 'GET', cache: 'no-store' });
-    if (!checkHealth.ok) {
+        if (!checkHealth.ok) {
         showToast('Сервер просыпается, подожди 10-20 секунд...', 'warning');
+                    
+        // ВОЗВРАЩАЕМ НОТУ ИЛИ БЕСПЛАТНУЮ ПРОВЕРКУ ОБРАТНО
+        if (userData.notesBalance > 0) userData.notesBalance++;
+        else if (userData.freeChecks > 0) userData.freeChecks++;
+                                    
+        localStorage.setItem('vortex_notes', userData.notesBalance);
+        localStorage.setItem('vortex_free_checks', userData.freeChecks);
+                                                
         updateCheckButton();
         return; // Останавливаем переход
-    }
+        }
 
     // Если сервер жив, переходим на страницу выбора
     const url = `select.html?track=${encodeURIComponent(trackName)}&artist=${encodeURIComponent(artistName)}`;
