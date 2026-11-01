@@ -73,6 +73,14 @@
     background: linear-gradient(90deg, rgba(108, 92, 231, 0.2), #1a1a1a);
 }
 
+/* Стили для правильного отображения крестика */
+.toast {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
 /* Светлая тема для тостов */
 body.light .toast {
     background: #fff;
