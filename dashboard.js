@@ -240,52 +240,7 @@ setInterval(() => {
 }, 2000);
 
 // ========== ПРОВЕРКА ПЕСНИ ==========
-async function tryCheckTrack() {
-    const trackName = document.getElementById('trackInputName').value.trim();
-    const artistName = document.getElementById('artistInputName').value.trim();
-
-    if (!trackName) {
-        showToast('Введите название трека!', 'warning');
-        return;
-    }
-
-    const btn = document.getElementById('checkTrackBtn');
-    btn.innerHTML = '⏳ Анализируем...';
-    btn.classList.add('disabled');
-    btn.onclick = null;
-
-    if (userData.notesBalance > 0) userData.notesBalance--;
-    else if (userData.freeChecks > 0) userData.freeChecks--;
-    else { updateCheckButton(); return; }
-
-    try {
-        if (!checkHealth.ok) {
-        showToast('Сервер просыпается, подожди 10-20 секунд...', 'warning');
-                    
-        // ВОЗВРАЩАЕМ НОТУ ИЛИ БЕСПЛАТНУЮ ПРОВЕРКУ ОБРАТНО
-        if (userData.notesBalance > 0) userData.notesBalance++;
-        else if (userData.freeChecks > 0) userData.freeChecks++;
-                                    
-        localStorage.setItem('vortex_notes', userData.notesBalance);
-        localStorage.setItem('vortex_free_checks', userData.freeChecks);
-                                                
-        updateCheckButton();
-        return; // Останавливаем переход
-        }
-
-    // Если сервер жив, переходим на страницу выбора
-    const url = `select.html?track=${encodeURIComponent(trackName)}&artist=${encodeURIComponent(artistName)}`;
-    window.location.href = url;
-
-    } catch (error) {
-        console.error(error);
-        showToast('Сервер недоступен', 'error');
-        userData.notesBalance++;
-        userData.songsTranslated--;
-    } finally {
-        updateCheckButton();
-    }
-}
+Aboba
 
 // ========== МАГАЗИН ==========
 let selectedNotes = 100, selectedPrice = 1000, shopTab = 'notes';
