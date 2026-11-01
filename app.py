@@ -94,7 +94,7 @@ def search_lrclib(track_name, artist_name=""):
             return []
         
         results = []
-        for song in data[:10]:  # берём максимум 10 вариантов
+        for song in data[:10]:  # берём максимум 10 вариантов ну блин, давай деплойся!!!
             results.append({
                 "id": song.get("id"),
                 "title": song.get("trackName", track_name),
