@@ -353,7 +353,7 @@ body.light .social-icon { background: #e5e5e5; }
 /* ========== АДАПТИВ (ТЕЛЕФОН) ========== */
 @media (max-width: 768px) {
     .guest-hero-text { font-size: 26px; padding: 0 16px; }
-    .guest-logo { width: 90px; height: 90px; }
+    .guest-logo { width: 300px; height: 300px; }
     .guest-logo-text { font-size: 18px; letter-spacing: 3px; }
     .guest-description { font-size: 14px; padding: 0 16px; }
     .start-btn { padding: 14px 44px; font-size: 16px; }
