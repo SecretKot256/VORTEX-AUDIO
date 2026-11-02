@@ -46,6 +46,43 @@
     <!-- Бургер-меню -->
     <div class="burger-menu" id="burgerMenu">
         <div class="burger-header">МЕНЮ</div>
+        
+        <!-- Плеер внутри меню -->
+        <audio id="bgMusic" loop>
+            <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
+            </audio>
+            
+            <div id="vortexPlayer" class="main-player">
+                <div class="music-info">
+                        <div class="music-title">Lofi Study</div>
+                                <div class="music-artist">FASSounds</div>
+                                    </div>
+                                        <button id="playBtn" onclick="toggleVortexMusic()" class="music-play-btn">
+                                                <svg id="iconPlay" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:block;"><path d="M8 5v14l11-7z"/></svg>
+                                                        <svg id="iconPause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                                            </button>
+                                                            </div>
+                                                            
+                                                            <script>
+                                                                const bgMusic = document.getElementById('bgMusic');
+                                                                    const playBtn = document.getElementById('playBtn');
+                                                                        const iconPlay = document.getElementById('iconPlay');
+                                                                            const iconPause = document.getElementById('iconPause');
+                                                                                
+                                                                                    bgMusic.volume = 0.6; 
+                                                                                    
+                                                                                        function toggleVortexMusic() {
+                                                                                                if (bgMusic.paused) {
+                                                                                                            bgMusic.play();
+                                                                                                                        iconPlay.style.display = 'none';
+                                                                                                                                    iconPause.style.display = 'block';
+                                                                                                                                            } else {
+                                                                                                                                                        bgMusic.pause();
+                                                                                                                                                                    iconPlay.style.display = 'block';
+                                                                                                                                                                                iconPause.style.display = 'none';
+                                                                                                                                                                                        }
+                                                                                                                                                                                            }
+                                                                                                                                                                                            </script>-->
 
         <a class="burger-item" href="achievements.html">
             <span> Достижения</span>
