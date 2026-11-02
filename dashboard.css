@@ -173,15 +173,15 @@ body {
 /* ========== АДАПТИВ ========== */
 @media (max-width: 768px) {
     .profile-btn {
-        padding: 6px;
+        padding: 4px 8px;
         gap: 0;
     }
     .profile-nickname {
         display: none;
     }
     .profile-avatar {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
     }
 }
 
