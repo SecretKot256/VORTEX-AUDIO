@@ -74,6 +74,20 @@ def clean_lyrics(lyrics):
     lines = [line.strip() for line in cleaned.split('\n') if line.strip()]
     return '\n'.join(lines)
 
+# ПОИСК: LYRICS.OVH 
+def try_lyrics_ovh(track_name, artist_name=""):
+    try:
+        url = f"https://api.lyrics.ovh/v1/{artist_name}/{track_name}"
+        response = requests.get(url, timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            lyrics = data.get("lyrics", "")
+            if lyrics:
+                return track_name, artist_name, lyrics, ""
+        return None, None, None, None
+    except Exception as e:
+        print(f"Lyrics.ovh не сработал: {e}")
+        return None, None, None, None
 
 # ===== ПОИСК: LRCLIB (список песен) =====
 def search_lrclib(track_name, artist_name=""):
@@ -304,9 +318,17 @@ def check_by_id():
         return jsonify({"success": False, "message": "Не указан ID песни"}), 400
     
     song = get_lyrics_by_id(song_id)
-    
-    if not song:
-        return jsonify({"success": False, "message": "Не удалось получить текст"})
+
+# Если LRCLIB не смог, пробуем Lyrics.ovh
+if not song:
+    print("LRCLIB не смог, пробуем Lyrics.ovh...")
+    title, artist, lyrics, cover = try_lyrics_ovh(data.get('track_name', ''), data.get('artist', ''))
+    if lyrics:
+        song = {
+            "title": title,
+            "artist": artist,
+            "lyrics": lyrics
+        }
     
     # Анализируем текст
     analysis = analyze_lyrics(song['lyrics'])
