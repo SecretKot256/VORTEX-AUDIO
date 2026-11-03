@@ -22,7 +22,7 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE')
     return response
 
-GENIUS_TOKEN = ('xOTPqcMbn0IrFZhLrBUVcDQkFAM6Mo_1u7Bb2uztucPKMcKhkcIuPqgHIYUUMTTB')
+GENIUS_TOKEN = os.environ.get("GENIUS_TOKEN", "")
 
 BAD_WORDS = {
     "бля", "блять", "сука", "суки", "нахер", "нахуй", "хуй", "хуя", "хуе", "хую",
