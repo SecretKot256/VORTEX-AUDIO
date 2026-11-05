@@ -249,6 +249,45 @@ async function tryCheckTrack() {
         return;
     }
 
+    // ===== ПАСХАЛКИ =====
+const secretArtist = artistName.toLowerCase().trim();
+const secretTrack = trackName.toLowerCase().trim();
+
+// 1. Даша
+if (secretArtist === 'dasha gavrilenko' && !secretTrack) {
+    window.location.href = 'dasha.html';
+    return;
+}
+// 2. Савелий
+if (secretArtist === 'savelii petrov' && !secretTrack) {
+    window.location.href = 'https://steamcommunity.com/id/SecretKotGames/';
+    return;
+}
+// 3. Секрет Кот
+if (secretArtist === 'secret kot') {
+    window.location.href = 'https://secretkot256.github.io/Secret.Kot.ru/Glavnaia.html';
+    return;
+}
+// 4. День Vortex
+const today = new Date();
+const isVortexDay = (today.getMonth() === 7 && today.getDate() === 22); // 22 августа
+const currentYear = today.getFullYear();
+const notesGift = currentYear - 2020; // Если 2026 -> 6 нот
+
+if (secretTrack === 'vortex audio' && secretArtist === 'savelii petrov' && isVortexDay) {
+    alert(`🎉 С Днем Vortex! Ты получаешь скидку 50% на всё и +${notesGift} нот в подарок!`);
+    userData.notesBalance += notesGift;
+    localStorage.setItem('vortex_notes', userData.notesBalance);
+    updateCheckButton();
+    return;
+}
+// 5. Дипик
+if (secretArtist === 'дипик') {
+    window.location.href = 'https://platform.deepseek.com';
+    return;
+}
+// ==============================
+
     const btn = document.getElementById('checkTrackBtn');
     btn.innerHTML = '⏳ Анализируем...';
     btn.classList.add('disabled');

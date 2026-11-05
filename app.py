@@ -368,6 +368,15 @@ def check_by_id():
         "overall": {"score": overall, "verdict": overall_verdict, "mood": "🎵"}
     })
 
+@app.route('/api/yandex-login', methods=['POST'])
+def yandex_login():
+    data = request.json
+    code = data.get('code')
+    
+    # Здесь мы меняем код на токен (это делает сервер)
+    # Пока просто заглушка, чтобы проверить работу
+    return jsonify({"success": True, "message": "Код получен! (Реализация в процессе)"})
+
 # ===== API НОВОСТЕЙ (только чтение) =====
 @app.route('/api/news', methods=['GET'])
 def get_news():

@@ -1911,6 +1911,7 @@ body.light .method-option-sub {
     margin: 0 16px 16px 16px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     gap: 10px;
+    /* По умолчанию (телефон) - плеер просто лежит в меню */
 }
 
 #vortexPlayer .music-title {
@@ -1938,14 +1939,16 @@ body.light .method-option-sub {
     flex-shrink: 0;
 }
 
-/* МАГИЯ ДЛЯ КОМПА */
+/* ========================================= */
+/* МАГИЯ ДЛЯ КОМПА (экран больше 768px) */
+/* ========================================= */
 @media (min-width: 769px) {
     #vortexPlayer.main-player {
         position: fixed;
-        top: 20px; /* Подняли выше */
+        top: 20px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 50; /* Опустили НИЖЕ бургер-меню (у него 100) */
+        z-index: 50; /* Меню (100) перекрывает плеер (50) */
         background: rgba(20, 20, 20, 0.9);
         backdrop-filter: blur(10px);
         border: 1px solid #444;
@@ -1953,7 +1956,7 @@ body.light .method-option-sub {
         padding: 10px 25px;
         margin: 0;
         gap: 20px;
-        min-width: 320px; /* Сделали шире */
+        min-width: 320px;
         box-shadow: 0 4px 25px rgba(0,0,0,0.6);
     }
     
