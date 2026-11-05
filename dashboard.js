@@ -208,10 +208,19 @@ function updateCheckButton() {
     btn.style.background = '#6C5CE7';
     btn.style.color = '#fff';
 
+    // 1. Если есть ноты
     if (userData.notesBalance > 0) {
-        btn.innerHTML = btn.textContent = 'Проверить'; 
+        btn.textContent = 'Проверить (1 нота)'; 
         btn.onclick = tryCheckTrack;
-    } else {
+    } 
+    // 2. Если есть бесплатные проверки
+    else if (userData.freeChecks > 0) {
+        btn.textContent = '🎁 Бесплатно (' + userData.freeChecks + ')';
+        btn.style.background = '#4CAF50';
+        btn.onclick = tryCheckTrack;
+    } 
+    // 3. Если ничего нет
+    else {
         btn.classList.add('disabled');
         btn.textContent = '❌ Не хватает нот';
         btn.style.background = '#444';
@@ -219,16 +228,6 @@ function updateCheckButton() {
         btn.onclick = null;
     }
 }
-
-function showErrorNotes() { document.getElementById('errorNotesOverlay').classList.add('show'); }
-function openShopFromError() {
-    document.getElementById('errorNotesOverlay').classList.remove('show');
-    openShop();
-}
-
-document.getElementById('errorNotesOverlay').addEventListener('click', function(e) {
-    if (e.target === this) this.classList.remove('show');
-});
 
 // ========== СЧЁТЧИК ==========
 let totalChecked = 25000;
