@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="shop.css">
+    <link rel="stylesheet" href="toast.css">
+</head>
+<body>
+    <a href="dashboard.html" class="back-btn">← Назад</a>
+
+    <div class="shop-container">
+        <h1 class="shop-header">Магазин</h1>
+        <p class="shop-sub">Пополни баланс и открой новые возможности</p>
+
+        <!-- Вкладки -->
+        <div class="shop-tabs">
+            <button class="shop-tab active" onclick="switchTab('notes')">💎 Ноты</button>
+            <button class="shop-tab" onclick="switchTab('subs')">👑 Подписки</button>
+            <button class="shop-tab" onclick="switchTab('promo')">🎁 Акции</button>
+        </div>
+
+        <!-- Вкладка: Ноты -->
+        <div id="tab-notes" class="tab-content active">
+            <div class="balance-info">Ваш баланс: <span id="shopBalance">0</span> нот</div>
+            
+            <div class="packs-grid">
+                <div class="pack" onclick="buyPack(10, 79)">
+                    <div class="pack-amount">10 нот</div>
+                    <div class="pack-price">79 ₽</div>
+                </div>
+                <div class="pack" onclick="buyPack(50, 399)">
+                    <div class="pack-amount">50 нот</div>
+                    <div class="pack-price">399 ₽</div>
+                </div>
+                <div class="pack" onclick="buyPack(100, 799)">
+                    <div class="pack-amount">100 нот</div>
+                    <div class="pack-price">799 ₽</div>
+                </div>
+                <div class="pack" onclick="buyPack(250, 2299)">
+                    <div class="pack-amount">250 нот</div>
+                    <div class="pack-price">2 299 ₽</div>
+                </div>
+                <div class="pack" onclick="buyPack(500, 3599)">
+                    <div class="pack-amount">500 нот</div>
+                    <div class="pack-price">3 599 ₽</div>
+                </div>
+                <div class="pack" onclick="buyPack(1000, 7999)">
+                    <div class="pack-amount">1000 нот</div>
+                    <div class="pack-price">7 999 ₽</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка: Подписки -->
+        <div id="tab-subs" class="tab-content">
+            <div class="subs-grid">
+                <div class="sub-pack bronze">
+                    <h3>🥉 Бронзовый</h3>
+                    <ul><li>25 нот в месяц</li><li>Бронзовая аура</li></ul>
+                    <div class="sub-price">299 ₽ / мес</div>
+                    <button onclick="buySub('bronze')">Выбрать</button>
+                </div>
+                <div class="sub-pack gold">
+                    <h3>🥇 Золотой</h3>
+                    <ul><li>50 нот в месяц</li><li>Золотая аура</li><li>Плеер песен</li></ul>
+                    <div class="sub-price">499 ₽ / мес</div>
+                    <button onclick="buySub('gold')">Выбрать</button>
+                </div>
+                <div class="sub-pack diamond">
+                    <h3>💎 Бриллиантовый</h3>
+                    <ul><li>100 нот в месяц</li><li>Аура + плеер</li><li>Без очереди</li></ul>
+                    <div class="sub-price">799 ₽ / мес</div>
+                    <button onclick="buySub('diamond')">Выбрать</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вкладка: Акции -->
+        <div id="tab-promo" class="tab-content">
+            <div class="promo-card">
+                <h3>🎉 День Vortex!</h3>
+                <p>Введи промокод <b>VORTEX2026</b> и получи <b>+6 нот</b> бесплатно!</p>
+                <button onclick="activatePromo()">Активировать</button>
+            </div>
+            <div class="promo-card">
+                <h3>🤖 ИИ-Анализ</h3>
+                <p>Первый анализ текста от ИИ — <b>бесплатно</b>. Следующие — 2 ноты.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Окно оплаты -->
+    <div class="payment-overlay" id="payOverlay">
+        <div class="payment-popup">
+            <h2>Оплата</h2>
+            <p>Вы выбрали: <span id="payItem"></span></p>
+            <p>Сумма: <span id="payAmount"></span> ₽</p>
+            <button class="pay-btn" onclick="confirmPayment()">Оплатить</button>
+            <button class="cancel-btn" onclick="closePayment()">Отмена</button>
+        </div>
+    </div>
+
+    <script src="shop.js"></script>
+</body>
+</html>

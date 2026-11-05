@@ -368,14 +368,79 @@ def check_by_id():
         "overall": {"score": overall, "verdict": overall_verdict, "mood": "🎵"}
     })
 
+# ===== ВХОД ЧЕРЕЗ ЯНДЕКС =====
 @app.route('/api/yandex-login', methods=['POST'])
 def yandex_login():
     data = request.json
     code = data.get('code')
     
-    # Здесь мы меняем код на токен (это делает сервер)
-    # Пока просто заглушка, чтобы проверить работу
-    return jsonify({"success": True, "message": "Код получен! (Реализация в процессе)"})
+    if not code:
+        return jsonify({"success": False, "message": "Нет кода авторизации"}), 400
+
+    # ВСТАВЬ СВОИ КЛЮЧИ СЮДА (потом мы их спрячем в переменные окружения, как с Genius)
+    YANDEX_CLIENT_ID = "f1f23a650f6844d49d0dec2dba6ac508"
+    YANDEX_CLIENT_SECRET = "923cc8669216492f8ad9843621fbc32b"
+    REDIRECT_URI = "https://secretkot256.github.io/VORTEX-AUDIO/auth.html"
+
+    # Меняем код на токен
+    token_url = "https://oauth.yandex.ru/token"
+    token_data = {
+        "grant_type": "authorization_code",
+        "code": code,
+        "client_id": YANDEX_CLIENT_ID,
+        "client_secret": YANDEX_CLIENT_SECRET,
+        "redirect_uri": REDIRECT_URI
+    }
+    
+    try:
+        response = requests.post(token_url, data=token_data, timeout=10)
+        token_json = response.json()
+        
+        if "access_token" not in token_json:
+            return jsonify({"success": False, "message": "Ошибка Яндекса", "details": token_json}), 400
+            
+        access_token = token_json["access_token"]
+        
+        # Получаем данные пользователя
+        user_info_url = "https://login.yandex.ru/info"
+        headers = {"Authorization": f"OAuth {access_token}"}
+        user_response = requests.get(user_info_url, headers=headers, timeout=10)
+        user_data = user_response.json()
+        
+        # Создаем или логиним пользователя в нашей базе
+        username = user_data.get("login", "yandex_user")
+        email = user_data.get("default_email", "")
+        avatar = f"https://avatars.yandex.net/get-yapic/{user_data.get('default_avatar_id')}/islands-200" if user_data.get('default_avatar_id') else "default-avatar.png"
+        
+        users = load_users()
+        if username not in users:
+            users[username] = {
+                "password": "yandex_auth", # Заглушка, так как вход по Яндексу
+                "email": email,
+                "avatar": avatar,
+                "phone": None,
+                "notes_balance": 0,
+                "free_checks": 1,
+                "songs_checked": 0,
+                "subscription": "none",
+                "created_at": datetime.now().isoformat()
+            }
+            save_users(users)
+        
+        return jsonify({
+            "success": True,
+            "user": {
+                "username": username,
+                "email": email,
+                "avatar": avatar,
+                "notes_balance": users[username].get('notes_balance', 0),
+                "free_checks": users[username].get('free_checks', 1)
+            }
+        })
+        
+    except Exception as e:
+        print(f"Ошибка Яндекса: {e}")
+        return jsonify({"success": False, "message": "Сервер не смог связаться с Яндексом"}), 500
 
 # ===== API НОВОСТЕЙ (только чтение) =====
 @app.route('/api/news', methods=['GET'])
@@ -383,6 +448,42 @@ def get_news():
     data = load_news()
     news = sorted(data['news'], key=lambda x: x.get('id', 0), reverse=True)
     return jsonify({"success": True, "news": news})
+
+    # ===== ИИ АНАЛИЗ =====
+HF_TOKEN = os.environ.get("HF_TOKEN", "")
+
+def analyze_with_ai(lyrics):
+    if not HF_TOKEN or not lyrics:
+        return "Для ИИ-анализа нужен токен или текст."
+    
+    API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
+    headers = {"Authorization": f"Bearer {HF_TOKEN}"}
+    short_lyrics = lyrics[:1500]
+    prompt = f"Проанализируй текст песни. Напиши в 2-3 предложениях, о чём она (тема) и какие эмоции вызывает. Вот текст:\n\n{short_lyrics}"
+    payload = {"inputs": prompt, "parameters": {"max_new_tokens": 150}}
+    
+    try:
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=20)
+        if response.status_code == 200:
+            result = response.json()
+            return result[0].get("generated_text", "").replace(prompt, "").strip()
+        else:
+            print(f"HF error: {response.status_code} - {response.text}")
+            return "ИИ сейчас перегружен, попробуй позже."
+    except Exception as e:
+        print(f"Ошибка ИИ: {e}")
+        return "Не удалось получить анализ."
+
+@app.route('/api/ai-analyze', methods=['POST'])
+def ai_analyze():
+    data = request.json
+    lyrics = data.get('lyrics', '')
+    
+    if not lyrics:
+        return jsonify({"success": False, "message": "Нет текста"})
+        
+    analysis = analyze_with_ai(lyrics)
+    return jsonify({"success": True, "ai_analysis": analysis})
 
 # ===== ЗАПУСК =====
 if __name__ == '__main__':

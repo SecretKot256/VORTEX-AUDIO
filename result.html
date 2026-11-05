@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <button class="share-btn" onclick="shareResult()">📤 Поделиться</button>
+        <button class="share-btn" onclick="window.location.href='dashboard.html'" style="background: #2a2a2a; margin-top: 10px;">🎵 Проверить другую песню</button>
     </div>
 
     <!-- Попап -->
@@ -295,8 +295,12 @@ function animateCards() {
             });
 
             document.getElementById('popupTitle').textContent = '📄 Текст песни';
-            document.getElementById('popupBody').innerHTML = 
-                `<div class="popup-lyrics">${html.replace(/\n/g, '<br>')}</div>`;
+            document.getElementById('popupBody').innerHTML = `
+            <div class="popup-lyrics">${html.replace(/\n/g, '<br>')}</div>
+            <button class="popup-btn" onclick="downloadLyrics()" style="margin-top: 15px; background: #4CAF50; color: white;">📥 Скачать текст (.txt)</button>
+            <button class="popup-btn" onclick="runAiAnalysis()" style="margin-top: 10px; background: #6C5CE7; color: white;">🤖 Анализ от ИИ (бета)</button>
+            <div id="aiResult" style="margin-top: 15px; color: #a78bfa; font-size: 14px;"></div>
+            `;
         }
 
         // ===== ПЕРЕВОД =====
@@ -366,6 +370,28 @@ function openListenPopup(event) {
 function closeListenPopup(event) {
     if (event) event.stopPropagation();
     document.getElementById('listenPopup').classList.remove('show');
+}
+
+function runAiAnalysis() {
+    const resultDiv = document.getElementById('aiResult');
+    resultDiv.innerHTML = '⏳ ИИ думает... (это займет несколько секунд)';
+    
+    fetch('https://vortex-audio-2ea62.containers.snapdeploy.app/api/ai-analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lyrics: data.lyrics })
+    })
+    .then(r => r.json())
+    .then(res => {
+        if (res.success) {
+            resultDiv.innerHTML = `<strong>🤖 ИИ:</strong> ${res.ai_analysis}`;
+        } else {
+            resultDiv.innerHTML = `❌ Ошибка: ${res.message}`;
+        }
+    })
+    .catch(() => {
+        resultDiv.innerHTML = '❌ Сервер недоступен';
+    });
 }
     </script>
     <script src="toast.js"></script>

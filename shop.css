@@ -1,0 +1,100 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Geogrotesque Cyr', sans-serif;
+    background: linear-gradient(135deg, #0b0f1a, #1a0b2e);
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.back-btn {
+    position: fixed; top: 20px; left: 20px;
+    padding: 10px 20px; background: rgba(26,26,26,0.9);
+    border: 1px solid #333; border-radius: 25px;
+    color: #ccc; text-decoration: none; font-size: 14px;
+    z-index: 100; transition: 0.2s;
+}
+.back-btn:hover { background: #6C5CE7; color: #fff; border-color: #6C5CE7; }
+
+.shop-container { max-width: 900px; margin: 80px auto 40px; text-align: center; }
+.shop-header { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
+.shop-sub { color: #888; margin-bottom: 30px; }
+
+.shop-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
+.shop-tab {
+    padding: 10px 24px; background: #1a1a1a; border: 1px solid #333;
+    border-radius: 20px; color: #aaa; font-size: 15px; cursor: pointer; transition: 0.2s;
+}
+.shop-tab.active { background: #6C5CE7; color: #fff; border-color: #6C5CE7; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.balance-info { font-size: 18px; margin-bottom: 20px; color: #888; }
+.balance-info span { color: #fff; font-weight: 700; }
+
+.packs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; max-width: 700px; margin: 0 auto; }
+.pack {
+    background: #1a1a1a; border: 1px solid #333; border-radius: 16px;
+    padding: 20px; cursor: pointer; transition: 0.2s;
+}
+.pack:hover { border-color: #6C5CE7; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(108,92,231,0.2); }
+.pack-amount { font-size: 20px; font-weight: 800; margin-bottom: 5px; }
+.pack-price { color: #a78bfa; font-weight: 600; }
+
+.subs-grid { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+.sub-pack {
+    background: #1a1a1a; border: 1px solid #333; border-radius: 20px;
+    padding: 25px; width: 250px; text-align: left; display: flex; flex-direction: column;
+}
+.sub-pack.bronze { border-color: #cd7f32; }
+.sub-pack.gold { border-color: #ffd700; }
+.sub-pack.diamond { border-color: #b9f2ff; }
+.sub-pack h3 { font-size: 18px; margin-bottom: 15px; }
+.sub-pack ul { list-style: none; font-size: 13px; color: #aaa; margin-bottom: 20px; flex-grow: 1; }
+.sub-pack ul li { margin-bottom: 8px; }
+.sub-price { font-size: 20px; font-weight: 700; margin-bottom: 15px; }
+.sub-pack button {
+    width: 100%; padding: 10px; background: #6C5CE7; color: #fff;
+    border: none; border-radius: 12px; cursor: pointer; font-weight: 600;
+}
+.sub-pack button:hover { background: #7C6CF7; }
+
+.promo-card {
+    background: #1a1a1a; border: 1px solid #333; border-radius: 16px;
+    padding: 25px; max-width: 600px; margin: 0 auto 15px; text-align: left;
+}
+.promo-card h3 { margin-bottom: 10px; }
+.promo-card p { color: #aaa; font-size: 14px; margin-bottom: 15px; }
+.promo-card button {
+    padding: 10px 20px; background: #4CAF50; color: #fff; border: none;
+    border-radius: 10px; cursor: pointer; font-weight: 600;
+}
+
+/* Окно оплаты */
+.payment-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+    z-index: 1000; justify-content: center; align-items: center;
+}
+.payment-overlay.show { display: flex; }
+.payment-popup {
+    background: #141414; border: 1px solid #333; border-radius: 20px;
+    padding: 30px; text-align: center; max-width: 400px; width: 100%;
+}
+.payment-popup h2 { margin-bottom: 15px; }
+.payment-popup p { color: #aaa; margin-bottom: 10px; }
+.payment-popup span { color: #fff; font-weight: 700; }
+.pay-btn {
+    width: 100%; padding: 14px; background: #4CAF50; color: #fff;
+    border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
+    cursor: pointer; margin-top: 20px; margin-bottom: 10px;
+}
+.cancel-btn { background: transparent; border: none; color: #888; cursor: pointer; font-size: 14px; }
+
+@media (max-width: 768px) {
+    .packs-grid { grid-template-columns: repeat(2, 1fr); }
+    .subs-grid { flex-direction: column; align-items: center; }
+    .sub-pack { width: 100%; max-width: 300px; }
+}

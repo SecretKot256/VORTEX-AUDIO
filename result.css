@@ -702,6 +702,14 @@ body.light .partners-title {
     margin-top: 2px;
 }
 
+.share-btn + .share-btn {
+    margin-top: 10px;
+    background: #2a2a2a;
+}
+.share-btn + .share-btn:hover {
+    background: #444;
+}
+
 /* Светлая тема */
 body.light .listen-popup {
     background: #fff;
