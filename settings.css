@@ -270,6 +270,50 @@
     transform: translateX(22px);
 }
 
+/* ===== ЦВЕТОВЫЕ ТЕМЫ ===== */
+.theme-options {
+    display: flex;
+    gap: 10px;
+}
+.theme-opt {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.theme-opt:hover {
+    transform: scale(1.1);
+}
+.theme-opt.active {
+    border-color: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* Неон */
+body.theme-neon .save-btn, 
+body.theme-neon .settings-tab.active, 
+body.theme-neon .lang-select-btn.active { 
+    background: #00FF88 !important; 
+    color: #000 !important; 
+}
+
+/* Космос */
+body.theme-space .save-btn, 
+body.theme-space .settings-tab.active,
+body.theme-space .lang-select-btn.active { 
+    background: #FF0055 !important; 
+}
+
+/* Ретро */
+body.theme-retro .save-btn, 
+body.theme-retro .settings-tab.active,
+body.theme-retro .lang-select-btn.active { 
+    background: #FFAA00 !important; 
+    color: #000 !important; 
+}
+
 /* ===== АДАПТИВ ===== */
 @media (max-width: 768px) {
     .settings-container {

@@ -6,10 +6,27 @@ const params = new URLSearchParams(window.location.search);
 const trackName = params.get('track') || '';
 const artistName = params.get('artist') || '';
 
+const FUN_FACTS = [
+    "Первая в мире песня была записана в 1860 году.",
+    "У королевы Великобритании есть свой плейлист на Spotify.",
+    "Слово 'фонк' происходит от бразильского 'funk' (вечеринка).",
+    "Песня 'Happy Birthday' до сих пор под защитой авторских прав.",
+    "У кошек есть своя музыка — она написана в высоких частотах.",
+    "Самый длинный концерт длился 453 часа (это почти 19 дней!).",
+    "Моцарт написал свою первую симфонию в 8 лет.",
+    "В космосе нельзя петь так, как на Земле — нет воздуха для звука."
+];
+
 // ========== СКЕЛЕТОН ==========
 function renderSkeleton(count = 4) {
     const list = document.getElementById('songsList');
     list.innerHTML = '';
+    // Добавляем забавный факт
+    const factDiv = document.createElement('div');
+    factDiv.className = 'fun-fact';
+    factDiv.style.cssText = 'text-align: center; color: #888; font-size: 14px; margin-bottom: 20px; animation: fadeIn 0.5s ease;';
+    factDiv.innerHTML = `💡 <b>А вы знали?</b> ${FUN_FACTS[Math.floor(Math.random() * FUN_FACTS.length)]}`;
+    list.appendChild(factDiv);
     for (let i = 0; i < count; i++) {
         const card = document.createElement('div');
         card.className = 'skeleton-card';

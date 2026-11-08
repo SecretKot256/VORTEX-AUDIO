@@ -199,6 +199,38 @@ function toggleAutoplay(value) {
     });
 })();
 
+// ===== ЦВЕТОВЫЕ ТЕМЫ =====
+function setTheme(theme, event) {
+    // Убираем старые темы
+    document.body.classList.remove('theme-neon', 'theme-space', 'theme-retro');
+    document.querySelectorAll('.theme-opt').forEach(btn => btn.classList.remove('active'));
+    
+    // Добавляем новую
+    if (theme !== 'default') {
+        document.body.classList.add(`theme-${theme}`);
+    }
+    
+    // Подсвечиваем кнопку
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
+    
+    // Сохраняем в память
+    localStorage.setItem('vortex_theme_color', theme);
+}
+
+// Восстановление темы при загрузке
+(function restoreColorTheme() {
+    const savedTheme = localStorage.getItem('vortex_theme_color') || 'default';
+    if (savedTheme !== 'default') {
+        document.body.classList.add(`theme-${savedTheme}`);
+        // Подсвечиваем нужную кнопку
+        const btns = document.querySelectorAll('.theme-opt');
+        const map = { 'default': 0, 'neon': 1, 'space': 2, 'retro': 3 };
+        if (btns[map[savedTheme]]) btns[map[savedTheme]].classList.add('active');
+    }
+})();
+
 // ========== ЗАПУСК ==========
 loadSettingsUser();
 restoreCheckboxes();

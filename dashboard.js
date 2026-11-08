@@ -249,43 +249,43 @@ async function tryCheckTrack() {
     }
 
     // ===== ПАСХАЛКИ =====
-const secretArtist = artistName.toLowerCase().trim();
-const secretTrack = trackName.toLowerCase().trim();
+    const secretArtist = artistName.toLowerCase().trim();
+    const secretTrack = trackName.toLowerCase().trim();
 
-// 1. Даша
-if (secretArtist === 'dasha gavrilenko' && !secretTrack) {
-    window.location.href = 'dasha.html';
-    return;
-}
-// 2. Савелий
-if (secretArtist === 'savelii petrov' && !secretTrack) {
-    window.location.href = 'https://steamcommunity.com/id/SecretKotGames/';
-    return;
-}
-// 3. Секрет Кот
-if (secretArtist === 'secret kot') {
-    window.location.href = 'https://secretkot256.github.io/Secret.Kot.ru/Glavnaia.html';
-    return;
-}
-// 4. День Vortex
-const today = new Date();
-const isVortexDay = (today.getMonth() === 7 && today.getDate() === 22); // 22 августа
-const currentYear = today.getFullYear();
-const notesGift = currentYear - 2020; // Если 2026 -> 6 нот
+    // 1. Даша
+    if (secretArtist === 'dasha gavrilenko' && !secretTrack) {
+        window.location.href = 'dasha.html';
+        return;
+    }
+    // 2. Савелий
+    if (secretArtist === 'savelii petrov' && !secretTrack) {
+        window.location.href = 'https://steamcommunity.com/id/SecretKotGames/';
+        return;
+    }
+    // 3. Секрет Кот
+    if (secretArtist === 'secret kot') {
+        window.location.href = 'https://secretkot256.github.io/Secret.Kot.ru/Glavnaia.html';
+        return;
+    }
+    // 4. День Vortex
+    const today = new Date();
+    const isVortexDay = (today.getMonth() === 7 && today.getDate() === 22);
+    const currentYear = today.getFullYear();
+    const notesGift = currentYear - 2020;
 
-if (secretTrack === 'vortex audio' && secretArtist === 'savelii petrov' && isVortexDay) {
-    alert(`🎉 С Днем Vortex! Ты получаешь скидку 50% на всё и +${notesGift} нот в подарок!`);
-    userData.notesBalance += notesGift;
-    localStorage.setItem('vortex_notes', userData.notesBalance);
-    updateCheckButton();
-    return;
-}
-// 5. Дипик
-if (secretArtist === 'дипик') {
-    window.location.href = 'https://platform.deepseek.com';
-    return;
-}
-// ==============================
+    if (secretTrack === 'vortex audio' && secretArtist === 'savelii petrov' && isVortexDay) {
+        alert(`🎉 С Днем Vortex! Ты получаешь скидку 50% на всё и +${notesGift} нот в подарок!`);
+        userData.notesBalance += notesGift;
+        localStorage.setItem('vortex_notes', userData.notesBalance);
+        updateCheckButton();
+        return;
+    }
+    // 5. Дипик
+    if (secretArtist === 'дипик') {
+        window.location.href = 'https://platform.deepseek.com';
+        return;
+    }
+    // ==============================
 
     const btn = document.getElementById('checkTrackBtn');
     btn.innerHTML = '⏳ Анализируем...';
@@ -305,7 +305,6 @@ if (secretArtist === 'дипик') {
         
         if (!checkHealth.ok) {
             showToast('Сервер просыпается, подожди 10-20 секунд...', 'warning');
-            // Возвращаем ноты, так как проверка не удалась
             if (userData.notesBalance > 0) userData.notesBalance++;
             else if (userData.freeChecks > 0) userData.freeChecks++;
             localStorage.setItem('vortex_notes', userData.notesBalance);
@@ -321,7 +320,6 @@ if (secretArtist === 'дипик') {
     } catch (error) {
         console.error(error);
         showToast('Сервер недоступен', 'error');
-        // Возвращаем ноты при ошибке сети
         if (userData.notesBalance > 0) userData.notesBalance++;
         else if (userData.freeChecks > 0) userData.freeChecks++;
         localStorage.setItem('vortex_notes', userData.notesBalance);
@@ -551,6 +549,36 @@ function renderAchievementsPreview() {
         `;
     }).join('');
 }
+
+// ===== ДОНАТЫ =====
+function openDonatePopup() {
+    document.getElementById('donateOverlay').classList.add('show');
+}
+
+function closeDonatePopup() {
+    document.getElementById('donateOverlay').classList.remove('show');
+}
+
+function selectDonate(amount) {
+    document.getElementById('customDonateAmount').value = amount;
+    document.querySelectorAll('.donate-option').forEach(btn => btn.classList.remove('selected'));
+    event.target.classList.add('selected');
+}
+
+function submitDonate() {
+    const amount = document.getElementById('customDonateAmount').value;
+    if (!amount || amount < 10) {
+        showToast('Введите сумму (минимум 10 ₽)', 'warning');
+        return;
+    }
+    closeDonatePopup();
+    showToast(`Спасибо за поддержку ${amount} ₽! (Оплата скоро появится)`, 'success');
+}
+
+// Закрытие по клику на оверлей
+document.getElementById('donateOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeDonatePopup();
+});
 
 // ========== ЗАПУСК ==========
 userData.cleanCount = parseInt(localStorage.getItem('vortex_clean') || '0');

@@ -432,6 +432,18 @@ body {
                                                                                                                                                                                                                                                                                                                                                     box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
                                                                                                                                                                                                                                                                                                                                                     }
 
+.fun-fact {
+    background: rgba(108, 92, 231, 0.1);
+    border: 1px solid rgba(108, 92, 231, 0.2);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin: 0 20px 20px 20px;
+    color: #ccc;
+}
+.fun-fact b {
+    color: #a78bfa;
+}
+
 /* ===== АДАПТИВ ===== */
 @media (max-width: 768px) {
     .select-title { font-size: 24px; }

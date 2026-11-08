@@ -209,6 +209,7 @@
 
         <!-- Кнопка проверки -->
         <button class="submit-btn" id="checkTrackBtn">Проверить</button>
+        <button class="support-btn" onclick="showSupport()">❤️ Поддержать Vortex</button>
     </div>
 
     <!-- ========== ПРОФИЛЬ ========== -->
@@ -274,6 +275,26 @@
 
     <!-- Загрузка аватара -->
     <input type="file" id="avatarFileInput" accept="image/*" onchange="handleAvatarUpload(event)" style="display:none;">
+
+    <!-- Попап доната -->
+<div class="donate-overlay" id="donateOverlay">
+    <div class="donate-popup">
+        <button class="donate-close" onclick="closeDonatePopup()">✕</button>
+        <h2 class="donate-title">❤️ Поддержать Vortex</h2>
+        <p class="donate-sub">Ваша поддержка помогает развивать проект</p>
+        
+        <div class="donate-options">
+            <button class="donate-option" onclick="selectDonate(100)">100 ₽</button>
+            <button class="donate-option" onclick="selectDonate(300)">300 ₽</button>
+            <button class="donate-option" onclick="selectDonate(500)">500 ₽</button>
+        </div>
+        
+        <div class="donate-custom">
+            <input type="number" id="customDonateAmount" placeholder="Своя сумма (₽)" class="donate-input">
+            <button class="donate-submit" onclick="submitDonate()">Поддержать</button>
+        </div>
+    </div>
+</div>
 
     <script src="dashboard.js"></script>
     <script src="toast.js"></script>
