@@ -74,6 +74,19 @@ def clean_lyrics(lyrics):
     lines = [line.strip() for line in cleaned.split('\n') if line.strip()]
     return '\n'.join(lines)
 
+def try_lyricsfind(track_name, artist_name=""):
+    try:
+        url = f"https://api.lyricsfind.com/v1/search?q={track_name}+{artist_name}"
+        response = requests.get(url, timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            if data and data.get("lyrics"):
+                return track_name, artist_name, data["lyrics"], ""
+        return None, None, None, None
+    except Exception as e:
+        print(f"LyricsFind не сработал: {e}")
+        return None, None, None, None
+
 # ПОИСК: LYRICS.OVH 
 def try_lyrics_ovh(track_name, artist_name=""):
     try:
@@ -317,21 +330,22 @@ def check_by_id():
     if not song_id:
         return jsonify({"success": False, "message": "Не указан ID песни"}), 400
 
-    song = get_lyrics_by_id(song_id)
+        song = get_lyrics_by_id(song_id)
 
-    # Если LRCLIB не смог, пробуем Lyrics.ovh
     if not song:
         print("LRCLIB не смог, пробуем Lyrics.ovh...")
         title, artist, lyrics, cover = try_lyrics_ovh(data.get('track_name', ''), data.get('artist', ''))
-        if lyrics:
-            song = {
-                "title": title,
-                "artist": artist,
-                "lyrics": lyrics
-            }
+    if lyrics:
+        song = {"title": title, "artist": artist, "lyrics": lyrics}
 
     if not song:
-        return jsonify({"success": False, "message": "Не удалось получить текст"})
+        print("Lyrics.ovh не смог, пробуем LyricsFind...")
+        title, artist, lyrics, cover = try_lyricsfind(data.get('track_name', ''), data.get('artist', ''))
+    if lyrics:
+        song = {"title": title, "artist": artist, "lyrics": lyrics}
+
+        if not song:
+            return jsonify({"success": False, "message": "Не удалось получить текст"})
 
     # Анализируем текст
     analysis = analyze_lyrics(song['lyrics'])
