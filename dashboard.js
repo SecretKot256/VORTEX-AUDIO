@@ -27,6 +27,11 @@ function loadUser() {
 
     userData.isLoggedIn = true;
     userData.nickname = savedUser;
+    // Обновляем партнерскую ссылку
+    const refInput = document.getElementById('refLink');
+    if (refInput) {
+        refInput.value = `https://secretkot256.github.io/VORTEX-AUDIO/?ref=${savedUser}`;
+    }
     userData.email = savedEmail || '';
     userData.avatar = savedAvatar || 'default-avatar.png';
     userData.notesBalance = parseInt(localStorage.getItem('vortex_notes') || '0');
@@ -580,8 +585,43 @@ document.getElementById('donateOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeDonatePopup();
 });
 
+// ===== ПАРТНЕРКА =====
+function copyRefLink() {
+    const linkInput = document.getElementById('refLink');
+    if (!linkInput) return;
+    linkInput.select();
+    linkInput.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(linkInput.value);
+    showToast('Ссылка скопирована!', 'success');
+}
+
+// Проверка реферала при загрузке сайта
+function checkReferral() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const refUser = urlParams.get('ref');
+    
+    // Если есть реферал и он не совпадает с текущим пользователем
+    if (refUser && refUser !== userData.nickname) {
+        // Проверяем, не начисляли ли уже бонус этому устройству
+        const hasBonus = localStorage.getItem('vortex_ref_bonus');
+        
+        if (!hasBonus) {
+            // Защита: записываем, что с этого устройства бонус уже получен
+            localStorage.setItem('vortex_ref_bonus', 'true');
+            
+            // Начисляем 10 нот тому, кто пришел (или можно отправлять запрос на сервер, чтобы начислить пригласившему)
+            userData.notesBalance += 10;
+            localStorage.setItem('vortex_notes', userData.notesBalance);
+            updateCheckButton();
+            
+            showToast(`Вам начислено 10 нот за переход по ссылке!`, 'success');
+        }
+    }
+}
+
 // ========== ЗАПУСК ==========
 userData.cleanCount = parseInt(localStorage.getItem('vortex_clean') || '0');
 userData.dirtyCount = parseInt(localStorage.getItem('vortex_dirty') || '0');
 loadUser();
 updateCheckButton();
+checkReferral();

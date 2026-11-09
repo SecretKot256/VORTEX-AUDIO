@@ -17,6 +17,13 @@ body {
 }
 .back-btn:hover { background: #6C5CE7; color: #fff; border-color: #6C5CE7; }
 
+.sub-pack.radio {
+    border-color: #00FF88; /* Неоново-зеленый цвет */
+}
+.sub-pack.radio .sub-pack-price {
+    color: #00FF88;
+}
+
 .shop-container { max-width: 900px; margin: 80px auto 40px; text-align: center; }
 .shop-header { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
 .shop-sub { color: #888; margin-bottom: 30px; }

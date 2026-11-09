@@ -235,6 +235,12 @@ body {
                                                                                                                                                     filter: invert(1); /* Делаем яблоко черным для светлой темы */
                                                                                                                                                     }
 
+#privacyCheckbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
 /* Адаптив */
 @media (max-width: 480px) {
     .auth-box {

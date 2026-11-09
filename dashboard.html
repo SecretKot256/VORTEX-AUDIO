@@ -255,6 +255,16 @@
             </div>
 
             <button class="buy-notes-btn" onclick="window.location.href='shop.html'"> Купить ноты</button>
+
+            <div class="referral-block" style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid #333;">
+    <div style="font-size: 13px; color: #888; margin-bottom: 8px;">Ваша партнерская ссылка:</div>
+    <div style="display: flex; gap: 8px;">
+        <input type="text" id="refLink" value="https://secretkot256.github.io/VORTEX-AUDIO/?ref=USERNAME" readonly style="flex: 1; background: #111; border: 1px solid #333; color: #fff; padding: 8px; border-radius: 8px; font-size: 12px; outline: none;">
+        <button onclick="copyRefLink()" style="background: #6C5CE7; color: #fff; border: none; border-radius: 8px; padding: 0 15px; cursor: pointer; font-weight: 700;">Копировать</button>
+    </div>
+    <div style="font-size: 11px; color: #666; margin-top: 8px;">Приведи друга — получи 10 нот!</div>
+</div>
+
             <button class="buy-notes-btn logout-btn" onclick="logout()"> Выйти</button>
 </div>
         </div>

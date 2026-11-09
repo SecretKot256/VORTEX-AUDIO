@@ -20,9 +20,16 @@ function buyPack(amount, price) {
 }
 
 function buySub(sub) {
-    let itemName = sub === 'bronze' ? 'Бронзовая подписка' : sub === 'gold' ? 'Золотая подписка' : 'Бриллиантовая подписка';
-    let price = sub === 'bronze' ? 299 : sub === 'gold' ? 499 : 799;
+    let itemName = sub === 'bronze' ? 'Бронзовая подписка' : 
+                   sub === 'gold' ? 'Золотая подписка' : 
+                   sub === 'diamond' ? 'Бриллиантовая подписка' : 
+                   'Радио подписка'; // <-- добавили Радио
     
+    let price = sub === 'bronze' ? 299 : 
+                sub === 'gold' ? 499 : 
+                sub === 'diamond' ? 1500 : // <-- изменили цену
+                1000; // <-- цена Радио
+
     currentPayment = { type: 'sub', item: itemName, amount: price, sub: sub };
     document.getElementById('payItem').textContent = itemName;
     document.getElementById('payAmount').textContent = price;
