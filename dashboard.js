@@ -619,6 +619,20 @@ function checkReferral() {
     }
 }
 
+// Проверка подписки на Радио
+function checkRadioAccess() {
+    const sub = localStorage.getItem('vortex_subscription');
+    const radioBtn = document.getElementById('radioMainBtn');
+    
+    if (radioBtn) {
+        if (sub === 'radio' || sub === 'diamond') {
+            radioBtn.style.display = 'inline-block'; // Показываем
+        } else {
+            radioBtn.style.display = 'none'; // Скрываем
+        }
+    }
+}
+
 // ========== ЗАПУСК ==========
 userData.cleanCount = parseInt(localStorage.getItem('vortex_clean') || '0');
 userData.dirtyCount = parseInt(localStorage.getItem('vortex_dirty') || '0');
