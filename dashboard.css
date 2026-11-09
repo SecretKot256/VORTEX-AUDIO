@@ -1832,6 +1832,24 @@ body.light .method-option-sub {
     transform: translateY(-2px);
 }
 
+.radio-main-btn {
+    margin-top: 15px;
+    padding: 12px 30px;
+    background: transparent;
+    color: #00FF88; /* Неоновый цвет */
+    border: 1px solid #00FF88;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.radio-main-btn:hover {
+    background: #00FF88;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+}
+
 /* Светлая тема */
 body.light .achievement {
     background: #f0f0f0;

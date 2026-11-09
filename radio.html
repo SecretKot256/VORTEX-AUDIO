@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex Radio — VORTEX AUDIO</title>
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="radio.css">
+    <link rel="stylesheet" href="toast.css">
+</head>
+<body>
+
+    <a href="dashboard.html" class="back-btn">← Назад</a>
+
+    <div class="radio-container">
+        <h1 class="radio-title">📻 VORTEX RADIO</h1>
+        <p class="radio-sub">Только проверенные треки. Выбирай режим и кайфуй.</p>
+
+        <!-- Выбор режима -->
+        <div class="radio-modes">
+            <button class="radio-mode active" onclick="setRadioMode('clean')">✅ Только чистые</button>
+            <button class="radio-mode" onclick="setRadioMode('dirty')">🔥 Только грязные</button>
+            <button class="radio-mode" onclick="setRadioMode('instrumental')">🎹 Инструментал</button>
+        </div>
+
+        <!-- Плеер -->
+        <div class="radio-player">
+            <div class="radio-cover" id="radioCover">🎵</div>
+            <div class="radio-info">
+                <div class="radio-track" id="radioTrack">Нажми Play, чтобы начать</div>
+                <div class="radio-artist" id="radioArtist">VORTEX RADIO</div>
+            </div>
+            <button class="radio-play-btn" id="radioPlayBtn" onclick="toggleRadio()">▶</button>
+        </div>
+    </div>
+
+    <script src="radio.js"></script>
+</body>
+</html>
