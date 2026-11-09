@@ -78,55 +78,7 @@
                                                                                                                                                                                                                 </div>
         </div>
     </div>
-    <script src="auth.js">
-
-// ===== ЯНДЕКС ВХОД =====
-const YANDEX_CLIENT_ID = "f1f23a650f6844d49d0dec2dba6ac508"; 
-const REDIRECT_URI = "https://secretkot256.github.io/VORTEX-AUDIO/auth.html";
-
-function loginYandex() {
-    // Перенаправляем на Яндекс
-    window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${YANDEX_CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
-}
-
-// Проверяем, вернулся ли пользователь с кодом от Яндекса
-window.addEventListener('load', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    
-    if (code) {
-        // Показываем загрузку
-        document.body.style.opacity = '0.5';
-        
-        fetch('https://vortex-audio-2ea62.containers.snapdeploy.app/api/yandex-login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code: code })
-        })
-        .then(r => r.json())
-        .then(res => {
-            if (res.success) {
-                // Сохраняем в localStorage (как при обычном входе)
-                localStorage.setItem('vortex_logged_user', res.user.username);
-                localStorage.setItem('vortex_logged_email', res.user.email);
-                localStorage.setItem('vortex_avatar', res.user.avatar);
-                localStorage.setItem('vortex_notes', res.user.notes_balance);
-                localStorage.setItem('vortex_free_checks', res.user.free_checks);
-                
-                window.location.href = 'dashboard.html';
-            } else {
-                alert('Ошибка входа через Яндекс: ' + res.message);
-                document.body.style.opacity = '1';
-            }
-        })
-        .catch(e => {
-            console.error(e);
-            alert('Ошибка сервера при входе через Яндекс');
-            document.body.style.opacity = '1';
-        });
-    }
-});
-    </script>
+    <script src="auth.js"></script>
     <script src="toast.js"></script>
 </body>
 </html>
