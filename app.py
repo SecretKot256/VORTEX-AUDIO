@@ -330,27 +330,25 @@ def check_by_id():
     if not song_id:
         return jsonify({"success": False, "message": "Не указан ID песни"}), 400
 
-        song = get_lyrics_by_id(song_id)
+    song = get_lyrics_by_id(song_id)
 
     if not song:
         print("LRCLIB не смог, пробуем Lyrics.ovh...")
         title, artist, lyrics, cover = try_lyrics_ovh(data.get('track_name', ''), data.get('artist', ''))
-    if lyrics:
-        song = {"title": title, "artist": artist, "lyrics": lyrics}
+        if lyrics:
+            song = {"title": title, "artist": artist, "lyrics": lyrics}
 
     if not song:
         print("Lyrics.ovh не смог, пробуем LyricsFind...")
         title, artist, lyrics, cover = try_lyricsfind(data.get('track_name', ''), data.get('artist', ''))
-    if lyrics:
-        song = {"title": title, "artist": artist, "lyrics": lyrics}
+        if lyrics:
+            song = {"title": title, "artist": artist, "lyrics": lyrics}
 
-        if not song:
-            return jsonify({"success": False, "message": "Не удалось получить текст"})
+    if not song:
+        return jsonify({"success": False, "message": "Не удалось получить текст"})
 
-    # Анализируем текст
     analysis = analyze_lyrics(song['lyrics'])
 
-    # Оценки
     if analysis['status'] == 'instrumental':
         lscore = 10
     elif analysis['is_clean']:
@@ -363,7 +361,6 @@ def check_by_id():
     overall = round((lscore + 7) / 2, 1)
     overall_verdict = f"🌟 Отлично! ({overall}/10)" if overall >= 8 else f"👍 Хорошо ({overall}/10)" if overall >= 5 else f"🚫 Плохо ({overall}/10)"
 
-    # Обновляем счётчик пользователя
     if username:
         users = load_users()
         if username in users:
