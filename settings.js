@@ -231,6 +231,15 @@ function setTheme(theme, event) {
     }
 })();
 
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('vortex_theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light');
+        const toggle = document.getElementById('themeToggle');
+        if (toggle) toggle.checked = true;
+    }
+});
+
 // ========== ЗАПУСК ==========
 loadSettingsUser();
 restoreCheckboxes();

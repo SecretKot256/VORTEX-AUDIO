@@ -1850,11 +1850,27 @@ body.light .method-option-sub {
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
 }
 
-/* Светлая тема */
+/* ===== СВЕТЛАЯ ТЕМА (СПЕЦИАЛЬНО БАГОВАННАЯ) ===== */
 body.light {
     background: linear-gradient(135deg, #f0f0f5, #e8e0f5);
     color: #1a1a1a;
 }
+
+/* Прячем кнопку профиля, оставляем только меню */
+body.light .profile-btn {
+    display: none !important;
+}
+
+/* Делаем бургер-кнопку видимой */
+body.light .burger-btn {
+    background: rgba(255,255,255,0.9);
+    border-color: #ddd;
+}
+body.light .burger-btn span {
+    background: #333;
+}
+
+/* Чиним меню (чтобы его было видно) */
 body.light .burger-menu {
     background: #ffffff;
     border-left: 1px solid #ddd;
@@ -1869,28 +1885,8 @@ body.light .burger-item:hover {
 body.light .burger-header {
     color: #999;
 }
-body.light .burger-divider {
-    background: #ddd;
-}
 body.light .burger-social {
     background: #e5e5e5;
-}
-body.light .burger-social:hover {
-    background: #d5d5d5;
-}
-body.light .profile-btn {
-    background: rgba(255,255,255,0.9);
-    border-color: #ddd;
-}
-body.light .profile-nickname {
-    color: #333;
-}
-body.light .burger-btn {
-    background: rgba(255,255,255,0.9);
-    border-color: #ddd;
-}
-body.light .burger-btn span {
-    background: #333;
 }
 body.light .dashboard-content {
     color: #1a1a1a;

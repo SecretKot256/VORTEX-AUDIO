@@ -58,30 +58,31 @@
                 <h2 class="panel-title">Внешний вид</h2>
                 <p class="panel-desc">Настройте, как выглядит Vortex Audio.</p>
 
-                <div class="setting-row">
+                <!-- ВОТ ЭТОТ БЛОК -->
+                <div class="setting-row" style="margin-bottom: 20px;">
                     <div class="setting-info">
-                        <div class="setting-name">Тёмная тема</div>
-                        <div class="setting-hint">Включите светлую тему, если вам так удобнее</div>
+                        <div class="setting-name">Светлая тема</div>
+                        <div class="setting-hint">Включите, если вам так удобнее (тема багованная)</div>
                     </div>
                     <label class="theme-switch">
                         <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
                         <span class="theme-slider"></span>
                     </label>
                 </div>
-            </div>
 
-            <div class="setting-row">
-    <div class="setting-info">
-        <div class="setting-name">Цветовая тема</div>
-        <div class="setting-hint">Выберите настроение сайта</div>
-    </div>
-    <div class="theme-options">
-        <button class="theme-opt active" onclick="setTheme('default', event)" style="background: #6C5CE7;"></button>
-        <button class="theme-opt" onclick="setTheme('neon', event)" style="background: #00FF88;"></button>
-        <button class="theme-opt" onclick="setTheme('space', event)" style="background: #FF0055;"></button>
-        <button class="theme-opt" onclick="setTheme('retro', event)" style="background: #FFAA00;"></button>
-    </div>
-</div>
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-name">Цветовая тема</div>
+                        <div class="setting-hint">Выберите настроение сайта</div>
+                    </div>
+                    <div class="theme-options">
+                        <button class="theme-opt active" onclick="setTheme('default', event)" style="background: #6C5CE7;"></button>
+                        <button class="theme-opt" onclick="setTheme('neon', event)" style="background: #00FF88;"></button>
+                        <button class="theme-opt" onclick="setTheme('space', event)" style="background: #FF0055;"></button>
+                        <button class="theme-opt" onclick="setTheme('retro', event)" style="background: #FFAA00;"></button>
+                    </div>
+                </div>
+            </div>
 
             <!-- 🌐 Язык -->
             <div class="settings-panel" id="panel-language">
