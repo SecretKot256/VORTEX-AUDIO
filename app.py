@@ -320,29 +320,34 @@ def search_songs():
     return jsonify({"success": True, "results": results})
 
 
-# ===== API ПОЛУЧЕНИЯ ТЕКСТА ПО ID =====
+# ===== API ПОЛУЧЕНИЯ ТЕКСТА ПО ID ===
 @app.route('/api/check-by-id', methods=['POST'])
 def check_by_id():
     data = request.json
     song_id = data.get('song_id')
     username = data.get('username', '').strip()
+    track_name = data.get('track_name', '')
+    artist_name = data.get('artist', '')
 
     if not song_id:
         return jsonify({"success": False, "message": "Не указан ID песни"}), 400
 
     song = get_lyrics_by_id(song_id)
+    source_used = "lrclib"
 
-    if not song:
+    if not song or not song.get('lyrics'):
         print("LRCLIB не смог, пробуем Lyrics.ovh...")
-        title, artist, lyrics, cover = try_lyrics_ovh(data.get('track_name', ''), data.get('artist', ''))
+        title, artist, lyrics, cover = try_lyrics_ovh(track_name, artist_name)
         if lyrics:
             song = {"title": title, "artist": artist, "lyrics": lyrics}
+            source_used = "lyrics.ovh"
 
-    if not song:
+    if not song or not song.get('lyrics'):
         print("Lyrics.ovh не смог, пробуем LyricsFind...")
-        title, artist, lyrics, cover = try_lyricsfind(data.get('track_name', ''), data.get('artist', ''))
+        title, artist, lyrics, cover = try_lyricsfind(track_name, artist_name)
         if lyrics:
             song = {"title": title, "artist": artist, "lyrics": lyrics}
+            source_used = "lyricsfind"
 
     if not song:
         return jsonify({"success": False, "message": "Не удалось получить текст"})
@@ -373,7 +378,7 @@ def check_by_id():
         "artists": [song['artist']],
         "lyrics": song['lyrics'],
         "cover_url": get_cover_from_itunes(song['title'], song['artist']),
-        "source": "lrclib",
+        "source": source_used,
         "lyrics_analysis": analysis,
         "beat_analysis": {"score": 7, "description": "Бит будет позже", "bpm": 120, "style": ""},
         "overall": {"score": overall, "verdict": overall_verdict, "mood": "🎵"}

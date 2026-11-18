@@ -1,3 +1,5 @@
+const API_URL = 'https://vortex-audio-2ea62.containers.snapdeploy.app';
+
 // ========== ДАННЫЕ ПОЛЬЗОВАТЕЛЯ ==========
 let userData = {
     isLoggedIn: false,
@@ -258,12 +260,12 @@ async function tryCheckTrack() {
     const secretTrack = trackName.toLowerCase().trim();
 
     // 1. Даша
-    if (secretArtist === 'dasha gavrilenko' && !secretTrack) {
+    if (secretArtist === 'dasha gavrilenko') {
         window.location.href = 'dasha.html';
         return;
     }
     // 2. Савелий
-    if (secretArtist === 'savelii petrov' && !secretTrack) {
+    if (secretArtist === 'savelii petrov') {
         window.location.href = 'https://steamcommunity.com/id/SecretKotGames/';
         return;
     }
