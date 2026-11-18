@@ -1,3 +1,5 @@
+const API_URL = 'https://vortex-audio-2ea62.containers.snapdeploy.app';
+
 // ========== ДАННЫЕ ==========
 let userData = {
     isLoggedIn: false,
@@ -29,7 +31,9 @@ const ACHIEVEMENTS = [
     { id: 'fifty',    icon: '50', name: 'Меломан',      desc: 'Проверить 50 песен',     need: 50,  type: 'checks' },
     { id: 'hundred',  icon: '100',name: 'Легенда',      desc: 'Проверить 100 песен',    need: 100, type: 'checks' },
     { id: 'dirty',    icon: '5',  name: 'Детектив',     desc: 'Найти 5 грязных песен',  need: 5,   type: 'dirty'  },
-    { id: 'clean',    icon: '10', name: 'Чистюля',      desc: 'Найти 10 чистых песен',  need: 10,  type: 'clean'  }
+    { id: 'clean',    icon: '10', name: 'Чистюля',      desc: 'Найти 10 чистых песен',  need: 10,  type: 'clean'  },
+    // Ачивка Аудиофил
+    { id: 'audiophile', icon: '🎧', name: 'Аудиофил', desc: 'Выполнить 13 условий', need: 13, type: 'audiophile' }
 ];
 
 // ========== ИЗБРАННЫЕ ==========
@@ -44,11 +48,19 @@ function saveFavorites(favs) {
 }
 
 // ========== ОТРИСОВКА ==========
-function renderAchievements() {
+async function renderAchievements() {
     const checks = parseInt(localStorage.getItem('vortex_songs') || '0');
     const dirty = parseInt(localStorage.getItem('vortex_dirty') || '0');
     const clean = parseInt(localStorage.getItem('vortex_clean') || '0');
     const favorites = getFavorites();
+
+    // Получаем ачивки с сервера
+    let serverAch = {};
+    try {
+        const res = await fetch(`${API_URL}/api/achievements?username=${userData.nickname}`);
+        const data = await res.json();
+        if (data.success) serverAch = data.achievements;
+    } catch (e) { console.log('Сервер недоступен'); }
 
     const allGrid = document.getElementById('achievementsGrid');
     const favGrid = document.getElementById('favoritesGrid');
@@ -60,26 +72,41 @@ function renderAchievements() {
         favGrid.innerHTML = favorites.map(id => {
             const a = ACHIEVEMENTS.find(x => x.id === id);
             if (!a) return '';
-            return renderAchievement(a, checks, dirty, clean, true);
+            return renderAchievement(a, checks, dirty, clean, true, serverAch);
         }).join('');
     }
 
     // Отображаем все
-    allGrid.innerHTML = ACHIEVEMENTS.map(a => renderAchievement(a, checks, dirty, clean, false)).join('');
+    allGrid.innerHTML = ACHIEVEMENTS.map(a => renderAchievement(a, checks, dirty, clean, false, serverAch)).join('');
+
+    // Считаем прогресс
+    let unlockedCount = 0;
+    ACHIEVEMENTS.forEach(a => {
+        let progress = 0;
+        if (a.type === 'checks') progress = checks;
+        if (a.type === 'dirty') progress = dirty;
+        if (a.type === 'clean') progress = clean;
+        if (a.type === 'audiophile') progress = Object.keys(serverAch).length; // Сколько условий выполнено
+        if (progress >= a.need) unlockedCount++;
+    });
+
+    document.getElementById('unlockedCount').textContent = unlockedCount;
+    document.getElementById('totalCount').textContent = ACHIEVEMENTS.length;
+    document.getElementById('progressFill').style.width = (unlockedCount / ACHIEVEMENTS.length * 100) + '%';
 }
 
-function renderAchievement(a, checks, dirty, clean, isFavorite) {
+function renderAchievement(a, checks, dirty, clean, isFavorite, serverAch) {
     let progress = 0;
     if (a.type === 'checks') progress = checks;
     if (a.type === 'dirty') progress = dirty;
     if (a.type === 'clean') progress = clean;
+    if (a.type === 'audiophile') progress = Object.keys(serverAch).length;
 
     const unlocked = progress >= a.need;
     const favorites = getFavorites();
     const isPinned = favorites.includes(a.id);
 
-const delay = Math.random() * 0.3; // небольшая случайная задержка
-return `
+    return `
         <div class="achievement ${unlocked ? 'unlocked' : 'locked'} ${isPinned ? 'pinned' : ''}">
             <div class="achievement-icon">${a.icon}</div>
             <div class="achievement-name">${a.name}</div>
@@ -93,40 +120,23 @@ return `
             ` : ''}
         </div>
     `;
-
-let unlockedCount = 0;
-ACHIEVEMENTS.forEach(a => {
-    let progress = 0;
-    if (a.type === 'checks') progress = checks;
-    if (a.type === 'dirty') progress = dirty;
-    if (a.type === 'clean') progress = clean;
-    if (progress >= a.need) unlockedCount++;
-});
-
-document.getElementById('unlockedCount').textContent = unlockedCount;
-document.getElementById('totalCount').textContent = ACHIEVEMENTS.length;
-document.getElementById('progressFill').style.width = 
-    (unlockedCount / ACHIEVEMENTS.length * 100) + '%';
 }
 
 // ========== ИЗБРАННОЕ ==========
 function toggleFavorite(id, event) {
-    event.stopPropagation();
+    if (event) event.stopPropagation();
     const favorites = getFavorites();
     const index = favorites.indexOf(id);
 
     if (index !== -1) {
-        // Убираем
         favorites.splice(index, 1);
     } else {
-        // Добавляем
         if (favorites.length >= 3) {
             alert('Можно выбрать только 3 достижения');
             return;
         }
         favorites.push(id);
     }
-
     saveFavorites(favorites);
     renderAchievements();
 }
@@ -137,10 +147,10 @@ renderAchievements();
 
 // Анимация появления
 setTimeout(() => {
-    document.getElementById('achievementsHeader').classList.add('visible');
-    document.getElementById('achievementsSubtitle').classList.add('visible');
+    document.getElementById('achievementsHeader')?.classList.add('visible');
+    document.getElementById('achievementsSubtitle')?.classList.add('visible');
 }, 200);
 
 setTimeout(() => {
-    document.querySelector('.progress-box').classList.add('visible');
+    document.querySelector('.progress-box')?.classList.add('visible');
 }, 400);

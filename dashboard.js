@@ -582,6 +582,11 @@ function submitDonate() {
     showToast(`Спасибо за поддержку ${amount} ₽! (Оплата скоро появится)`, 'success');
 }
 
+// ===== ПОДДЕРЖКА =====
+function showSupport() {
+    document.getElementById('donateOverlay').classList.add('show');
+}
+
 // Закрытие по клику на оверлей
 document.getElementById('donateOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeDonatePopup();

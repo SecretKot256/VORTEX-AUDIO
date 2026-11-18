@@ -302,6 +302,46 @@ def login():
         }})
     return jsonify({"success": False, "message": "Неверный логин или пароль!"})
 
+# ===== АЧИВКА "АУДИОФИЛ" =====
+@app.route('/api/achievements', methods=['GET'])
+def get_achievements():
+    username = request.args.get('username')
+    if not username:
+        return jsonify({"success": False, "message": "Нет юзера"}), 400
+    
+    users = load_users()
+    if username not in users:
+        return jsonify({"success": False, "message": "Юзер не найден"}), 404
+    
+    # Если у юзера еще нет ачивок, создаем пустой прогресс
+    if 'achievements' not in users[username]:
+        users[username]['achievements'] = {}
+        save_users(users)
+        
+    return jsonify({"success": True, "achievements": users[username]['achievements']})
+
+@app.route('/api/achievements', methods=['POST'])
+def update_achievement():
+    data = request.json
+    username = data.get('username')
+    task_id = data.get('task_id')
+    
+    if not username or not task_id:
+        return jsonify({"success": False, "message": "Не хватает данных"}), 400
+        
+    users = load_users()
+    if username not in users:
+        return jsonify({"success": False, "message": "Юзер не найден"}), 404
+        
+    if 'achievements' not in users[username]:
+        users[username]['achievements'] = {}
+        
+    # Записываем выполнение
+    users[username]['achievements'][task_id] = True
+    save_users(users)
+    
+    return jsonify({"success": True, "message": "Ачивка обновлена"})
+
 # ===== API ПОИСКА СПИСКА ПЕСЕН =====
 @app.route('/api/search', methods=['POST'])
 def search_songs():

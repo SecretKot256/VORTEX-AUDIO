@@ -17,11 +17,18 @@
         <h1 class="radio-title">📻 VORTEX RADIO</h1>
         <p class="radio-sub">Только проверенные треки. Выбирай режим и кайфуй.</p>
 
-        <!-- Выбор режима -->
+        <!-- Фильтры -->
         <div class="radio-modes">
-            <button class="radio-mode active" onclick="setRadioMode('clean')">✅ Только чистые</button>
-            <button class="radio-mode" onclick="setRadioMode('dirty')">🔥 Только грязные</button>
-            <button class="radio-mode" onclick="setRadioMode('instrumental')">🎹 Инструментал</button>
+            <button class="radio-mode active" onclick="setRadioMode('clean', event)">✅ Чистые</button>
+            <button class="radio-mode" onclick="setRadioMode('dirty', event)">🔥 Грязные</button>
+            <button class="radio-mode" onclick="setRadioMode('instrumental', event)">🎹 Инструментал</button>
+            <button class="radio-mode" onclick="setRadioMode('acoustic', event)">🎸 Акустика</button>
+        </div>
+
+        <!-- Поиск -->
+        <div class="radio-search">
+            <input type="text" id="radioSearchInput" placeholder="Введи название трека или жанр...">
+            <button class="radio-search-btn" onclick="searchAndPlay()">🔍 Найти</button>
         </div>
 
         <!-- Плеер -->
@@ -31,8 +38,13 @@
                 <div class="radio-track" id="radioTrack">Нажми Play, чтобы начать</div>
                 <div class="radio-artist" id="radioArtist">VORTEX RADIO</div>
             </div>
-            <button class="radio-play-btn" id="radioPlayBtn" onclick="toggleRadio()">▶</button>
+            <div class="radio-controls">
+                <button class="radio-nav-btn" onclick="prevTrack()">⏮</button>
+                <button class="radio-play-btn" id="radioPlayBtn" onclick="toggleRadio()">▶</button>
+                <button class="radio-nav-btn" onclick="nextTrack()">⏭</button>
+            </div>
         </div>
+        <audio id="radioAudio"></audio>
     </div>
 
     <script src="radio.js"></script>
