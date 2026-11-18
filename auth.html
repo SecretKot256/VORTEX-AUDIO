@@ -6,7 +6,8 @@
     <title>Вход — VORTEX AUDIO</title>
     <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="auth.css">
-    <link rel="stylesheet" href="toast.css"> <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="toast.css">
+    <link rel="stylesheet" href="animations.css">
 </head>
 <body>
 
@@ -17,11 +18,11 @@
             <div class="auth-logo">
                 <span class="logo-text">VORTEX AUDIO</span>
             </div>
-            
+
             <h1 class="auth-title" id="authTitle">Вход</h1>
             <p class="auth-subtitle" id="authSubtitle">Войдите в свой аккаунт</p>
 
-            <form class="auth-form" id="authForm" onsubmit="submitAuth(event)">
+            <form class="auth-form" id="authForm">
                 <div class="auth-field">
                     <label>Логин</label>
                     <input type="text" id="authLogin" placeholder="username" required autocomplete="username">
@@ -38,46 +39,40 @@
                 </div>
 
                 <label style="display: flex; align-items: flex-start; gap: 8px; margin: 15px 0; font-size: 12px; color: #888; cursor: pointer;">
-    <input type="checkbox" id="privacyCheckbox" required style="margin-top: 2px; accent-color: #6C5CE7;">
-    <span>Я согласен с <a href="privacy.html" target="_blank" style="color: #6C5CE7; text-decoration: underline;">политикой конфиденциальности</a> и обработкой данных</span>
-</label>
+                    <input type="checkbox" id="privacyCheckbox" required style="margin-top: 2px; accent-color: #6C5CE7;">
+                    <span>Я согласен с <a href="privacy.html" target="_blank" style="color: #6C5CE7; text-decoration: underline;">политикой конфиденциальности</a> и обработкой данных</span>
+                </label>
 
                 <button type="submit" class="auth-btn" id="authBtn">Войти</button>
             </form>
 
             <div class="auth-switch">
                 <span id="switchText">Нет аккаунта?</span>
-                <a href="#" id="switchLink" onclick="switchMode(event)">Зарегистрироваться</a>
+                <a href="#" id="switchLink">Зарегистрироваться</a>
             </div>
-            <!-- Блок быстрого входа -->
+
             <div class="social-login-block">
                 <div class="social-divider">
-                        <span>или войдите через</span>
-                            </div>
-                                
-                                    <div class="social-buttons">
-                                            <!-- Google -->
-                                                    <button class="social-btn google" onclick="showToast('Вход через Google скоро появится!', 'info')">
-                                                                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
-                                                                        </button>
-                                                                                
-<button class="social-btn yandex" onclick="loginYandex()">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" alt="Яндекс" width="24" height="24">
-</button> <!-- Яндекс -->
-                                                                                                                            
-                                                                                                                                    <!-- VK -->
-                                                                                                                                            <button class="social-btn vk" onclick="showToast('Вход через VK скоро появится!', 'info')">
-                                                                                                                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/VK.com_icon_%282020%29.svg" alt="VK" width="24" height="24">
-                                                                                                                                                                </button>
-                                                                                                                                                                        
-                                                                                                                                                                                <!-- Apple -->
-                                                                                                                                                                                        <button class="social-btn apple" onclick="showToast('Вход через Apple скоро появится!', 'info')">
-                                                                                                                                                                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
-                                                                                                                                                                                                            </button>
-                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                </div>
+                    <span>или войдите через</span>
+                </div>
+                <div class="social-buttons">
+                    <button class="social-btn google" id="googleBtn">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
+                    </button>
+                    <button class="social-btn yandex" id="yandexBtn">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Yandex_icon.svg" alt="Яндекс" width="24" height="24">
+                    </button>
+                    <button class="social-btn vk" id="vkBtn">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/VK.com_icon_%282020%29.svg" alt="VK" width="24" height="24">
+                    </button>
+                    <button class="social-btn apple" id="appleBtn">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
     <script src="auth.js"></script>
     <script src="toast.js"></script>
 </body>
